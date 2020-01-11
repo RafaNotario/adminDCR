@@ -1,0 +1,29 @@
+elementos de ALTA DE CLIENTES adminDCR
+txtIdParam
+
+jTextNombre
+jTextApellidos
+jTextLocalidad
+
+jRad1Activo
+jRadInactivo
+
+jTexTelefono
+txtQuintoAltas
+jDateChFechaAlta
+
+jButaltasGuardar
+jButAltasActualiza
+jButAltasElimina
+
+//elementos de detailPedido
+txtFechDetail
+txtNumPedidoDetail
+txtNameCli
+txtStatusDetail
+
+txtTotCajas
+txtCosto
+
+jButGuardDetail
+jTextArea1
