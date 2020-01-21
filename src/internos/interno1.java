@@ -1,5 +1,5 @@
-
 package internos;
+
 import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import Frame.AgregaFlete;
 import Frame.VentaPiso;
 import Frame.detailPedido;
+import Frame.detallePrestamo;
 import java.util.Date;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,11 +20,13 @@ import internos.tickets.print.Funciones;
 import controllers.altadeclientes.controladorCFP;
 import conexiones.db.ConexionDBOriginal;
 import java.awt.GridLayout;
+import java.math.BigDecimal;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -32,6 +35,7 @@ import java.util.logging.Logger;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import renderTable.TModel;
+
 /**
  *
  * @author A. Rafael Notario
@@ -41,16 +45,26 @@ public class interno1 extends javax.swing.JFrame {
     Funciones fn = new Funciones();
     controladorCFP controlInserts = new controladorCFP();
     ConexionDBOriginal con2 = new ConexionDBOriginal();
-//** variables globales
-    String atribAltaCli ="";//variable para asignar el nombre de la tabla llenar de la base de datos
-    List<String> conten=new ArrayList<String>();//lista para guardar el id de cada cleinte en crea pedido
-    List<String> idProducts=new ArrayList<String>();
+    //** variables globales
+    String atribAltaCli = "";//variable para asignar el nombre de la tabla llenar de la base de datos
+    List<String> conten = new ArrayList<String>();//lista para guardar el id de cada cleinte en crea pedido
+    List<String> idProducts = new ArrayList<String>();//lista para id de produvtod
+
+    List<String> idProdPrest = new ArrayList<String>();//
+    List<String> idProoved = new ArrayList<String>();//para id_proveedores
+    List<String> importes = new ArrayList<String>();//para importes de prestamo
+
     DefaultTableModel dtm;//obtener modelo en tabla CreaPedido clientes
-    String[] cab={"ID PEDIDO","FECHA","STATUS","ID CLIENTE","NOMBRE","CANTIDAD","COSTO","NOTA",};
-    
+    DefaultTableModel dtmPrec;
+    DefaultTableModel tabCompras;//tabla diamica de compras del dia
+    String[] cab = {"ID PEDIDO", "FECHA", "STATUS", "ID CLIENTE", "NOMBRE", "CANTIDAD", "COSTO", "NOTA"};
+    String[] cabPrest = {"NO. CREDITO", "FECHA", "STATUS", "ID PROVEEDOR", "NOMBRE", "TOTAL", "NOTA"};
+
     AgregaFlete aF;
     VentaPiso vP;
     detailPedido dP;
+    detallePrestamo dPresta;
+
     /**
      * Creates new form interno1
      */
@@ -59,7 +73,7 @@ public class interno1 extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         jRad1Activo.setSelected(true);
 //panel alta de clientes
-        fn.setBorder(jPanAdminist,"Formulario Clientes");
+        fn.setBorder(jPanAdminist, "Formulario Clientes");
         fn.setBorder(jPanVistaAlta, "Vista de Clientes");
         fn.setBorder(jPanCompraProoved, "Compra a proveedor");
         jTextNombre.requestFocus();
@@ -68,15 +82,20 @@ public class interno1 extends javax.swing.JFrame {
         jTableAltasCli.setFont(new java.awt.Font("Tahoma", 0, 14));
         jPanAgregarFlete.setVisible(false);
 //panel compra proovedor
-    jPanClientOption.setVisible(false);
-    jPanSubastaOption.setVisible(false);
-    jLabAdeudaProoved.setVisible(false);
-    jtxtMontoAdeuda.setVisible(false);
-    jtxtLinkAdeudo.setVisible(false);
+        jPanClientOption.setVisible(false);
+        jPanSubastaOption.setVisible(false);
+        jLabAdeudaProoved.setVisible(false);
+        jtxtMontoAdeuda.setVisible(false);
+        jtxtLinkAdeudo.setVisible(false);
 //panel crea pedidos
-    jRadioCreaPedido.setSelected(true);
-    jPanCreaPedido.setVisible(true);    
-    jPanConsulPed.setVisible(false);
+        jRadioCreaPedido.setSelected(true);
+        jPanCreaPedido.setVisible(true);
+        jPanConsulPed.setVisible(false);
+//panel PROVEEDORES
+        jPanPrestamoProovedor.setVisible(false);
+        jPanCompraProoved.setVisible(false);
+        jPanBusquedaPrest.setVisible(false);
+        jDatFechaPrest.setDate(cargafecha());
 //panel ventas de mostrador
         jButton10.setMnemonic(KeyEvent.VK_F12);
     }
@@ -95,7 +114,7 @@ public class interno1 extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuItem4 = new javax.swing.JMenuItem();
-        buttonGroup2 = new javax.swing.ButtonGroup();
+        buttonGProveedores = new javax.swing.ButtonGroup();
         jPopupPrestaProov = new javax.swing.JPopupMenu();
         jMIPPVer = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -103,6 +122,12 @@ public class interno1 extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMIEliminar = new javax.swing.JMenuItem();
         butnGPedidos = new javax.swing.ButtonGroup();
+        butnGProved = new javax.swing.ButtonGroup();
+        jPopCompraProveedor = new javax.swing.JPopupMenu();
+        jMenPago = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        Detalle = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
         paneAltas = new javax.swing.JTabbedPane();
         jPanAltas = new javax.swing.JPanel();
         jPanAdminist = new javax.swing.JPanel();
@@ -137,20 +162,6 @@ public class interno1 extends javax.swing.JFrame {
         jRadioCreaPedido = new javax.swing.JRadioButton();
         jRadioConsulPedido = new javax.swing.JRadioButton();
         jLayeredPanePedidos = new javax.swing.JLayeredPane();
-        jPanConsulPed = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
-        jComPedBusqCli = new javax.swing.JComboBox<>();
-        jLabel60 = new javax.swing.JLabel();
-        jCombOpcBusqPedido = new javax.swing.JComboBox<>();
-        jLabel61 = new javax.swing.JLabel();
-        jDateChoB1Cli = new com.toedter.calendar.JDateChooser();
-        jLabel62 = new javax.swing.JLabel();
-        jDate2BusqCli = new com.toedter.calendar.JDateChooser();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTablefiltrosBusq = new javax.swing.JTable();
-        jLabel63 = new javax.swing.JLabel();
-        jSeparator7 = new javax.swing.JSeparator();
-        jButton3 = new javax.swing.JButton();
         jPanCreaPedido = new javax.swing.JPanel();
         jCombPedidoClient = new javax.swing.JComboBox<>();
         jLabel46 = new javax.swing.JLabel();
@@ -170,24 +181,38 @@ public class interno1 extends javax.swing.JFrame {
         jScrollPane10 = new javax.swing.JScrollPane();
         jTabPedidosDiaView = new javax.swing.JTable();
         jButGuardaPedidodia = new javax.swing.JButton();
+        jPanConsulPed = new javax.swing.JPanel();
+        jLabel18 = new javax.swing.JLabel();
+        jComPedBusqCli = new javax.swing.JComboBox<>();
+        jLabel60 = new javax.swing.JLabel();
+        jCombOpcBusqPedido = new javax.swing.JComboBox<>();
+        jLabel61 = new javax.swing.JLabel();
+        jDateChoB1Cli = new com.toedter.calendar.JDateChooser();
+        jLabel62 = new javax.swing.JLabel();
+        jDate2BusqCli = new com.toedter.calendar.JDateChooser();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTablefiltrosBusq = new javax.swing.JTable();
+        jLabel63 = new javax.swing.JLabel();
+        jSeparator7 = new javax.swing.JSeparator();
+        jButton3 = new javax.swing.JButton();
         proveedorJP = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        jRadBCompraProve = new javax.swing.JRadioButton();
+        jRadBPrestamoProv = new javax.swing.JRadioButton();
+        jRadBConsultaProv = new javax.swing.JRadioButton();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jPanCompraProoved = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jCElijaProovedor = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jCombProductProv = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtPrecCompraProv = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jLabel5 = new javax.swing.JLabel();
+        jTabCompraProved = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jLayeredPane2 = new javax.swing.JLayeredPane();
         jPanel1 = new javax.swing.JPanel();
@@ -216,38 +241,74 @@ public class interno1 extends javax.swing.JFrame {
         jLabel32 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTable5 = new javax.swing.JTable();
+        jTabVistaComprasDia = new javax.swing.JTable();
         jLabel41 = new javax.swing.JLabel();
-        jTextField14 = new javax.swing.JTextField();
+        txtCantidadCompra = new javax.swing.JTextField();
         jLayeredPane3 = new javax.swing.JLayeredPane();
         jPanSubastaOption = new javax.swing.JPanel();
         jLabel57 = new javax.swing.JLabel();
-        jTextField20 = new javax.swing.JTextField();
+        txtCamSubastaCompra = new javax.swing.JTextField();
         jPanClientOption = new javax.swing.JPanel();
         jLabAdeudaProoved = new javax.swing.JLabel();
         jtxtMontoAdeuda = new javax.swing.JTextField();
         jtxtLinkAdeudo = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        jDateFechCompraProv = new com.toedter.calendar.JDateChooser();
+        jLabel40 = new javax.swing.JLabel();
+        txtNotaCompra = new javax.swing.JTextField();
+        jButton13 = new javax.swing.JButton();
+        jScrollPane15 = new javax.swing.JScrollPane();
+        jTabPrecCompProved = new javax.swing.JTable();
+        txtImportComp = new javax.swing.JTextField();
+        jLabel48 = new javax.swing.JLabel();
         jPanPrestamoProovedor = new javax.swing.JPanel();
         jLabel33 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox<>();
+        jComBPrestamosProv = new javax.swing.JComboBox<>();
         jLabel34 = new javax.swing.JLabel();
-        jComboBox6 = new javax.swing.JComboBox<>();
-        jLabel35 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
+        jComBProveedor = new javax.swing.JComboBox<>();
+        txtCantPres = new javax.swing.JTextField();
         jLabBNumerador = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
+        txtPrecProov = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
         jLabel38 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jDatFechaPrest = new com.toedter.calendar.JDateChooser();
         jScrollPane7 = new javax.swing.JScrollPane();
         jTabPrestamoProovedores = new javax.swing.JTable();
         jLabel39 = new javax.swing.JLabel();
         jScrollPane8 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        textANotaPrestProv = new javax.swing.JTextArea();
         jLabel36 = new javax.swing.JLabel();
-        jLabel40 = new javax.swing.JLabel();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        jButton4 = new javax.swing.JButton();
+        jLabel64 = new javax.swing.JLabel();
+        jLabel65 = new javax.swing.JLabel();
+        txtTotalPres = new javax.swing.JTextField();
+        txtImportPres = new javax.swing.JTextField();
+        jLabel66 = new javax.swing.JLabel();
+        jLabel67 = new javax.swing.JLabel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        jTabPreciosPrest = new javax.swing.JTable();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        jTabVistaPresta = new javax.swing.JTable();
+        jLabel68 = new javax.swing.JLabel();
+        jSeparator8 = new javax.swing.JSeparator();
+        jPanBusquedaPrest = new javax.swing.JPanel();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jPanInternoBusquedaPrest = new javax.swing.JPanel();
+        jDaTFechPrest1 = new com.toedter.calendar.JDateChooser();
+        jLabel42 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        jCombBProvBusqPrest = new javax.swing.JComboBox<>();
+        jLabel47 = new javax.swing.JLabel();
+        jComBusPrestamo = new javax.swing.JComboBox<>();
+        jLabel69 = new javax.swing.JLabel();
+        jLabel70 = new javax.swing.JLabel();
+        jDaTFechPrest2 = new com.toedter.calendar.JDateChooser();
+        jButton5 = new javax.swing.JButton();
+        jLabel71 = new javax.swing.JLabel();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        jTabBusqPrestProv = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
         jPanVentasPiso = new javax.swing.JPanel();
         jComboBox10 = new javax.swing.JComboBox<>();
         jLabel53 = new javax.swing.JLabel();
@@ -268,19 +329,6 @@ public class interno1 extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        jDateChooser4 = new com.toedter.calendar.JDateChooser();
-        jLabel49 = new javax.swing.JLabel();
-        jDateChooser5 = new com.toedter.calendar.JDateChooser();
-        jLabel50 = new javax.swing.JLabel();
-        jDateChooser3 = new com.toedter.calendar.JDateChooser();
-        jLabel42 = new javax.swing.JLabel();
-        jTextField16 = new javax.swing.JTextField();
-        jComboBox9 = new javax.swing.JComboBox<>();
-        jLabel47 = new javax.swing.JLabel();
-        jLabel48 = new javax.swing.JLabel();
-        jSeparator6 = new javax.swing.JSeparator();
-        jSeparator5 = new javax.swing.JSeparator();
-        jSeparator4 = new javax.swing.JSeparator();
         jPanCabezera = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -311,6 +359,21 @@ public class interno1 extends javax.swing.JFrame {
 
         jMIEliminar.setText("jMenuItem5");
         jPopupPrestaProov.add(jMIEliminar);
+
+        jMenPago.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        jMenPago.setText("Realizar Pago");
+        jMenPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenPagoActionPerformed(evt);
+            }
+        });
+        jPopCompraProveedor.add(jMenPago);
+        jPopCompraProveedor.add(jSeparator5);
+
+        Detalle.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        Detalle.setText("Ver Detalle");
+        jPopCompraProveedor.add(Detalle);
+        jPopCompraProveedor.add(jSeparator6);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADMINISTRACION DCR");
@@ -481,9 +544,8 @@ public class interno1 extends javax.swing.JFrame {
         txtIdParam.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jPanAltas.add(txtIdParam, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 70, 40));
 
-        paneAltas.addTab("ALTA DE CLIENTES", jPanAltas);
+        paneAltas.addTab("    ALTA DE CLIENTES    ", jPanAltas);
 
-        jPPedidosHist.setBackground(new java.awt.Color(255, 255, 255));
         jPPedidosHist.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel15.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -515,6 +577,137 @@ public class interno1 extends javax.swing.JFrame {
 
         jLayeredPanePedidos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanCreaPedido.setBackground(new java.awt.Color(255, 255, 255));
+        jPanCreaPedido.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nuevo pedido", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13), new java.awt.Color(0, 51, 51))); // NOI18N
+        jPanCreaPedido.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jCombPedidoClient.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jCombPedidoClient.setMaximumRowCount(100);
+        jCombPedidoClient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        jCombPedidoClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCombPedidoClientActionPerformed(evt);
+            }
+        });
+        jPanCreaPedido.add(jCombPedidoClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, 190, 40));
+
+        jLabel46.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel46.setText("PEDIDOS DEL DIA:");
+        jPanCreaPedido.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 170, 30));
+
+        jLabel43.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel43.setText("Tipo Mercancia:");
+        jPanCreaPedido.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 140, 40));
+
+        jCombProdPedidos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanCreaPedido.add(jCombProdPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 90, 140, 40));
+
+        jLabel44.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel44.setText("CANTIDAD:");
+        jPanCreaPedido.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, 90, 40));
+
+        txtCantCreaPedido.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        txtCantCreaPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantCreaPedidoActionPerformed(evt);
+            }
+        });
+        jPanCreaPedido.add(txtCantCreaPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, 80, 40));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setText("CAJAS");
+        jPanCreaPedido.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 90, 60, 40));
+
+        jLabel45.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel45.setText("NOTA:");
+        jPanCreaPedido.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 90, 70, 40));
+
+        txtNotePedidoCli.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        txtNotePedidoCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNotePedidoCliActionPerformed(evt);
+            }
+        });
+        jPanCreaPedido.add(txtNotePedidoCli, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 90, 240, 40));
+
+        jButton9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton9.setText("AGREGAR");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        jPanCreaPedido.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 90, 110, 40));
+
+        jScrollPane9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jTableCreaPedidos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableCreaPedidos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S"
+            }
+        ));
+        jTableCreaPedidos.setComponentPopupMenu(jPopupMenu2);
+        jTableCreaPedidos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jTableCreaPedidos.setEditingColumn(0);
+        jTableCreaPedidos.setEditingRow(0);
+        jTableCreaPedidos.setRowHeight(32);
+        jTableCreaPedidos.setRowMargin(2);
+        jScrollPane9.setViewportView(jTableCreaPedidos);
+
+        jPanCreaPedido.add(jScrollPane9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 1270, 80));
+
+        jDateCHPedido.setDateFormatString("dd/MM/yyyy");
+        jDateCHPedido.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jPanCreaPedido.add(jDateCHPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 30, 190, 40));
+
+        jLabel58.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel58.setText("ELIJA CLIENTE:");
+        jPanCreaPedido.add(jLabel58, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 150, 40));
+
+        jLabel59.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel59.setText("PEDIDO DE CLIENTE:");
+        jPanCreaPedido.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 170, 30));
+
+        jTabPedidosDiaView.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTabPedidosDiaView.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jTabPedidosDiaView.setComponentPopupMenu(jPopupMenu2);
+        jTabPedidosDiaView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jTabPedidosDiaView.setEditingColumn(0);
+        jTabPedidosDiaView.setEditingRow(0);
+        jTabPedidosDiaView.setRowHeight(32);
+        jTabPedidosDiaView.setRowMargin(2);
+        jTabPedidosDiaView.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTabPedidosDiaViewMousePressed(evt);
+            }
+        });
+        jScrollPane10.setViewportView(jTabPedidosDiaView);
+
+        jPanCreaPedido.add(jScrollPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 1270, 170));
+
+        jButGuardaPedidodia.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jButGuardaPedidodia.setText("GUARDAR");
+        jButGuardaPedidodia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButGuardaPedidodiaActionPerformed(evt);
+            }
+        });
+        jPanCreaPedido.add(jButGuardaPedidodia, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 250, 140, 50));
+
+        jLayeredPanePedidos.add(jPanCreaPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1360, 650));
+
+        jPanConsulPed.setBackground(new java.awt.Color(255, 255, 255));
         jPanConsulPed.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Consulta Pedidos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         jPanConsulPed.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -596,162 +789,46 @@ public class interno1 extends javax.swing.JFrame {
 
         jLayeredPanePedidos.add(jPanConsulPed, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1360, 650));
 
-        jPanCreaPedido.setBackground(new java.awt.Color(204, 204, 255));
-        jPanCreaPedido.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nuevo pedido", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 13), new java.awt.Color(0, 51, 51))); // NOI18N
-        jPanCreaPedido.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jCombPedidoClient.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jCombPedidoClient.setMaximumRowCount(100);
-        jCombPedidoClient.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
-        jCombPedidoClient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCombPedidoClientActionPerformed(evt);
-            }
-        });
-        jPanCreaPedido.add(jCombPedidoClient, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, 190, 40));
-
-        jLabel46.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel46.setText("PEDIDOS DEL DIA:");
-        jPanCreaPedido.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 170, 30));
-
-        jLabel43.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel43.setText("Tipo Mercancia:");
-        jPanCreaPedido.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 140, 40));
-
-        jCombProdPedidos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPanCreaPedido.add(jCombProdPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 90, 140, 40));
-
-        jLabel44.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel44.setText("CANTIDAD:");
-        jPanCreaPedido.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, 90, 40));
-
-        txtCantCreaPedido.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtCantCreaPedido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCantCreaPedidoActionPerformed(evt);
-            }
-        });
-        jPanCreaPedido.add(txtCantCreaPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, 80, 40));
-
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel6.setText("CAJAS");
-        jPanCreaPedido.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 90, 60, 40));
-
-        jLabel45.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel45.setText("NOTA:");
-        jPanCreaPedido.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 90, 70, 40));
-
-        txtNotePedidoCli.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtNotePedidoCli.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNotePedidoCliActionPerformed(evt);
-            }
-        });
-        jPanCreaPedido.add(txtNotePedidoCli, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 90, 240, 40));
-
-        jButton9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton9.setText("AGREGAR");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-        jPanCreaPedido.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 90, 110, 40));
-
-        jScrollPane9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
-        jTableCreaPedidos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTableCreaPedidos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S"
-            }
-        ));
-        jTableCreaPedidos.setComponentPopupMenu(jPopupMenu2);
-        jTableCreaPedidos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jTableCreaPedidos.setEditingColumn(0);
-        jTableCreaPedidos.setEditingRow(0);
-        jTableCreaPedidos.setRowHeight(32);
-        jTableCreaPedidos.setRowMargin(2);
-        jScrollPane9.setViewportView(jTableCreaPedidos);
-
-        jPanCreaPedido.add(jScrollPane9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 1270, 80));
-
-        jDateCHPedido.setDateFormatString("dd/MM/yyyy");
-        jDateCHPedido.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jPanCreaPedido.add(jDateCHPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 30, 190, 40));
-
-        jLabel58.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel58.setText("ELIJA CLIENTE:");
-        jPanCreaPedido.add(jLabel58, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 150, 40));
-
-        jLabel59.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel59.setText("PEDIDO DE CLIENTE:");
-        jPanCreaPedido.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 170, 30));
-
-        jTabPedidosDiaView.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTabPedidosDiaView.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        jTabPedidosDiaView.setComponentPopupMenu(jPopupMenu2);
-        jTabPedidosDiaView.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jTabPedidosDiaView.setEditingColumn(0);
-        jTabPedidosDiaView.setEditingRow(0);
-        jTabPedidosDiaView.setRowHeight(32);
-        jTabPedidosDiaView.setRowMargin(2);
-        jScrollPane10.setViewportView(jTabPedidosDiaView);
-
-        jPanCreaPedido.add(jScrollPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 1270, 170));
-
-        jButGuardaPedidodia.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jButGuardaPedidodia.setText("GUARDAR");
-        jButGuardaPedidodia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButGuardaPedidodiaActionPerformed(evt);
-            }
-        });
-        jPanCreaPedido.add(jButGuardaPedidodia, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 250, 140, 50));
-
-        jLayeredPanePedidos.add(jPanCreaPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1360, 650));
-
         jPPedidosHist.add(jLayeredPanePedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 1360, 650));
 
-        paneAltas.addTab("PEDIDOS", jPPedidosHist);
+        paneAltas.addTab("    PEDIDOS    ", jPPedidosHist);
 
-        proveedorJP.setBackground(new java.awt.Color(255, 255, 255));
         proveedorJP.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("ELIJA ACCION:");
         proveedorJP.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 150, 40));
 
-        buttonGroup2.add(jRadioButton3);
-        jRadioButton3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jRadioButton3.setSelected(true);
-        jRadioButton3.setText("COMPRA");
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+        buttonGProveedores.add(jRadBCompraProve);
+        jRadBCompraProve.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jRadBCompraProve.setSelected(true);
+        jRadBCompraProve.setText("COMPRA");
+        jRadBCompraProve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
+                jRadBCompraProveActionPerformed(evt);
             }
         });
-        proveedorJP.add(jRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 140, 40));
+        proveedorJP.add(jRadBCompraProve, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 120, 40));
 
-        buttonGroup2.add(jRadioButton4);
-        jRadioButton4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jRadioButton4.setText("PRESTAMO");
-        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+        buttonGProveedores.add(jRadBPrestamoProv);
+        jRadBPrestamoProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jRadBPrestamoProv.setText("PRESTAMO");
+        jRadBPrestamoProv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton4ActionPerformed(evt);
+                jRadBPrestamoProvActionPerformed(evt);
             }
         });
-        proveedorJP.add(jRadioButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 160, 40));
+        proveedorJP.add(jRadBPrestamoProv, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 130, 40));
+
+        buttonGProveedores.add(jRadBConsultaProv);
+        jRadBConsultaProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jRadBConsultaProv.setText("CONSULTAR OPERACIONES");
+        jRadBConsultaProv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadBConsultaProvActionPerformed(evt);
+            }
+        });
+        proveedorJP.add(jRadBConsultaProv, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, 250, 40));
 
         jLayeredPane1.setBackground(new java.awt.Color(0, 102, 102));
         jLayeredPane1.setPreferredSize(new java.awt.Dimension(1366, 580));
@@ -766,7 +843,6 @@ public class interno1 extends javax.swing.JFrame {
         jPanCompraProoved.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 150, 40));
 
         jCElijaProovedor.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jCElijaProovedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "JUAN", "MIGUEL", "SANCHEZ", "ROLANDO", "SUBASTA" }));
         jCElijaProovedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCElijaProovedorActionPerformed(evt);
@@ -774,66 +850,66 @@ public class interno1 extends javax.swing.JFrame {
         });
         jPanCompraProoved.add(jCElijaProovedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 190, 40));
 
-        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BOLA", "PRIMERA", "SEGUNDA", "PRIMERA BOLA", " " }));
-        jPanCompraProoved.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 80, 140, 40));
+        jCombProductProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jCombProductProv.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        jPanCompraProoved.add(jCombProductProv, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 140, 40));
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel9.setText("Tipo Mercancia:");
-        jPanCompraProoved.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 160, 40));
+        jLabel9.setText("MERCANCIA:");
+        jPanCompraProoved.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 110, 40));
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel2.setText("CAJAS");
-        jPanCompraProoved.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 80, 60, 40));
+        jPanCompraProoved.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, 60, 40));
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel8.setText("PRECIO");
-        jPanCompraProoved.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 80, 70, 40));
+        jLabel8.setText("FECHA:");
+        jPanCompraProoved.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 20, 70, 40));
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+        txtPrecCompraProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtPrecCompraProv.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPrecCompraProvFocusLost(evt);
             }
         });
-        jPanCompraProoved.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 80, 80, 40));
+        jPanCompraProoved.add(txtPrecCompraProv, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, 80, 40));
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton1.setText("AGREGAR");
-        jPanCompraProoved.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 80, 110, 40));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanCompraProoved.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 70, 110, 50));
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel10.setText("ENTRADAS");
-        jPanCompraProoved.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 90, 30));
+        jLabel10.setText("PEDIDOS DEL DIA:");
+        jPanCompraProoved.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 180, 30));
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTabCompraProved.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTabCompraProved.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"ISRAEL", "50", null, "20", null, null, null, null, null},
-                {"DON FER", null, "50", null, null, null, null, null, null},
-                {"HEBER CASTILLO", "100", null, null, "55", null, null, null, null},
-                {"ZAYLER", null, null, "50", null, null, null, null, null}
+
             },
             new String [] {
-                "Cliente", "Prim", "Seg", "PrimReg", "SegReg", "Tat", "TatP", "Tat_SReg", "Tat_PReg"
+                "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jTabCompraProved.setRowHeight(35);
+        jTabCompraProved.setRowMargin(2);
+        jScrollPane1.setViewportView(jTabCompraProved);
 
-        jPanCompraProoved.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 440, 550, 60));
-
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel5.setText("RESTANTES");
-        jPanCompraProoved.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 90, 40));
+        jPanCompraProoved.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 1120, 60));
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton2.setText("GUARDAR");
+        jButton2.setText("VER");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanCompraProoved.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 380, 110, 40));
+        jPanCompraProoved.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 200, 110, 40));
 
         jLayeredPane2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -989,48 +1065,68 @@ public class interno1 extends javax.swing.JFrame {
 
         jLayeredPane2.add(jPanAgregarFlete, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 690, 400));
 
-        jPanCompraProoved.add(jLayeredPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 120, 720, 450));
+        jPanCompraProoved.add(jLayeredPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 510, 720, 130));
 
-        jTable5.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+        jTabVistaComprasDia.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTabVistaComprasDia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"SANCHEZ", "245", null, "150", null, null, null, null, null},
-                {"RODOLFO", null, null, null, null, null, null, null, null},
-                {"JUAN", null, null, null, null, null, null, null, null},
-                {"YOLA", null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Cliente", "Prim", "Seg", "PrimReg", "SegReg", "Tat", "TatP", "Tat_SRef", "Tat_PReg"
+                "ID", "PROVEEDOR", "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "TOTAL CAJAS"
             }
-        ));
-        jTable5.setComponentPopupMenu(jPopupMenu2);
-        jTable5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jTable5.setEditingColumn(0);
-        jTable5.setEditingRow(0);
-        jScrollPane6.setViewportView(jTable5);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, true, false
+            };
 
-        jPanCompraProoved.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 630, 210));
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTabVistaComprasDia.setComponentPopupMenu(jPopCompraProveedor);
+        jTabVistaComprasDia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jTabVistaComprasDia.setEditingColumn(0);
+        jTabVistaComprasDia.setEditingRow(0);
+        jTabVistaComprasDia.setRowHeight(32);
+        jTabVistaComprasDia.setRowMargin(2);
+        jScrollPane6.setViewportView(jTabVistaComprasDia);
+        if (jTabVistaComprasDia.getColumnModel().getColumnCount() > 0) {
+            jTabVistaComprasDia.getColumnModel().getColumn(0).setMinWidth(60);
+            jTabVistaComprasDia.getColumnModel().getColumn(0).setPreferredWidth(60);
+            jTabVistaComprasDia.getColumnModel().getColumn(0).setMaxWidth(60);
+            jTabVistaComprasDia.getColumnModel().getColumn(2).setPreferredWidth(15);
+            jTabVistaComprasDia.getColumnModel().getColumn(3).setPreferredWidth(15);
+            jTabVistaComprasDia.getColumnModel().getColumn(4).setPreferredWidth(15);
+            jTabVistaComprasDia.getColumnModel().getColumn(5).setPreferredWidth(15);
+            jTabVistaComprasDia.getColumnModel().getColumn(6).setPreferredWidth(15);
+            jTabVistaComprasDia.getColumnModel().getColumn(7).setPreferredWidth(15);
+        }
+
+        jPanCompraProoved.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 1170, 210));
 
         jLabel41.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel41.setText("CANTIDAD:");
-        jPanCompraProoved.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 80, 90, 40));
+        jPanCompraProoved.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 80, 90, 40));
 
-        jTextField14.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField14.addActionListener(new java.awt.event.ActionListener() {
+        txtCantidadCompra.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtCantidadCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField14ActionPerformed(evt);
+                txtCantidadCompraActionPerformed(evt);
             }
         });
-        jPanCompraProoved.add(jTextField14, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 80, 80, 40));
+        jPanCompraProoved.add(txtCantidadCompra, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 80, 80, 40));
 
         jLayeredPane3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanSubastaOption.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel57.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel57.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel57.setText("CAMIONETA:");
         jPanSubastaOption.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, 40));
-        jPanSubastaOption.add(jTextField20, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 270, 40));
+
+        txtCamSubastaCompra.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanSubastaOption.add(txtCamSubastaCompra, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 270, 40));
 
         jLayeredPane3.add(jPanSubastaOption, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 380, 60));
 
@@ -1061,111 +1157,333 @@ public class interno1 extends javax.swing.JFrame {
 
         jPanCompraProoved.add(jLayeredPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 10, 390, 60));
 
+        jLabel35.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel35.setText("NOTA:");
+        jPanCompraProoved.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 80, 70, 40));
+
+        jDateFechCompraProv.setDateFormatString("dd/MM/yyyy");
+        jDateFechCompraProv.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jPanCompraProoved.add(jDateFechCompraProv, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 20, 190, 40));
+
+        jLabel40.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel40.setText("IMPORTE:");
+        jPanCompraProoved.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 80, 70, 40));
+
+        txtNotaCompra.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanCompraProoved.add(txtNotaCompra, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 80, 210, 40));
+
+        jButton13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton13.setText("GUARDAR");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+        jPanCompraProoved.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 140, 130, 50));
+
+        jTabPrecCompProved.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTabPrecCompProved.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S"
+            }
+        ));
+        jTabPrecCompProved.setRowHeight(35);
+        jTabPrecCompProved.setRowMargin(2);
+        jScrollPane15.setViewportView(jTabPrecCompProved);
+
+        jPanCompraProoved.add(jScrollPane15, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 1120, 70));
+
+        txtImportComp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanCompraProoved.add(txtImportComp, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 80, 80, 40));
+
+        jLabel48.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel48.setText("PRECIO $:");
+        jPanCompraProoved.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 80, 70, 40));
+
         jLayeredPane1.add(jPanCompraProoved, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 650));
 
-        jPanPrestamoProovedor.setBackground(new java.awt.Color(255, 255, 153));
+        jPanPrestamoProovedor.setBackground(new java.awt.Color(255, 255, 255));
+        jPanPrestamoProovedor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Prestamo a Proveedor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         jPanPrestamoProovedor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel33.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel33.setText("ELIJA PROVEEDOR:");
-        jPanPrestamoProovedor.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 150, 40));
+        jLabel33.setText("DETALLE:");
+        jPanPrestamoProovedor.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 150, 40));
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "JUAN", "SANCHEZ", "ROLANDO", "---" }));
-        jPanPrestamoProovedor.add(jComboBox5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 190, 40));
-
-        jLabel34.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel34.setText("Prestamo:");
-        jPanPrestamoProovedor.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 160, 40));
-
-        jComboBox6.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SEMILLA", "EFECTIVO", "CAJA", "PERIODICO", " " }));
-        jPanPrestamoProovedor.add(jComboBox6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 140, 40));
-
-        jLabel35.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
-        jLabel35.setText("5600");
-        jPanPrestamoProovedor.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 90, 40));
-
-        jTextField12.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField12.addActionListener(new java.awt.event.ActionListener() {
+        jComBPrestamosProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComBPrestamosProv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField12ActionPerformed(evt);
+                jComBPrestamosProvActionPerformed(evt);
             }
         });
-        jPanPrestamoProovedor.add(jTextField12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, 80, 40));
+        jPanPrestamoProovedor.add(jComBPrestamosProv, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 190, 40));
+
+        jLabel34.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel34.setText("Prestamo de:");
+        jPanPrestamoProovedor.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 120, 40));
+
+        jComBProveedor.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComBProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComBProveedorActionPerformed(evt);
+            }
+        });
+        jPanPrestamoProovedor.add(jComBProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 140, 40));
+
+        txtCantPres.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanPrestamoProovedor.add(txtCantPres, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 80, 80, 40));
 
         jLabBNumerador.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabBNumerador.setText("CAJAS");
-        jPanPrestamoProovedor.add(jLabBNumerador, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 120, 60, 40));
+        jPanPrestamoProovedor.add(jLabBNumerador, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 80, 60, 40));
 
         jLabel37.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel37.setText("FECHA:");
-        jPanPrestamoProovedor.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 120, 70, 40));
+        jPanPrestamoProovedor.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 30, 70, 40));
 
-        jTextField13.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTextField13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField13ActionPerformed(evt);
+        txtPrecProov.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtPrecProov.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPrecProovFocusLost(evt);
             }
         });
-        jPanPrestamoProovedor.add(jTextField13, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 120, 80, 40));
+        jPanPrestamoProovedor.add(txtPrecProov, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 80, 80, 40));
 
         jButton7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton7.setText("GUARDAR");
+        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/add-BN.png"))); // NOI18N
+        jButton7.setText("AGREGAR");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
-        jPanPrestamoProovedor.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, 110, 40));
+        jPanPrestamoProovedor.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 100, 140, 50));
 
         jLabel38.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel38.setText("NOTA:");
-        jPanPrestamoProovedor.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 120, 70, 40));
-        jPanPrestamoProovedor.add(jDateChooser2, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 120, 130, 40));
+        jPanPrestamoProovedor.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 130, 70, 40));
 
+        jDatFechaPrest.setDateFormatString("dd/MM/yyyy");
+        jDatFechaPrest.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jPanPrestamoProovedor.add(jDatFechaPrest, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 30, 170, 40));
+
+        jTabPrestamoProovedores.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTabPrestamoProovedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"SEMILLA", "12-06-2019", "5", "4200", "21 000"},
-                {"PERIODICO", "06-02-2018", "3", "0", "0"},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "CONCEPTO", "FECHA", "CANTIDAD", "PRECIO", "MONTO"
+                "CAJA", "PERIODICO", "SEMILLA", "EFECTIVO"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTabPrestamoProovedores.setComponentPopupMenu(jPopupPrestaProov);
+        jTabPrestamoProovedores.setRowHeight(32);
+        jTabPrestamoProovedores.setRowMargin(2);
         jScrollPane7.setViewportView(jTabPrestamoProovedores);
 
-        jPanPrestamoProovedor.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 1310, 240));
+        jPanPrestamoProovedor.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 1310, 60));
 
         jLabel39.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel39.setText("PRECIO:");
-        jPanPrestamoProovedor.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 70, 40));
+        jLabel39.setText("M.N.");
+        jPanPrestamoProovedor.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 300, 70, 40));
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane8.setViewportView(jTextArea2);
+        textANotaPrestProv.setColumns(20);
+        textANotaPrestProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        textANotaPrestProv.setRows(5);
+        jScrollPane8.setViewportView(textANotaPrestProv);
 
-        jPanPrestamoProovedor.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 120, 290, -1));
+        jPanPrestamoProovedor.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 130, 300, 60));
 
         jLabel36.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel36.setText("CANTIDAD:");
-        jPanPrestamoProovedor.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 120, 90, 40));
+        jPanPrestamoProovedor.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 80, 90, 40));
 
-        jLabel40.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel40.setText("TOTAL $:");
-        jPanPrestamoProovedor.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 30, 90, 40));
+        jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton4.setText("GUARDAR");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanPrestamoProovedor.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 300, 130, 50));
 
-        jCheckBox3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jCheckBox3.setText("VER TODOS");
-        jPanPrestamoProovedor.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 233, 270, 40));
+        jLabel64.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel64.setText("COSTO:");
+        jPanPrestamoProovedor.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 80, 70, 40));
+
+        jLabel65.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel65.setText("IMPORTE:");
+        jPanPrestamoProovedor.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 80, 70, 40));
+        jPanPrestamoProovedor.add(txtTotalPres, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 300, 80, 40));
+
+        txtImportPres.setEditable(false);
+        txtImportPres.setBackground(new java.awt.Color(255, 255, 255));
+        txtImportPres.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanPrestamoProovedor.add(txtImportPres, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 80, 80, 40));
+
+        jLabel66.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel66.setText("TOTAL   $:");
+        jPanPrestamoProovedor.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 300, 70, 40));
+
+        jLabel67.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel67.setText("CREDITOS REALIZADOS:");
+        jPanPrestamoProovedor.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 190, 40));
+
+        jTabPreciosPrest.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "CAJA", "PERIODICO", "SEMILLA", "EFECTIVO"
+            }
+        ));
+        jTabPreciosPrest.setRowHeight(32);
+        jTabPreciosPrest.setRowMargin(2);
+        jScrollPane11.setViewportView(jTabPreciosPrest);
+
+        jPanPrestamoProovedor.add(jScrollPane11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 1310, 60));
+
+        jTabVistaPresta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTabVistaPresta.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jTabVistaPresta.setRowHeight(32);
+        jTabVistaPresta.setRowMargin(2);
+        jTabVistaPresta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTabVistaPrestaMousePressed(evt);
+            }
+        });
+        jScrollPane13.setViewportView(jTabVistaPresta);
+
+        jPanPrestamoProovedor.add(jScrollPane13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 1310, 230));
+
+        jLabel68.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel68.setText("ELIJA PROVEEDOR:");
+        jPanPrestamoProovedor.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 150, 40));
+        jPanPrestamoProovedor.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, 1140, 10));
 
         jLayeredPane1.add(jPanPrestamoProovedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1370, 650));
 
+        jPanBusquedaPrest.setBackground(new java.awt.Color(255, 255, 255));
+        jPanBusquedaPrest.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTabbedPane2.setBackground(new java.awt.Color(0, 255, 204));
+        jTabbedPane2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+
+        jPanInternoBusquedaPrest.setBackground(new java.awt.Color(255, 255, 255));
+        jPanInternoBusquedaPrest.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jDaTFechPrest1.setDateFormatString("dd/MM/yyyy");
+        jDaTFechPrest1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanInternoBusquedaPrest.add(jDaTFechPrest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 170, 40));
+
+        jLabel42.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        jLabel42.setText("Tabla de Resultados:");
+        jPanInternoBusquedaPrest.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 140, 40));
+        jPanInternoBusquedaPrest.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, 260, 10));
+
+        jCombBProvBusqPrest.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jCombBProvBusqPrest.setMaximumRowCount(25);
+        jPanInternoBusquedaPrest.add(jCombBProvBusqPrest, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 150, 40));
+
+        jLabel47.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel47.setText("ELIJA PROVEEDOR:");
+        jPanInternoBusquedaPrest.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 150, 40));
+
+        jComBusPrestamo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComBusPrestamo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLIENTE", "FECHA", "LAPSO FECHAS", "CLIENTE+FECHA", "CLIENTE+LAPSO FECHAS" }));
+        jComBusPrestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComBusPrestamoActionPerformed(evt);
+            }
+        });
+        jPanInternoBusquedaPrest.add(jComBusPrestamo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 150, 40));
+
+        jLabel69.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel69.setText("TIPO DE BUSQUEDA:");
+        jPanInternoBusquedaPrest.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 150, 40));
+
+        jLabel70.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel70.setText("ELIJA FECHA 2:");
+        jPanInternoBusquedaPrest.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 120, 120, 40));
+
+        jDaTFechPrest2.setDateFormatString("dd/MM/yyyy");
+        jDaTFechPrest2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanInternoBusquedaPrest.add(jDaTFechPrest2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 120, 170, 40));
+
+        jButton5.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/search32pxcolor.png"))); // NOI18N
+        jButton5.setText("BUSCAR");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanInternoBusquedaPrest.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 120, 160, 50));
+
+        jLabel71.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel71.setText("ELIJA FECHA:");
+        jPanInternoBusquedaPrest.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 140, 40));
+
+        jTabBusqPrestProv.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        jTabBusqPrestProv.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jTabBusqPrestProv.setRowHeight(32);
+        jTabBusqPrestProv.setRowMargin(2);
+        jTabBusqPrestProv.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTabBusqPrestProvMousePressed(evt);
+            }
+        });
+        jScrollPane14.setViewportView(jTabBusqPrestProv);
+
+        jPanInternoBusquedaPrest.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 1330, 360));
+
+        jTabbedPane2.addTab("PRESTAMOS                   ", jPanInternoBusquedaPrest);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1355, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 619, Short.MAX_VALUE)
+        );
+
+        jTabbedPane2.addTab("VENTAS                         ", jPanel4);
+
+        jPanBusquedaPrest.add(jTabbedPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1360, 650));
+
+        jLayeredPane1.add(jPanBusquedaPrest, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1360, 650));
+
         proveedorJP.add(jLayeredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, -1, 650));
 
-        paneAltas.addTab("PROVEEDORES", proveedorJP);
+        paneAltas.addTab("    PROVEEDORES    ", proveedorJP);
 
         jPanVentasPiso.setBackground(new java.awt.Color(255, 255, 255));
         jPanVentasPiso.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1276,7 +1594,7 @@ public class interno1 extends javax.swing.JFrame {
         });
         jPanVentasPiso.add(jButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 510, 170, 40));
 
-        paneAltas.addTab("VENTAS DE PISO", jPanVentasPiso);
+        paneAltas.addTab("    VENTAS DE PISO    ", jPanVentasPiso);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1289,7 +1607,7 @@ public class interno1 extends javax.swing.JFrame {
             .addGap(0, 696, Short.MAX_VALUE)
         );
 
-        paneAltas.addTab("FLETES", jPanel5);
+        paneAltas.addTab("    FLETES    ", jPanel5);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -1302,7 +1620,7 @@ public class interno1 extends javax.swing.JFrame {
             .addGap(0, 696, Short.MAX_VALUE)
         );
 
-        paneAltas.addTab("NOMINAS", jPanel6);
+        paneAltas.addTab("    NOMINAS    ", jPanel6);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1315,49 +1633,10 @@ public class interno1 extends javax.swing.JFrame {
             .addGap(0, 696, Short.MAX_VALUE)
         );
 
-        paneAltas.addTab("PAGOS", jPanel8);
+        paneAltas.addTab("    PAGOS    ", jPanel8);
 
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel7.add(jDateChooser4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 300, 150, 40));
-
-        jLabel49.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel49.setText("FECHA FIN:");
-        jPanel7.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 300, 90, 40));
-        jPanel7.add(jDateChooser5, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 300, 150, 40));
-
-        jLabel50.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel50.setText("FECHA INICIO:");
-        jPanel7.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 300, 110, 40));
-        jPanel7.add(jDateChooser3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 300, 150, 40));
-
-        jLabel42.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel42.setText("FECHA BUSQUEDA:");
-        jPanel7.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 300, 140, 40));
-
-        jTextField16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPanel7.add(jTextField16, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 300, 210, 40));
-
-        jComboBox9.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLIENTE", "FECHA", "RANGO DE FECHAS", "ALL" }));
-        jPanel7.add(jComboBox9, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 150, 40));
-
-        jLabel47.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel47.setText("BUSCAR PEDIDO:");
-        jPanel7.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 150, 40));
-
-        jLabel48.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel48.setText("NOMBRE CLIENTE:");
-        jPanel7.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 150, 40));
-
-        jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel7.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 350, 10, 50));
-
-        jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel7.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 290, 10, 50));
-
-        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel7.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 290, 10, 50));
-
-        paneAltas.addTab("INFORMES", jPanel7);
+        paneAltas.addTab("    INFORMES    ", jPanel7);
 
         getContentPane().add(paneAltas, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1920, 730));
 
@@ -1404,49 +1683,46 @@ public class interno1 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
     private void jtxtMontoAdeudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtMontoAdeudaActionPerformed
     }//GEN-LAST:event_jtxtMontoAdeudaActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        JOptionPane.showMessageDialog(null, "Tiene adeudo de Semill");
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboAltasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboAltasActionPerformed
-        int var = jComboAltas.getSelectedIndex();        
-        if(var == 0)
-        {
-            fn.setBorder(jPanAdminist,"Formulario Clientes");
+        int var = jComboAltas.getSelectedIndex();
+        if (var == 0) {
+            fn.setBorder(jPanAdminist, "Formulario Clientes");
             fn.setBorder(jPanVistaAlta, "Vista Clientes");
-            txtQuintoAltas.setVisible(true);jTextApellidos.setVisible(true);
-            atribAltaCli="clientepedidos";
-            mostrarTablaAltaCli(var,"","nombre");
+            txtQuintoAltas.setVisible(true);
+            jTextApellidos.setVisible(true);
+            atribAltaCli = "clientepedidos";
+            mostrarTablaAltaCli(var, "", "nombre");
         }
-        if(var == 1)
-        {
-            fn.setBorder(jPanAdminist,"Formulario Proveedor");
-             fn.setBorder(jPanVistaAlta, "Vista Proveedores");
-             txtQuintoAltas.setVisible(false);jTextApellidos.setVisible(true);
-             atribAltaCli="proveedor";
-            mostrarTablaAltaCli(var,"","nombreP");
+        if (var == 1) {
+            fn.setBorder(jPanAdminist, "Formulario Proveedor");
+            fn.setBorder(jPanVistaAlta, "Vista Proveedores");
+            txtQuintoAltas.setVisible(false);
+            jTextApellidos.setVisible(true);
+            atribAltaCli = "proveedor";
+            mostrarTablaAltaCli(var, "", "nombreP");
         }
-        if(var == 2)
-        {
-            fn.setBorder(jPanAdminist,"Formulario Empleados");
-             fn.setBorder(jPanVistaAlta, "Vista Empleados");
-            txtQuintoAltas.setVisible(false);jTextApellidos.setVisible(true);
-            atribAltaCli="empleado";
-            mostrarTablaAltaCli(var,"","nombreE");
+        if (var == 2) {
+            fn.setBorder(jPanAdminist, "Formulario Empleados");
+            fn.setBorder(jPanVistaAlta, "Vista Empleados");
+            txtQuintoAltas.setVisible(false);
+            jTextApellidos.setVisible(true);
+            atribAltaCli = "empleado";
+            mostrarTablaAltaCli(var, "", "nombreE");
         }
-        if(var == 3)
-        {
-           fn.setBorder(jPanAdminist,"Formulario Fletero");
-           fn.setBorder(jPanVistaAlta, "Vista Fleteros");
-           txtQuintoAltas.setVisible(false);jTextApellidos.setVisible(false);
-           atribAltaCli="fletero";
-            mostrarTablaAltaCli(var,"","nombreF");
+        if (var == 3) {
+            fn.setBorder(jPanAdminist, "Formulario Fletero");
+            fn.setBorder(jPanVistaAlta, "Vista Fleteros");
+            txtQuintoAltas.setVisible(false);
+            jTextApellidos.setVisible(false);
+            atribAltaCli = "fletero";
+            mostrarTablaAltaCli(var, "", "nombreF");
         }
         jButaltasGuardar.setEnabled(true);
         limpiaCamposAltaCli();
@@ -1454,139 +1730,143 @@ public class interno1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboAltasActionPerformed
 
     private void jButAltasActualizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButAltasActualizaActionPerformed
-        
+
         int var = jComboAltas.getSelectedIndex();
-        
-        List<String> contentL=new ArrayList<String>();
-        String var1=jTextNombre.getText(), 
-                var2= jTextApellidos.getText(),
-                var3=jTextLocalidad.getText(),
-                var4=jTexTelefono.getText(),
-                var5=txtQuintoAltas.getText(),
-                var6=fn.getFecha(jDateChFechaAlta),radio="",isPar=txtIdParam.getText();
-                
-               if(jRad1Activo.isSelected())
-                   radio ="1";
-               else if(jRadInactivo.isSelected())
-                   radio="0";
-              contentL.add( (var1.isEmpty())?"/" : var1);
-              contentL.add( (var2.isEmpty())?"/" : var2);
-              contentL.add( (var3.isEmpty())?"/" : var3);
-              contentL.add(radio);
-              contentL.add( var6);
-              contentL.add( (var4.isEmpty())?"/" : var4);             
-              contentL.add( (var5.isEmpty())?"/" : var5);
-               
-              switch (var){
-           case 0:
-                controlInserts.actualizaData("clientepedidos", contentL,isPar);
-                atribAltaCli="clientepedidos";
-                mostrarTablaAltaCli(var,"","nombre");
-           break;
-           case 1:
-                  controlInserts.actualizaData("proveedor", contentL,isPar);
-                  atribAltaCli="proveedor";
-                  mostrarTablaAltaCli(var,"","nombreP");
-           break;
-           case 2:
-               controlInserts.actualizaData("empleado", contentL,isPar);
-               atribAltaCli="empleado";
-               mostrarTablaAltaCli(var,"","nombreE");
-           break;
-           case 3:
-               controlInserts.actualizaData("fletero", contentL,isPar);
-               atribAltaCli="fletero";
-               mostrarTablaAltaCli(var,"","nombreF");
-           break;
-           default:              
-               break;
-       }        
-jButaltasGuardar.setEnabled(true);
-limpiaCamposAltaCli();
+
+        List<String> contentL = new ArrayList<String>();
+        String var1 = jTextNombre.getText(),
+                var2 = jTextApellidos.getText(),
+                var3 = jTextLocalidad.getText(),
+                var4 = jTexTelefono.getText(),
+                var5 = txtQuintoAltas.getText(),
+                var6 = fn.getFecha(jDateChFechaAlta), radio = "", isPar = txtIdParam.getText();
+
+        if (jRad1Activo.isSelected()) {
+            radio = "1";
+        } else if (jRadInactivo.isSelected()) {
+            radio = "0";
+        }
+        contentL.add((var1.isEmpty()) ? "/" : var1);
+        contentL.add((var2.isEmpty()) ? "/" : var2);
+        contentL.add((var3.isEmpty()) ? "/" : var3);
+        contentL.add(radio);
+        contentL.add(var6);
+        contentL.add((var4.isEmpty()) ? "/" : var4);
+        contentL.add((var5.isEmpty()) ? "/" : var5);
+
+        switch (var) {
+            case 0:
+                controlInserts.actualizaData("clientepedidos", contentL, isPar);
+                atribAltaCli = "clientepedidos";
+                mostrarTablaAltaCli(var, "", "nombre");
+                break;
+            case 1:
+                controlInserts.actualizaData("proveedor", contentL, isPar);
+                atribAltaCli = "proveedor";
+                mostrarTablaAltaCli(var, "", "nombreP");
+                break;
+            case 2:
+                controlInserts.actualizaData("empleado", contentL, isPar);
+                atribAltaCli = "empleado";
+                mostrarTablaAltaCli(var, "", "nombreE");
+                break;
+            case 3:
+                controlInserts.actualizaData("fletero", contentL, isPar);
+                atribAltaCli = "fletero";
+                mostrarTablaAltaCli(var, "", "nombreF");
+                break;
+            default:
+                break;
+        }
+        jButaltasGuardar.setEnabled(true);
+        limpiaCamposAltaCli();
     }//GEN-LAST:event_jButAltasActualizaActionPerformed
 
     private void jRad1ActivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRad1ActivoActionPerformed
-        
 
-        
+
     }//GEN-LAST:event_jRad1ActivoActionPerformed
 
     private void jTableAltasCliMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAltasCliMousePressed
-       int opc = jComboAltas.getSelectedIndex();
+        int opc = jComboAltas.getSelectedIndex();
         List<String> values = new ArrayList<String>();
-        if(evt.getClickCount() > 1){
+        if (evt.getClickCount() > 1) {
             jButaltasGuardar.setEnabled(false);
             int fila = jTableAltasCli.getSelectedRow();
-            String val = jTableAltasCli.getValueAt(fila,0).toString();
-           if(opc==0){
-               values=controlInserts.regresaDatos(0, val);
-               txtIdParam.setText(values.get(0));
-               jTextNombre.setText(values.get(1));
-               jTextApellidos.setText(values.get(2));
-               jTextLocalidad.setText(values.get(3));
-              if(values.get(4).equals("1"))
-                  jRad1Activo.setSelected(true);
-              else if(values.get(4).equals("0")){
-                  jRadInactivo.setSelected(true);
-              }
-              jDateChFechaAlta.setDate(fn.StringDate(values.get(5)));
-              jTexTelefono.setText(values.get(6));
-              txtQuintoAltas.setText(values.get(7));
-           }
-           if(opc==1){
-               values=controlInserts.regresaDatos(1, val);
-               txtIdParam.setText(values.get(0));
+            String val = jTableAltasCli.getValueAt(fila, 0).toString();
+            if (opc == 0) {
+                values = controlInserts.regresaDatos(0, val);
+                txtIdParam.setText(values.get(0));
                 jTextNombre.setText(values.get(1));
-               jTextApellidos.setText(values.get(2));
-               jTextLocalidad.setText(values.get(3));
-              if(values.get(4).equals("1"))
-                  jRad1Activo.setSelected(true);
-              else if(values.get(4).equals("0")){
-                  jRadInactivo.setSelected(true);
-              }
-               jDateChFechaAlta.setDate(fn.StringDate(values.get(5)));
-               jTexTelefono.setText(values.get(6));
-           }
-           if(opc==2){
-                values=controlInserts.regresaDatos(2, val);
-               txtIdParam.setText(values.get(0));
+                jTextApellidos.setText(values.get(2));
+                jTextLocalidad.setText(values.get(3));
+                if (values.get(4).equals("1")) {
+                    jRad1Activo.setSelected(true);
+                } else if (values.get(4).equals("0")) {
+                    jRadInactivo.setSelected(true);
+                }
+                jDateChFechaAlta.setDate(fn.StringDate(values.get(5)));
+                jTexTelefono.setText(values.get(6));
+                txtQuintoAltas.setText(values.get(7));
+            }
+            if (opc == 1) {
+                values = controlInserts.regresaDatos(1, val);
+                txtIdParam.setText(values.get(0));
                 jTextNombre.setText(values.get(1));
-               jTextApellidos.setText(values.get(2));
-               jTextLocalidad.setText(values.get(3));
-              if(values.get(4).equals("1"))
-                  jRad1Activo.setSelected(true);
-              else if(values.get(4).equals("0")){
-                  jRadInactivo.setSelected(true);
-              }
-               jDateChFechaAlta.setDate(fn.StringDate(values.get(5)));
-               jTexTelefono.setText(values.get(6));
-           }
-           if(opc==3){
-                values=controlInserts.regresaDatos(3, val);
-               txtIdParam.setText(values.get(0));
-               jTextNombre.setText(values.get(1));
-               jTextLocalidad.setText(values.get(2));
-              if(values.get(3).equals("1"))
-                  jRad1Activo.setSelected(true);
-              else if(values.get(3).equals("0")){
-                  jRadInactivo.setSelected(true);
-              }
-               jDateChFechaAlta.setDate(fn.StringDate(values.get(4)));
-               jTexTelefono.setText(values.get(5));
-           }
-       }     
+                jTextApellidos.setText(values.get(2));
+                jTextLocalidad.setText(values.get(3));
+                if (values.get(4).equals("1")) {
+                    jRad1Activo.setSelected(true);
+                } else if (values.get(4).equals("0")) {
+                    jRadInactivo.setSelected(true);
+                }
+                jDateChFechaAlta.setDate(fn.StringDate(values.get(5)));
+                jTexTelefono.setText(values.get(6));
+            }
+            if (opc == 2) {
+                values = controlInserts.regresaDatos(2, val);
+                txtIdParam.setText(values.get(0));
+                jTextNombre.setText(values.get(1));
+                jTextApellidos.setText(values.get(2));
+                jTextLocalidad.setText(values.get(3));
+                if (values.get(4).equals("1")) {
+                    jRad1Activo.setSelected(true);
+                } else if (values.get(4).equals("0")) {
+                    jRadInactivo.setSelected(true);
+                }
+                jDateChFechaAlta.setDate(fn.StringDate(values.get(5)));
+                jTexTelefono.setText(values.get(6));
+            }
+            if (opc == 3) {
+                values = controlInserts.regresaDatos(3, val);
+                txtIdParam.setText(values.get(0));
+                jTextNombre.setText(values.get(1));
+                jTextLocalidad.setText(values.get(2));
+                if (values.get(3).equals("1")) {
+                    jRad1Activo.setSelected(true);
+                } else if (values.get(3).equals("0")) {
+                    jRadInactivo.setSelected(true);
+                }
+                jDateChFechaAlta.setDate(fn.StringDate(values.get(4)));
+                jTexTelefono.setText(values.get(5));
+            }
+        }
         jButAltasActualiza.setEnabled(true);
     }//GEN-LAST:event_jTableAltasCliMousePressed
 
-    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
-        if(jRadioButton3.isSelected()){
-           jPanCompraProoved.setVisible(true);
-           jPanPrestamoProovedor.setVisible(false);
-        }    
-    }//GEN-LAST:event_jRadioButton3ActionPerformed
+    private void jRadBCompraProveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadBCompraProveActionPerformed
+        if (jRadBCompraProve.isSelected()) {
+            jPanCompraProoved.setVisible(true);
+            jPanPrestamoProovedor.setVisible(false);
+            jPanBusquedaPrest.setVisible(false);
+            llenacomboProducts();
+            llenacomboProovedores();
+            jDateFechCompraProv.setDate(cargafecha());
+            cargaComprasDia(fn.getFecha(jDateFechCompraProv));
+        }
+    }//GEN-LAST:event_jRadBCompraProveActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
         jPanel1.setVisible(false);
         jPanAgregarFlete.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
@@ -1619,46 +1899,87 @@ limpiaCamposAltaCli();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jTable2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MousePressed
-        if (evt.getClickCount() > 1)
-           {
-                aF = new AgregaFlete();
-                aF.setVisible(true);
-                aF.setEnabled(true);
-                aF.validate();
-           }
-
-        // TODO add your handling code here:
+        if (evt.getClickCount() > 1) {
+            aF = new AgregaFlete();
+            aF.setVisible(true);
+            aF.setEnabled(true);
+            aF.validate();
+        }
     }//GEN-LAST:event_jTable2MousePressed
 
-    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
-        if (jRadioButton4.isSelected())
-        {
-           jPanCompraProoved.setVisible(false);
-           jPanPrestamoProovedor.setVisible(true);
+    private void jRadBPrestamoProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadBPrestamoProvActionPerformed
+        if (jRadBPrestamoProv.isSelected()) {
+            jPanCompraProoved.setVisible(false);
+            jPanPrestamoProovedor.setVisible(true);
+            jPanBusquedaPrest.setVisible(false);
+
+            llenacomboProovedores();
+            llenacomboProdPrest();
+            String datePed = fn.getFecha(jDatFechaPrest);
+
+            String[][] mat = controlInserts.matrizPrestaProv(datePed);
+            jTabVistaPresta.setModel(new TModel(mat, cabPrest));
         }
-    }//GEN-LAST:event_jRadioButton4ActionPerformed
-
-    private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField12ActionPerformed
-
-    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField13ActionPerformed
+    }//GEN-LAST:event_jRadBPrestamoProvActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        int dialog = JOptionPane.YES_NO_OPTION;
-        int result = JOptionPane.showConfirmDialog(null, "¿Desea Realizar algun Abono?","Exit",dialog);
-        if(result == 0){
-            System.exit(0);
-        }else{
-            System.out.println(result);
-        }
+        int opc = jComBPrestamosProv.getSelectedIndex(),//index de proveedor
+                codP = jComBProveedor.getSelectedIndex();//index de producto
+        importes.add(txtImportPres.getText());
+
+        String id_cli = idProoved.get(opc),//idProveedor devuelto de la base de datos
+                codPro = idProdPrest.get(codP),//idProducto devuelto de la base de datos
+                costoProd = txtPrecProov.getText(),
+                cantidad = txtCantPres.getText(),//indexCliente
+                nota = textANotaPrestProv.getText(),
+                importe = txtImportPres.getText(),
+                datePed = fn.getFecha(jDatFechaPrest);
+        System.out.println("IdProveedor: " + id_cli + "\t idProd: " + codPro + "Fecha: " + datePed);
+
+        List<String> dataPrestamo = new ArrayList<String>();
+        if (cantidad.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una cantidad");
+        } else {
+            dtm = (DefaultTableModel) jTabPrestamoProovedores.getModel();
+            dtmPrec = (DefaultTableModel) jTabPreciosPrest.getModel();
+            int filas = dtm.getRowCount(), filasPrec = dtmPrec.getRowCount();
+            int column = dtm.getColumnCount(), column2 = dtmPrec.getColumnCount();
+            //JOptionPane.showMessageDialog(null, "filas= "+filas+"\n Col= "+column);
+            if (filas == 0) {
+                dtm.setRowCount(1);
+                dtmPrec.setRowCount(1);
+
+                jTabPrestamoProovedores.setModel(dtm);
+                jTabPreciosPrest.setModel(dtmPrec);
+
+                jTabPrestamoProovedores.setValueAt(cantidad, 0, Integer.parseInt(codPro) - 7);
+                jTabPreciosPrest.setValueAt(costoProd, 0, Integer.parseInt(codPro) - 7);
+
+//id_ProveedorF,fechaPrestamo,status,notaPrest
+                dataPrestamo.add(id_cli);
+                dataPrestamo.add(datePed);
+                dataPrestamo.add("0");
+                if (nota.isEmpty()) {
+                    dataPrestamo.add("/");
+                } else {
+                    dataPrestamo.add(nota);
+                }
+
+                controlInserts.guardaPrestamoProv(dataPrestamo);
+                limpiaPrestamoProv();
+                jComBPrestamosProv.setEnabled(false);
+                textANotaPrestProv.setEnabled(false);
+            } else {
+                jTabPrestamoProovedores.setValueAt(cantidad, 0, Integer.parseInt(codPro) - 7);
+                jTabPreciosPrest.setValueAt(costoProd, 0, Integer.parseInt(codPro) - 7);
+                limpiaPrestamoProv();
+            }
+        }//else vacio
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jTextField14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField14ActionPerformed
+    private void txtCantidadCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadCompraActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField14ActionPerformed
+    }//GEN-LAST:event_txtCantidadCompraActionPerformed
 
     private void txtCantCreaPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantCreaPedidoActionPerformed
         // TODO add your handling code here:
@@ -1669,12 +1990,11 @@ limpiaCamposAltaCli();
     }//GEN-LAST:event_txtNotePedidoCliActionPerformed
 
     private void jCElijaProovedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCElijaProovedorActionPerformed
-        String var = jCElijaProovedor.getSelectedItem().toString();        
-        if(var.equals("SUBASTA"))
-        {
+        String var = jCElijaProovedor.getSelectedItem().toString();
+        if (var.equals("SUBASTA")) {
             jPanSubastaOption.setVisible(true);
-        }else{
-             jPanSubastaOption.setVisible(false);
+        } else {
+            jPanSubastaOption.setVisible(false);
         }
     }//GEN-LAST:event_jCElijaProovedorActionPerformed
 
@@ -1692,35 +2012,35 @@ limpiaCamposAltaCli();
 
     private void jPanVentasPisoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanVentasPisoKeyReleased
 
-        if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){//,VK_F1
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {//,VK_F1
             JOptionPane.showMessageDialog(null, "OPRIMIO ESC TECLA");
-}
-       int key = evt.getKeyCode();
-       System.out.println(key);
+        }
+        int key = evt.getKeyCode();
+        System.out.println(key);
     }//GEN-LAST:event_jPanVentasPisoKeyReleased
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        vP = new VentaPiso(13567,"0123");
+        vP = new VentaPiso("13567", "0123");
         vP.setVisible(true);
         vP.setEnabled(true);
         vP.validate();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        JPanel panel2=new JPanel();
+        JPanel panel2 = new JPanel();
         panel2.setLayout(null);
         jTabbedPane1.addTab("Ticket", panel2);
-        jTabbedPane1.setSelectedIndex(jTabbedPane1.getSelectedIndex()+1);
+        jTabbedPane1.setSelectedIndex(jTabbedPane1.getSelectedIndex() + 1);
         //Componentes del panel2
-        Object titulos []={"Codigo", "Descripcion","Precio Venta","Cantidad","Importe","Existencia"};
-        Object celdas [][]=new Object[4][6];
+        Object titulos[] = {"Codigo", "Descripcion", "Precio Venta", "Cantidad", "Importe", "Existencia"};
+        Object celdas[][] = new Object[4][6];
         JScrollPane scroll = new JScrollPane();
-        JTable tabla=new JTable(celdas, titulos);
+        JTable tabla = new JTable(celdas, titulos);
         scroll.setViewportView(tabla);
-        scroll.setBounds(10, 10, 800,300);
+        scroll.setBounds(10, 10, 800, 300);
         panel2.add(scroll);
-        JLabel et_p2=new JLabel("Estas en el panel 2");       
-        panel2.add(et_p2);      
+        JLabel et_p2 = new JLabel("Estas en el panel 2");
+        panel2.add(et_p2);
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
@@ -1730,250 +2050,255 @@ limpiaCamposAltaCli();
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButaltasGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButaltasGuardarActionPerformed
-        int var =jComboAltas.getSelectedIndex();
-        List<String> contentL=new ArrayList<String>();
-        String var1=jTextNombre.getText(), 
-                var2= jTextApellidos.getText(),
-                var3=jTextLocalidad.getText(),
-                var4=jTexTelefono.getText(),
-                var5=txtQuintoAltas.getText(),
-                var6=fn.getFecha(jDateChFechaAlta);
-               if(var1.isEmpty())
-                   contentL.add("/");
-               else
-                   contentL.add(var1);
-              contentL.add( (var2.isEmpty())?"/":var2);
-              contentL.add( (var3.isEmpty())?"/":var3);
-              contentL.add( var6);
-              contentL.add( (var4.isEmpty())?"/":var4);             
-              contentL.add( (var5.isEmpty())?"/":var5);
-                switch (var){
-           case 0:
-               controlInserts.insertaCampos("clientepedidos", contentL);
-                atribAltaCli="clientepedidos";
-                mostrarTablaAltaCli(var,"","nombre");
-           break;
-           case 1:
-                  controlInserts.insertaCampos("proveedor", contentL);
-                  atribAltaCli="proveedor";
-                  mostrarTablaAltaCli(var,"","nombreP");
-           break;
-           case 2:
-               controlInserts.insertaCampos("empleado", contentL);
-               atribAltaCli="empleado";
-              mostrarTablaAltaCli(var,"","nombreE");
-           break;
-           case 3:
-               controlInserts.insertaCampos("fletero", contentL);
-               atribAltaCli="fletero";
-               mostrarTablaAltaCli(var,"","nombreF");
-           break;
-           default:              
-               break;
-       }        
+        int var = jComboAltas.getSelectedIndex();
+        List<String> contentL = new ArrayList<String>();
+        String var1 = jTextNombre.getText(),
+                var2 = jTextApellidos.getText(),
+                var3 = jTextLocalidad.getText(),
+                var4 = jTexTelefono.getText(),
+                var5 = txtQuintoAltas.getText(),
+                var6 = fn.getFecha(jDateChFechaAlta);
+        if (var1.isEmpty() && var2.isEmpty() && var3.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar por lo menos campo Nombre");
+        } else {
+
+            if (var1.isEmpty()) {
+                contentL.add("/");
+            } else {
+                contentL.add(var1);
+            }
+            contentL.add((var2.isEmpty()) ? "/" : var2);
+            contentL.add((var3.isEmpty()) ? "/" : var3);
+            contentL.add(var6);
+            contentL.add((var4.isEmpty()) ? "/" : var4);
+            contentL.add((var5.isEmpty()) ? "/" : var5);
+            switch (var) {
+                case 0:
+                    controlInserts.insertaCampos("clientepedidos", contentL);
+                    atribAltaCli = "clientepedidos";
+                    mostrarTablaAltaCli(var, "", "nombre");
+                    break;
+                case 1:
+                    controlInserts.insertaCampos("proveedor", contentL);
+                    atribAltaCli = "proveedor";
+                    mostrarTablaAltaCli(var, "", "nombreP");
+                    break;
+                case 2:
+                    controlInserts.insertaCampos("empleado", contentL);
+                    atribAltaCli = "empleado";
+                    mostrarTablaAltaCli(var, "", "nombreE");
+                    break;
+                case 3:
+                    controlInserts.insertaCampos("fletero", contentL);
+                    atribAltaCli = "fletero";
+                    mostrarTablaAltaCli(var, "", "nombreF");
+                    break;
+                default:
+                    break;
+            }
+        }//if vacio
     }//GEN-LAST:event_jButaltasGuardarActionPerformed
 
     private void txtBusqAltasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusqAltasKeyPressed
-    String pal = txtBusqAltas.getText();
-    int opc = jComboAltas.getSelectedIndex();
-    
-    if(opc == 0){
-        atribAltaCli="clientepedidos";
-        mostrarTablaAltaCli(opc,pal,"nombre");
-    }
-    
-    if(opc ==1){
-       atribAltaCli="proveedor";
-        mostrarTablaAltaCli(opc,pal,"nombreP");
-    }
-    
-    if(opc == 2){
-       atribAltaCli="empleado";
-        mostrarTablaAltaCli(opc,pal,"nombreE");
-    }
-        
-    if(opc == 3){
-       atribAltaCli="fletero";
-        mostrarTablaAltaCli(opc,pal,"nombreF");
-    }
+        String pal = txtBusqAltas.getText();
+        int opc = jComboAltas.getSelectedIndex();
+
+        if (opc == 0) {
+            atribAltaCli = "clientepedidos";
+            mostrarTablaAltaCli(opc, pal, "nombre");
+        }
+
+        if (opc == 1) {
+            atribAltaCli = "proveedor";
+            mostrarTablaAltaCli(opc, pal, "nombreP");
+        }
+
+        if (opc == 2) {
+            atribAltaCli = "empleado";
+            mostrarTablaAltaCli(opc, pal, "nombreE");
+        }
+
+        if (opc == 3) {
+            atribAltaCli = "fletero";
+            mostrarTablaAltaCli(opc, pal, "nombreF");
+        }
     }//GEN-LAST:event_txtBusqAltasKeyPressed
 
     private void jRadioCreaPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioCreaPedidoActionPerformed
-       conten=llenacomboAltaClis();
-       jDateCHPedido.setDate(cargafecha());
-       llenacomboProducts();
-       String datePed=fn.getFecha(jDateCHPedido);
-       
-       String[][] mat =controlInserts.matrizPedidos(datePed);
-       jTabPedidosDiaView.setModel(new TModel(mat,cab));
-       jPanConsulPed.setVisible(false);
-       jPanCreaPedido.setVisible(true);
+        conten = llenacomboAltaClis();
+        jDateCHPedido.setDate(cargafecha());
+        llenacomboProducts();
+        String datePed = fn.getFecha(jDateCHPedido);
+
+        String[][] mat = controlInserts.matrizPedidos(datePed);
+        jTabPedidosDiaView.setModel(new TModel(mat, cab));
+        jPanConsulPed.setVisible(false);
+        jPanCreaPedido.setVisible(true);
     }//GEN-LAST:event_jRadioCreaPedidoActionPerformed
 
     private void jCombPedidoClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCombPedidoClientActionPerformed
         int opc = jCombPedidoClient.getSelectedIndex();
-         dtm = (DefaultTableModel) jTableCreaPedidos.getModel();
-                int filas = dtm.getRowCount();
-                int column = dtm.getColumnCount();
-                if(filas >0){
-                    dtm.removeRow(0);
-                    jTableCreaPedidos.setModel(dtm);
-                }
-                    
+        dtm = (DefaultTableModel) jTableCreaPedidos.getModel();
+        int filas = dtm.getRowCount();
+        int column = dtm.getColumnCount();
+        if (filas > 0) {
+            dtm.removeRow(0);
+            jTableCreaPedidos.setModel(dtm);
+        }
+
     }//GEN-LAST:event_jCombPedidoClientActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-       int opc = jCombPedidoClient.getSelectedIndex(),//index de cliente
+        int opc = jCombPedidoClient.getSelectedIndex(),//index de cliente
                 codP = jCombProdPedidos.getSelectedIndex();//index de producto
-       
-       String id_cli =conten.get(opc),//idCliente devuelto de la base de datos
-                codPro=idProducts.get(codP),//idProducto devuelto de la base de datos
-                cantidad =txtCantCreaPedido.getText(),//indexCliente
-                nota=txtNotePedidoCli.getText(),
-               datePed=fn.getFecha(jDateCHPedido);
-       List<String> dataPedidoCli=new ArrayList<String>(); 
-        if(cantidad.isEmpty()){
+
+        String id_cli = conten.get(opc),//idCliente devuelto de la base de datos
+                codPro = idProducts.get(codP),//idProducto devuelto de la base de datos
+                cantidad = txtCantCreaPedido.getText(),//indexCliente
+                nota = txtNotePedidoCli.getText(),
+                datePed = fn.getFecha(jDateCHPedido);
+        List<String> dataPedidoCli = new ArrayList<String>();
+        if (cantidad.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debe ingresar una cantidad");
-        }else{
-                dtm = (DefaultTableModel) jTableCreaPedidos.getModel();
-                int filas = dtm.getRowCount();
-                int column = dtm.getColumnCount();
-                //JOptionPane.showMessageDialog(null, "filas= "+filas+"\n Col= "+column);
-                if(filas == 0){
-                    dtm.setRowCount(1);
-                    jTableCreaPedidos.setModel(dtm);
-                    jTableCreaPedidos.setValueAt(cantidad, 0, codP);
-                    
-                    dataPedidoCli.add(id_cli);
-                    dataPedidoCli.add(datePed);
-                    if(nota.isEmpty())
-                        dataPedidoCli.add("/");
-                    else
-                        dataPedidoCli.add(nota);
-                    controlInserts.guardaPedidoCli(dataPedidoCli); 
-                    jCombPedidoClient.setEnabled(false);
-        }else{
-            jTableCreaPedidos.setValueAt(cantidad, 0, codP);        
+        } else {
+            dtm = (DefaultTableModel) jTableCreaPedidos.getModel();
+            int filas = dtm.getRowCount();
+            int column = dtm.getColumnCount();
+            //JOptionPane.showMessageDialog(null, "filas= "+filas+"\n Col= "+column);
+            if (filas == 0) {
+                dtm.setRowCount(1);
+                jTableCreaPedidos.setModel(dtm);
+                jTableCreaPedidos.setValueAt(cantidad, 0, codP);
+
+                dataPedidoCli.add(id_cli);
+                dataPedidoCli.add(datePed);
+                if (nota.isEmpty()) {
+                    dataPedidoCli.add("/");
+                } else {
+                    dataPedidoCli.add(nota);
+                }
+                controlInserts.guardaPedidoCli(dataPedidoCli);
+                jCombPedidoClient.setEnabled(false);
+            } else {
+                jTableCreaPedidos.setValueAt(cantidad, 0, codP);
             }
         }//else vacio
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButGuardaPedidodiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButGuardaPedidodiaActionPerformed
-      dtm = (DefaultTableModel) jTableCreaPedidos.getModel();
-                int filas = dtm.getRowCount();
-                int column = dtm.getColumnCount();
-                if(filas > 0){
-        String[] ultimo =controlInserts.ultimoRegistroPedido();
-        Object val=null;
-        int opc = jCombPedidoClient.getSelectedIndex(),//index de cliente
-        codP = jCombProdPedidos.getSelectedIndex();//index de producto
-        String id_cli =conten.get(opc);
-        String cantidad =txtCantCreaPedido.getText(),datePed=fn.getFecha(jDateCHPedido);
-        
-        //System.out.println("id_cli:"+id_cli+"\n id ped: "+ultimo[1]);
-               
-                for(int i=0;i<column;i++){
-                    val = jTableCreaPedidos.getValueAt(0, i);
-                    if(val != null){
-                        controlInserts.guardaDetallePedidoCli(ultimo[0],Integer.toString(i+1),Integer.parseInt(jTableCreaPedidos.getValueAt(0, i).toString()));
-                        //System.out.println("pos= "+(i+1)+" "+jTableCreaPedidos.getColumnName(i)+"\t-> val= "+jTableCreaPedidos.getValueAt(0, i).toString());
-                    }//if null
-                }
-           String[][] mat =controlInserts.matrizPedidos(datePed);
-       jTabPedidosDiaView.setModel(new TModel(mat,cab));
+        dtm = (DefaultTableModel) jTableCreaPedidos.getModel();
+        int filas = dtm.getRowCount();
+        int column = dtm.getColumnCount();
+        if (filas > 0) {
+            String[] ultimo = controlInserts.ultimoRegistroPedido();
+            Object val = null;
+            int opc = jCombPedidoClient.getSelectedIndex(),//index de cliente
+                    codP = jCombProdPedidos.getSelectedIndex();//index de producto
+            String id_cli = conten.get(opc);
+            String cantidad = txtCantCreaPedido.getText(), datePed = fn.getFecha(jDateCHPedido);
 
-                }else{
-                    JOptionPane.showMessageDialog(null, "No ha generado pedido para el cliente: "+jCombPedidoClient.getSelectedItem().toString());
-                }
-                jCombPedidoClient.setEnabled(true);
+            //System.out.println("id_cli:"+id_cli+"\n id ped: "+ultimo[1]);
+            for (int i = 0; i < column; i++) {
+                val = jTableCreaPedidos.getValueAt(0, i);
+                if (val != null) {
+                    controlInserts.guardaDetallePedidoCli(ultimo[0], Integer.toString(i + 1), Integer.parseInt(jTableCreaPedidos.getValueAt(0, i).toString()));
+                    //System.out.println("pos= "+(i+1)+" "+jTableCreaPedidos.getColumnName(i)+"\t-> val= "+jTableCreaPedidos.getValueAt(0, i).toString());
+                }//if null
+            }
+
+            String[][] mat = controlInserts.matrizPedidos(datePed);
+            jTabPedidosDiaView.setModel(new TModel(mat, cab));
+
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha generado pedido para el cliente: " + jCombPedidoClient.getSelectedItem().toString());
+        }
+        jCombPedidoClient.setEnabled(true);
     }//GEN-LAST:event_jButGuardaPedidodiaActionPerformed
 
     private void jRadioConsulPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioConsulPedidoActionPerformed
-       conten=llenacomboAltaClis();
-       jDateChoB1Cli.setDate(cargafecha());
-       jDate2BusqCli.setDate(cargafecha());
-      
-       String datePed=fn.getFecha(jDateCHPedido);
-                jCombOpcBusqPedido.setVisible(true);
-                 jComPedBusqCli.setEnabled(true);
-                 jDateChoB1Cli.setEnabled(false);
-                 jDate2BusqCli.setEnabled(false);
-        
+        conten = llenacomboAltaClis();
+        jDateChoB1Cli.setDate(cargafecha());
+        jDate2BusqCli.setDate(cargafecha());
+
+        String datePed = fn.getFecha(jDateCHPedido);
+        jCombOpcBusqPedido.setVisible(true);
+        jComPedBusqCli.setEnabled(true);
+        jDateChoB1Cli.setEnabled(false);
+        jDate2BusqCli.setEnabled(false);
+
         jPanConsulPed.setVisible(true);
-       jPanCreaPedido.setVisible(false);
+        jPanCreaPedido.setVisible(false);
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioConsulPedidoActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-  int opc = jComPedBusqCli.getSelectedIndex(),elije=jCombOpcBusqPedido.getSelectedIndex(),
-               //jCombOpcBusqPedido->Criterio de Busqueda
-                 codP = jCombProdPedidos.getSelectedIndex();//index de producto
-                 String fech1=fn.getFecha(jDateChoB1Cli),fech2=fn.getFecha(jDate2BusqCli);
-                 String id_cli =conten.get(opc);//idCliente devuelto de la base de datos
-                 String[][] mat = null;
-       switch(elije){
-           
-           case 0:
-               System.out.println("IdCli: "+id_cli);
-               mat =controlInserts.matrizPedidosB(elije,id_cli,"","");
-               jTablefiltrosBusq.setModel(new TModel(mat,cab));
-               break;
-           case 1:
-               System.out.println("Fechai: "+fech1);
-               mat =controlInserts.matrizPedidosB(elije,"",fech1,"");
-               jTablefiltrosBusq.setModel(new TModel(mat,cab));
-               break;
-           case 2:
-               System.out.println("Fecha1: "+fech1+"Fecha2: "+fech2);
-               mat =controlInserts.matrizPedidosB(elije,"",fech1,fech2);
-               jTablefiltrosBusq.setModel(new TModel(mat,cab));
-               break;
-           case 3:
-               System.out.println("idCli: "+id_cli+"Fecha1: "+fech1);
-               mat =controlInserts.matrizPedidosB(elije,id_cli,fech1,"");
-               jTablefiltrosBusq.setModel(new TModel(mat,cab));
-               break;
-           case 4:
-               System.out.println("idCli: "+id_cli+"Fecha1: "+fech1+"Fecha2: "+fech2);
-               mat =controlInserts.matrizPedidosB(elije,id_cli,fech1,fech2);
-               jTablefiltrosBusq.setModel(new TModel(mat,cab));
-               break;
-       };
-       
+        int opc = jComPedBusqCli.getSelectedIndex(), elije = jCombOpcBusqPedido.getSelectedIndex(),
+                //jCombOpcBusqPedido->Criterio de Busqueda
+                codP = jCombProdPedidos.getSelectedIndex();//index de producto
+        String fech1 = fn.getFecha(jDateChoB1Cli), fech2 = fn.getFecha(jDate2BusqCli);
+        String id_cli = conten.get(opc);//idCliente devuelto de la base de datos
+        String[][] mat = null;
+        switch (elije) {
+
+            case 0:
+                System.out.println("IdCli: " + id_cli);
+                mat = controlInserts.matrizPedidosB(elije, id_cli, "", "");
+                jTablefiltrosBusq.setModel(new TModel(mat, cab));
+                break;
+            case 1:
+                System.out.println("Fechai: " + fech1);
+                mat = controlInserts.matrizPedidosB(elije, "", fech1, "");
+                jTablefiltrosBusq.setModel(new TModel(mat, cab));
+                break;
+            case 2:
+                System.out.println("Fecha1: " + fech1 + "Fecha2: " + fech2);
+                mat = controlInserts.matrizPedidosB(elije, "", fech1, fech2);
+                jTablefiltrosBusq.setModel(new TModel(mat, cab));
+                break;
+            case 3:
+                System.out.println("idCli: " + id_cli + "Fecha1: " + fech1);
+                mat = controlInserts.matrizPedidosB(elije, id_cli, fech1, "");
+                jTablefiltrosBusq.setModel(new TModel(mat, cab));
+                break;
+            case 4:
+                System.out.println("idCli: " + id_cli + "Fecha1: " + fech1 + "Fecha2: " + fech2);
+                mat = controlInserts.matrizPedidosB(elije, id_cli, fech1, fech2);
+                jTablefiltrosBusq.setModel(new TModel(mat, cab));
+                break;
+        };
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jCombOpcBusqPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCombOpcBusqPedidoActionPerformed
-        int elije=jCombOpcBusqPedido.getSelectedIndex();
-        
-        switch(elije){
+        int elije = jCombOpcBusqPedido.getSelectedIndex();
+
+        switch (elije) {
             case 0:
-                 jComPedBusqCli.setEnabled(true);
-                 jDateChoB1Cli.setEnabled(false);
-                 jDate2BusqCli.setEnabled(false);
+                jComPedBusqCli.setEnabled(true);
+                jDateChoB1Cli.setEnabled(false);
+                jDate2BusqCli.setEnabled(false);
                 break;
             case 1:
                 jComPedBusqCli.setEnabled(false);
-                 jDateChoB1Cli.setEnabled(true);
-                  jDate2BusqCli.setEnabled(false);
-             break;
+                jDateChoB1Cli.setEnabled(true);
+                jDate2BusqCli.setEnabled(false);
+                break;
             case 2:
-               jComPedBusqCli.setEnabled(false);
-               jDateChoB1Cli.setEnabled(true);
-               jDate2BusqCli.setEnabled(true); 
+                jComPedBusqCli.setEnabled(false);
+                jDateChoB1Cli.setEnabled(true);
+                jDate2BusqCli.setEnabled(true);
                 break;
             case 3:
                 jComPedBusqCli.setEnabled(true);
-               jDateChoB1Cli.setEnabled(true);
-               jDate2BusqCli.setEnabled(false); 
+                jDateChoB1Cli.setEnabled(true);
+                jDate2BusqCli.setEnabled(false);
                 break;
             case 4:
                 jComPedBusqCli.setEnabled(true);
-               jDateChoB1Cli.setEnabled(true);
-               jDate2BusqCli.setEnabled(true); 
+                jDateChoB1Cli.setEnabled(true);
+                jDate2BusqCli.setEnabled(true);
                 break;
         };
-       
-        // TODO add your handling code here:
     }//GEN-LAST:event_jCombOpcBusqPedidoActionPerformed
 
     private void jComPedBusqCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComPedBusqCliActionPerformed
@@ -1981,155 +2306,526 @@ limpiaCamposAltaCli();
     }//GEN-LAST:event_jComPedBusqCliActionPerformed
 
     private void jTablefiltrosBusqMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablefiltrosBusqMousePressed
-        if(evt.getClickCount() > 1){
-               int fila = jTablefiltrosBusq.getSelectedRow();
-               String val = jTablefiltrosBusq.getValueAt(fila,0).toString();
-            if(val.equals("NO DATA")){
+        if (evt.getClickCount() > 1) {
+            int fila = jTablefiltrosBusq.getSelectedRow();
+            String val = jTablefiltrosBusq.getValueAt(fila, 0).toString();
+            if (val.equals("NO DATA")) {
                 JOptionPane.showMessageDialog(null, "No hay datos para mostrar.");
-            }else{
-                 List<String> detailPedidoCli=new ArrayList<String>(); 
-                    for(int j = 0;j<jTablefiltrosBusq.getColumnCount();j++){
-                           detailPedidoCli.add(jTablefiltrosBusq.getValueAt(fila, j).toString());    
-                    }
-             dP= new detailPedido(Integer.parseInt(val));
-             
-             dP.setEnabled(true);
-             dP.setVisible(true);
-             dP.validate();
-             dP.recibeListData(detailPedidoCli);
-        }           
-   }           
+            } else {
+                List<String> detailPedidoCli = new ArrayList<String>();
+                for (int j = 0; j < jTablefiltrosBusq.getColumnCount(); j++) {
+                    detailPedidoCli.add(jTablefiltrosBusq.getValueAt(fila, j).toString());
+                }
+                dP = new detailPedido(Integer.parseInt(val));
+
+                dP.setEnabled(true);
+                dP.setVisible(true);
+                dP.validate();
+                dP.recibeListData(detailPedidoCli);
+            }
+        }
 
     }//GEN-LAST:event_jTablefiltrosBusqMousePressed
 
-    
+    private void txtPrecProovFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrecProovFocusLost
+        String cant = txtCantPres.getText(),
+                cos = txtPrecProov.getText();
+        txtImportPres.setText("");
+
+        if (cant.isEmpty() || cos.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo cantidad o monto vacios\n Verifique Por favor");
+        } else {
+            BigDecimal amountOne = new BigDecimal(cant);//monto a cobrar
+            BigDecimal amountTwo = new BigDecimal(cos);//cantidad recivida
+            txtImportPres.setText(fn.multiplicaAmount(amountOne, amountTwo).toString());
+        }
+    }//GEN-LAST:event_txtPrecProovFocusLost
+
+    private void jComBProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComBProveedorActionPerformed
+        int var = jComBProveedor.getSelectedIndex();
+        if (var == 0) {
+            jLabBNumerador.setText("CAJAS");
+        }
+        if (var == 1) {
+            jLabBNumerador.setText("M.N.");
+        }
+        if (var == 2) {
+            jLabBNumerador.setText("PACAS");
+        }
+        if (var == 3) {
+            jLabBNumerador.setText("LIBRA(S)");
+        }
+    }//GEN-LAST:event_jComBProveedorActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        dtm = (DefaultTableModel) jTabPrestamoProovedores.getModel();
+        dtmPrec = (DefaultTableModel) jTabPreciosPrest.getModel();//tabña de precios
+
+        int filas = dtm.getRowCount();
+        int column = dtm.getColumnCount();
+        if (filas > 0) {
+            String[] ultimo = controlInserts.ultimoRegistroPrestamo();
+            Object val = null;
+
+            int opc = jComBPrestamosProv.getSelectedIndex(),//index de PROVEEDOR
+                    codP = jComBProveedor.getSelectedIndex();//index de producto
+
+            String id_cli = idProoved.get(opc);
+            String cantidad = txtCantPres.getText(), datePed = fn.getFecha(jDatFechaPrest);
+
+            //System.out.println("id_cli:"+id_cli+"\n id ped: "+ultimo[1]);
+            //guardaDetallePrestamoProv(String numCP,String codP, int cantP,String costP)          
+            for (int i = 0; i < column; i++) {
+                val = jTabPrestamoProovedores.getValueAt(0, i);
+                if (val != null) {
+                    controlInserts.guardaDetallePrestamoProv(ultimo[0], Integer.toString(i + 7), Integer.parseInt(jTabPrestamoProovedores.getValueAt(0, i).toString()), jTabPreciosPrest.getValueAt(0, i).toString());
+                    //System.out.println("pos= "+(i+1)+" "+jTableCreaPedidos.getColumnName(i)+"\t-> val= "+jTableCreaPedidos.getValueAt(0, i).toString());
+                }//if null
+            }
+
+            String[][] mat = controlInserts.matrizPrestaProv(datePed);
+            jTabVistaPresta.setModel(new TModel(mat, cabPrest));
+            importes.clear();
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha generado prestamo para el proveedor: " + jComBPrestamosProv.getSelectedItem().toString());
+        }
+        jComBPrestamosProv.setEnabled(true);
+        textANotaPrestProv.setEnabled(true);
+
+        ListIterator<String> itrI = importes.listIterator();
+        while (itrI.hasNext()) {
+            System.out.println(itrI.next());
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jComBPrestamosProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComBPrestamosProvActionPerformed
+        int opc = jComBPrestamosProv.getSelectedIndex();
+        dtm = (DefaultTableModel) jTabPrestamoProovedores.getModel();
+        dtmPrec = (DefaultTableModel) jTabPreciosPrest.getModel();
+
+        int filas = dtm.getRowCount();
+        int column = dtm.getColumnCount();
+        if (filas > 0) {
+            dtm.removeRow(0);
+            dtmPrec.removeRow(0);
+            jTableCreaPedidos.setModel(dtm);
+            jTabPreciosPrest.setModel(dtmPrec);
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComBPrestamosProvActionPerformed
+
+    private void jRadBConsultaProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadBConsultaProvActionPerformed
+        if (jRadBConsultaProv.isSelected()) {
+            jPanCompraProoved.setVisible(false);
+            jPanPrestamoProovedor.setVisible(false);
+            jPanBusquedaPrest.setVisible(true);
+            llenacomboProovedores();
+            jDaTFechPrest2.setDate(cargafecha());
+            jDaTFechPrest1.setDate(cargafecha());
+        }
+    }//GEN-LAST:event_jRadBConsultaProvActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        int opc = jCombBProvBusqPrest.getSelectedIndex(),//jCombBProvBusqPrest id_Proveedor
+                elije = jComBusPrestamo.getSelectedIndex();
+        //jCombOpcBusqPedido->Criterio de Busqueda
+        String fech1 = fn.getFecha(jDaTFechPrest1), fech2 = fn.getFecha(jDaTFechPrest2);
+        String id_cli = idProoved.get(opc);//idCliente devuelto de la base de datos
+        String[][] mat = null;
+
+        switch (elije) {
+
+            case 0:
+                mat = controlInserts.matrizPrestaProvOpc(elije, id_cli, "", "");
+                jTabBusqPrestProv.setModel(new TModel(mat, cabPrest));
+                break;
+            case 1:
+                System.out.println("Fechai: " + fech1);
+                mat = controlInserts.matrizPrestaProvOpc(elije, "", fech1, "");
+                jTabBusqPrestProv.setModel(new TModel(mat, cabPrest));
+                break;
+            case 2:
+                System.out.println("Fecha1: " + fech1 + "Fecha2: " + fech2);
+                mat = controlInserts.matrizPrestaProvOpc(elije, "", fech1, fech2);
+                jTabBusqPrestProv.setModel(new TModel(mat, cabPrest));
+                break;
+            case 3:
+                System.out.println("idCli: " + id_cli + "Fecha1: " + fech1);
+                mat = controlInserts.matrizPrestaProvOpc(elije, id_cli, fech1, "");
+                jTabBusqPrestProv.setModel(new TModel(mat, cabPrest));
+                break;
+            case 4:
+                System.out.println("idCli: " + id_cli + "Fecha1: " + fech1 + "Fecha2: " + fech2);
+                mat = controlInserts.matrizPrestaProvOpc(elije, id_cli, fech1, fech2);
+                jTabBusqPrestProv.setModel(new TModel(mat, cabPrest));
+                break;
+        };
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jComBusPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComBusPrestamoActionPerformed
+        int elije = jComBusPrestamo.getSelectedIndex();
+        switch (elije) {
+            case 0:
+                jCombBProvBusqPrest.setEnabled(true);
+                jDaTFechPrest1.setEnabled(false);
+                jDaTFechPrest2.setEnabled(false);
+                break;
+            case 1:
+                jCombBProvBusqPrest.setEnabled(false);
+                jDaTFechPrest1.setEnabled(true);
+                jDaTFechPrest2.setEnabled(false);
+                break;
+            case 2:
+                jCombBProvBusqPrest.setEnabled(false);
+                jDaTFechPrest1.setEnabled(true);
+                jDaTFechPrest2.setEnabled(true);
+                break;
+            case 3:
+                jCombBProvBusqPrest.setEnabled(true);
+                jDaTFechPrest1.setEnabled(true);
+                jDaTFechPrest2.setEnabled(false);
+                break;
+            case 4:
+                jCombBProvBusqPrest.setEnabled(true);
+                jDaTFechPrest1.setEnabled(true);
+                jDaTFechPrest2.setEnabled(true);
+                break;
+        };
+    }//GEN-LAST:event_jComBusPrestamoActionPerformed
+
+    private void jTabBusqPrestProvMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabBusqPrestProvMousePressed
+        if (evt.getClickCount() > 1) {
+            int fila = jTabBusqPrestProv.getSelectedRow();
+            String val = jTabBusqPrestProv.getValueAt(fila, 0).toString();
+            System.out.println("Envia: "+val);
+            
+            if (val.equals("No Data")) {
+                JOptionPane.showMessageDialog(null, "No hay datos para mostrar.");
+            } else {
+                List<String> detailPedidoCli = new ArrayList<String>();
+                for (int j = 0; j < jTabBusqPrestProv.getColumnCount(); j++) {
+                    detailPedidoCli.add(jTabBusqPrestProv.getValueAt(fila, j).toString());
+                }
+                dPresta = new detallePrestamo(Integer.parseInt(val));
+                dPresta.setEnabled(true);
+                dPresta.setVisible(true);
+                dPresta.validate();
+                dPresta.recibeListData(detailPedidoCli);
+            }
+        }
+    }//GEN-LAST:event_jTabBusqPrestProvMousePressed
+
+    private void jTabPedidosDiaViewMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabPedidosDiaViewMousePressed
+        if (evt.getClickCount() > 1) {
+            int fila = jTabPedidosDiaView.getSelectedRow();
+            String val = jTabPedidosDiaView.getValueAt(fila, 0).toString();
+            if (val.equals("NO DATA")) {
+                JOptionPane.showMessageDialog(null, "No hay datos para mostrar.");
+            } else {
+                List<String> detailPedidoCli = new ArrayList<String>();
+                for (int j = 0; j < jTabPedidosDiaView.getColumnCount(); j++) {
+                    detailPedidoCli.add(jTabPedidosDiaView.getValueAt(fila, j).toString());
+                }
+                dP = new detailPedido(Integer.parseInt(val));
+
+                dP.setEnabled(true);
+                dP.setVisible(true);
+                dP.validate();
+                dP.recibeListData(detailPedidoCli);
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jTabPedidosDiaViewMousePressed
+
+    private void jTabVistaPrestaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabVistaPrestaMousePressed
+        if (evt.getClickCount() > 1) {
+            int fila = jTabVistaPresta.getSelectedRow();
+            String val = jTabVistaPresta.getValueAt(fila, 0).toString();
+            System.out.println("Envia: "+val);
+            
+            if (val.equals("No Data")) {
+                JOptionPane.showMessageDialog(null, "No hay datos para mostrar.");
+            } else {
+                List<String> detailPedidoCli = new ArrayList<String>();
+                for (int j = 0; j < jTabVistaPresta.getColumnCount(); j++) {
+                    detailPedidoCli.add(jTabVistaPresta.getValueAt(fila, j).toString());
+                }
+                dPresta = new detallePrestamo(Integer.parseInt(val));
+                dPresta.setEnabled(true);
+                dPresta.setVisible(true);
+                dPresta.validate();
+                dPresta.recibeListData(detailPedidoCli);
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jTabVistaPrestaMousePressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(jPanSubastaOption.isVisible())/**BOTON DE GUARDADO COMPRA A PROVEEDOR*/
+            JOptionPane.showMessageDialog(null, "ELIGIO SUBASTA");
+        else{
+            
+        }
+         int opc = jCElijaProovedor.getSelectedIndex(),//index de proveedor
+            codP = jCombProductProv.getSelectedIndex();//index de producto
+
+        String id_cli = idProoved.get(opc),//idProveedor devuelto de la base de datos
+                codPro = idProducts.get(codP),//idProducto devuelto de la base de datos
+                costoProd = txtPrecCompraProv.getText(),
+                cantidad = txtCantidadCompra.getText(),//indexCliente
+                nota = txtNotaCompra.getText(),
+                importe = txtImportComp.getText(),
+                descriSubasta = txtCamSubastaCompra.getText(),
+                datePed = fn.getFecha(jDateFechCompraProv);
+        
+        System.out.println("IdProveedor: " + id_cli + "\t idProd: " + codPro + "Fecha: " + datePed);
+
+        List<String> dataCompra = new ArrayList<String>();
+        if (cantidad.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una cantidad");
+        } else {
+             if(!jPanSubastaOption.isVisible()){
+                 descriSubasta="/";
+             }
+             if(nota.isEmpty()){
+                 nota="/";
+             }
+            dtm = (DefaultTableModel) jTabCompraProved.getModel();
+            dtmPrec = (DefaultTableModel) jTabPrecCompProved.getModel();
+            
+            int filas = dtm.getRowCount(), filasPrec = dtmPrec.getRowCount();
+            int column = dtm.getColumnCount(), column2 = dtmPrec.getColumnCount();
+            //JOptionPane.showMessageDialog(null, "filas= "+filas+"\n Col= "+column);
+            if (filas == 0) {
+                dtm.setRowCount(1);
+                dtmPrec.setRowCount(1);
+
+                jTabCompraProved.setModel(dtm);
+                jTabPrecCompProved.setModel(dtmPrec);
+
+                jTabCompraProved.setValueAt(cantidad, 0, Integer.parseInt(codPro)-1);
+                jTabPrecCompProved.setValueAt(costoProd, 0, Integer.parseInt(codPro)-1);
+
+//id_ProveedorF,fechaPrestamo,status,notaPrest
+                dataCompra.add(id_cli);
+                dataCompra.add(datePed);
+                dataCompra.add(descriSubasta);
+                if (nota.isEmpty()) {
+                    dataCompra.add("/");
+                } else {
+                    dataCompra.add(nota);
+                }
+                dataCompra.add("0");
+
+                controlInserts.guardaCompraProv(dataCompra);
+
+                jCElijaProovedor.setEnabled(false);
+                txtNotaCompra.setEnabled(false);
+            } else {
+                jTabCompraProved.setValueAt(cantidad, 0, Integer.parseInt(codPro) - 1);
+                jTabPrecCompProved.setValueAt(costoProd, 0, Integer.parseInt(codPro) - 1);
+            }
+        }//else vacio
+        importes.add(txtImportComp.getText());
+        limpiacompraProved();
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtPrecCompraProvFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrecCompraProvFocusLost
+         String cant = txtCantidadCompra.getText(),
+                    cos = txtPrecCompraProv.getText();
+                    txtImportComp.setText("");
+
+        if (cant.isEmpty() || cos.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo cantidad o monto vacios\n Verifique Por favor");
+        } else {
+            BigDecimal amountOne = new BigDecimal(cant);//monto a cobrar
+            BigDecimal amountTwo = new BigDecimal(cos);//cantidad recivida
+            txtImportComp.setText(fn.multiplicaAmount(amountOne, amountTwo).toString());
+        }
+    }//GEN-LAST:event_txtPrecCompraProvFocusLost
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        dtm = (DefaultTableModel) jTabCompraProved.getModel();//tabla de precios
+        dtmPrec = (DefaultTableModel) jTabPrecCompProved.getModel();
+
+        int filas = dtm.getRowCount();
+        int column = dtm.getColumnCount();
+        String cantidad = txtCantPres.getText(), datePed = fn.getFecha(jDateFechCompraProv);
+
+        if (filas > 0) {
+            String[] ultimo = controlInserts.ultimoRegistroCompra();
+            Object val = null;
+
+            int opc = jCElijaProovedor.getSelectedIndex(),//index de PROVEEDOR
+                    codP = jCombProductProv.getSelectedIndex();//index de producto
+
+            String id_cli = idProoved.get(opc);
+
+            //System.out.println("id_cli:"+id_cli+"\n id ped: "+ultimo[1]);
+            //guardaDetallePrestamoProv(String numCP,String codP, int cantP,String costP)          
+            for (int i = 0; i < column; i++) {
+                val = jTabCompraProved.getValueAt(0, i);
+                if (val != null) {//String numCP,String codP, int cantP,String costP
+                    controlInserts.guardaDetalleCompraProv(ultimo[0], Integer.toString(i + 1), Integer.parseInt(jTabCompraProved.getValueAt(0, i).toString()), jTabPrecCompProved.getValueAt(0, i).toString());
+                    //System.out.println("pos= "+(i+1)+" "+jTableCreaPedidos.getColumnName(i)+"\t-> val= "+jTableCreaPedidos.getValueAt(0, i).toString());
+                }//if null
+            }
+       //     String[][] mat = controlInserts.matrizPrestaProv(datePed);
+         //   jTabVistaPresta.setModel(new TModel(mat, cabPrest));
+        } else {
+            JOptionPane.showMessageDialog(null, "No ha generado compra para el proveedor: " + jCElijaProovedor.getSelectedItem().toString());
+        }
+        ListIterator<String> itrI = importes.listIterator();
+        while (itrI.hasNext()) {
+            System.out.println("Importes: "+itrI.next());
+        }
+        cargaComprasDia(datePed);//carga las compras del dia
+        
+        jCElijaProovedor.setEnabled(true);
+        txtNotaCompra.setEnabled(true);
+
+           importes.clear();
+
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void jMenPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenPagoActionPerformed
+        vP = new VentaPiso("13567", "0123");
+        vP.setVisible(true);
+        vP.setEnabled(true);
+        vP.validate();
+    }//GEN-LAST:event_jMenPagoActionPerformed
+
     public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("image/icons8_customer_32px_1.png"));
         return retValue;
     }
-    
-    public final void mostrarTabla(){
+
+    public final void mostrarTabla() {
 //        String datos[][] =  new String[2][4];
-        String [][] datos = {{"1","Jimena","Perez","23-10-2019","ACTIVO"},{"2","JOSE","SANCHEZ","23-11-2018","BAJA"},{"4","ESPERANZA","ALVARADO","25-01-2017","ACTIVO"}};
+        String[][] datos = {{"1", "Jimena", "Perez", "23-10-2019", "ACTIVO"}, {"2", "JOSE", "SANCHEZ", "23-11-2018", "BAJA"}, {"4", "ESPERANZA", "ALVARADO", "25-01-2017", "ACTIVO"}};
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("NOMBRE");
         modelo.addColumn("APELLIDOS");
         modelo.addColumn("FECHA");
-        modelo.addColumn("STATUS");        
-         for (int x=0; x < datos.length; x++) {
-      for (int y=0; y <datos[x].length; y++) {
-          //System.out.println ("[" + x + "," + y + "] = " + datos[x][y]);
-          modelo.addRow(datos[x]);
-      }
+        modelo.addColumn("STATUS");
+        for (int x = 0; x < datos.length; x++) {
+            for (int y = 0; y < datos[x].length; y++) {
+                //System.out.println ("[" + x + "," + y + "] = " + datos[x][y]);
+                modelo.addRow(datos[x]);
+            }
+        }
+        jTableAltasCli.setModel(modelo);
     }
-         jTableAltasCli.setModel(modelo);
-    }
-    
-    void mostrarTablaAltaCli(int opc,String var,String campo){//opc=index-combo,var=campo-busqueda,campo=parametro-nombre
+
+    void mostrarTablaAltaCli(int opc, String var, String campo) {//opc=index-combo,var=campo-busqueda,campo=parametro-nombre
         Connection cn = con2.conexion();
-        DefaultTableModel modelo = new DefaultTableModel(){ 
+        DefaultTableModel modelo = new DefaultTableModel() {
             @Override
-            public boolean isCellEditable (int fila, int columna) {
+            public boolean isCellEditable(int fila, int columna) {
                 return false;
             }
-            };
-        
+        };
+
         TableColumn columna;
-        String consul="";
-        
-        if(opc == 0){
+        String consul = "";
+
+        if (opc == 0) {
             modelo.addColumn("Id");
             modelo.addColumn("Nombre");
             modelo.addColumn("Apellidos");
             modelo.addColumn("Localidad");
-            modelo.addColumn("Status");   
-            modelo.addColumn("Fecha Registro");   
-        }
-        
-        if(opc ==1 || opc == 2 ){
-            modelo.addColumn("Id");
-            modelo.addColumn("Nombre");
-            modelo.addColumn("Apellidos");
-            modelo.addColumn("Localidad");
-            modelo.addColumn("Status");            
+            modelo.addColumn("Status");
+            modelo.addColumn("Fecha Registro");
         }
 
-        if(opc == 3){
+        if (opc == 1 || opc == 2) {
+            modelo.addColumn("Id");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Apellidos");
+            modelo.addColumn("Localidad");
+            modelo.addColumn("Status");
+        }
+
+        if (opc == 3) {
             modelo.addColumn("Id");
             modelo.addColumn("Nombre");
             modelo.addColumn("Localidad");
-            modelo.addColumn("Status");   
-            modelo.addColumn("Fecha Registro");   
+            modelo.addColumn("Status");
+            modelo.addColumn("Fecha Registro");
         }
-        
+
         jTableAltasCli.setModel(modelo);
 
-       TableColumnModel columnModel = jTableAltasCli.getColumnModel();
+        TableColumnModel columnModel = jTableAltasCli.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(15);
         columnModel.getColumn(1).setPreferredWidth(50);
-        
+
         jTableAltasCli.getColumnModel().getColumn(0).setMaxWidth(100);
         jTableAltasCli.getColumnModel().getColumn(0).setMinWidth(0);
         jTableAltasCli.getColumnModel().getColumn(0).setPreferredWidth(100);
-     
-        if(var.equals(""))
-        {
-            consul = "SELECT * FROM "+atribAltaCli+" ORDER BY "+campo+" ASC";
-        }else{
-         
-            consul = "SELECT * FROM "+atribAltaCli+" WHERE "+campo+" LIKE '%"+var+"%' ORDER BY "+campo+" ASC";
+
+        if (var.equals("")) {
+            consul = "SELECT * FROM " + atribAltaCli + " ORDER BY " + campo + " ASC";
+        } else {
+
+            consul = "SELECT * FROM " + atribAltaCli + " WHERE " + campo + " LIKE '%" + var + "%' ORDER BY " + campo + " ASC";
 //        System.out.println(consul);
         }
-        String datos[] =  new String[6];
-        List<String> contentL=new ArrayList<String>();
+        String datos[] = new String[6];
+        List<String> contentL = new ArrayList<String>();
         Statement st = null;
         ResultSet rs = null;
-        int i=1;
+        int i = 1;
         try {
             st = cn.createStatement();
             rs = st.executeQuery(consul);
-            while(rs.next()){
-/*                           for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
+            while (rs.next()) {
+                /*                           for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
                      //System.out.print(x+" -> "+rs.getString(x));
                      contentL.add(rs.getString(x));
                    }*/
                 datos[0] = rs.getString(1);
-                 datos[1] = rs.getString(2);
-                 datos[2] = rs.getString(3);
-                 datos[3] = rs.getString(4);
-                 datos[4] = rs.getString(5);
-                 datos[5] = rs.getString(6);
-                 if((opc == 0 || opc==1 || opc==2) && rs.getString(5).equals("1")){
-                       datos[4] = "ACTIVO";
-                 }else if((opc == 0 || opc==1 || opc==2) && rs.getString(5).equals("0")){
-                     datos[4] = "INACTIVO";
-                 }
-                 if( opc==3 && rs.getString(4).equals("1")){
-                       datos[3] = "ACTIVO";
-                 }else if( opc == 3 && rs.getString(4).equals("0")){
-                     datos[3] = "INACTIVO";
-                 }
+                datos[1] = rs.getString(2);
+                datos[2] = rs.getString(3);
+                datos[3] = rs.getString(4);
+                datos[4] = rs.getString(5);
+                datos[5] = rs.getString(6);
+                if ((opc == 0 || opc == 1 || opc == 2) && rs.getString(5).equals("1")) {
+                    datos[4] = "ACTIVO";
+                } else if ((opc == 0 || opc == 1 || opc == 2) && rs.getString(5).equals("0")) {
+                    datos[4] = "INACTIVO";
+                }
+                if (opc == 3 && rs.getString(4).equals("1")) {
+                    datos[3] = "ACTIVO";
+                } else if (opc == 3 && rs.getString(4).equals("0")) {
+                    datos[3] = "INACTIVO";
+                }
 
-                   modelo.addRow(datos);
+                modelo.addRow(datos);
             }
             jTableAltasCli.setModel(modelo);
         } catch (SQLException ex) {
             Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
 //                    System.out.println( "cierra conexion a la base de datos" );    
-                    try {
-                        if(st != null) st.close();
-                        if(rs != null) rs.close();
-                        if(cn != null) cn.close();
-//                        if(cn !=null) cn.close();
-                    } catch (SQLException ex) {
-                        System.err.println( ex.getMessage() );    
-                    }
+            try {
+                if (st != null) {
+                    st.close();
                 }
+                if (rs != null) {
+                    rs.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+//                        if(cn !=null) cn.close();
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
     }//termina mostrartablaAltaCli
-    
-   private void limpiaCamposAltaCli(){
+
+    private void limpiaCamposAltaCli() {
         txtIdParam.setText("");
 
         jTextNombre.setText("");
@@ -2143,7 +2839,8 @@ limpiaCamposAltaCli();
         jDateChFechaAlta.setDate(cargafecha());
         txtBusqAltas.setText("");
     }
-   //****** TERMINA CODIGO DE ALTA CLIENTES
+    //****** TERMINA CODIGO DE ALTA CLIENTES
+
     /**
      * @param args the command line arguments
      */
@@ -2179,7 +2876,8 @@ limpiaCamposAltaCli();
         });
     }
 //*** CODIGO PARA PESTAÑA DE PEDIDOS
-    private List llenacomboAltaClis(){
+
+    private List llenacomboAltaClis() {
         Connection cn = con2.conexion();
         jCombPedidoClient.removeAllItems();
         jComPedBusqCli.removeAllItems();
@@ -2189,67 +2887,257 @@ limpiaCamposAltaCli();
         try {
             st = cn.createStatement();
             rs = st.executeQuery(consul);
-            while(rs.next()){
+            while (rs.next()) {
                 conten.add(rs.getString(1));
                 jCombPedidoClient.addItem(rs.getString(2));
                 jComPedBusqCli.addItem(rs.getString(2));
             }
         } catch (SQLException ex) {
             Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-                    try {
-                        if(st != null) st.close();
-                        if(cn != null) cn.close();
-                    } catch (SQLException ex) {
-                        System.err.println( ex.getMessage() );    
-                    }
-                  
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
                 }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            }
+
+        }
         return conten;
     }//Llena comboAltasClis    
-    
-    private void llenacomboProducts(){
+
+    private void llenacomboProducts() {
         Connection cn = con2.conexion();
+        idProducts.clear();
         jCombProdPedidos.removeAllItems();
-        String consul = "SELECT codigo,nombreP FROM productocal";
+        jCombProductProv.removeAllItems();
+        String consul = "SELECT codigo,nombreP FROM productocal WHERE categoria = 'CAL'";
         int i = 1;
         Statement st = null;
         ResultSet rs = null;
         try {
             st = cn.createStatement();
             rs = st.executeQuery(consul);
-            while(rs.next()){
+            while (rs.next()) {
                 idProducts.add(rs.getString(1));
                 jCombProdPedidos.addItem(rs.getString(2));
+                jCombProductProv.addItem(rs.getString(2));
             }
         } catch (SQLException ex) {
             Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-                    try {
-                        if(st != null) st.close();
-                        if(cn != null) cn.close();
-                    } catch (SQLException ex) {
-                        System.err.println( ex.getMessage() );    
-                    }
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
                 }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
 //        return conten;
     }//Llena comboAltasClis    
+
+    //LLENA COMBO PROOVEDORES
+    private void llenacomboProovedores() {
+        Connection cn = con2.conexion();
+        idProoved.clear();
+        jComBPrestamosProv.removeAllItems();
+        jCombBProvBusqPrest.removeAllItems();
+        jCElijaProovedor.removeAllItems();
+        String consul = "SELECT id_Proveedor,nombreP FROM proveedor WHERE statusP=1 ORDER BY nombreP";
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            st = cn.createStatement();
+            rs = st.executeQuery(consul);
+            while (rs.next()) {
+                idProoved.add(rs.getString(1));
+                jComBPrestamosProv.addItem(rs.getString(2));
+                jCombBProvBusqPrest.addItem(rs.getString(2));
+                jCElijaProovedor.addItem(rs.getString(2));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
+
+        ListIterator<String> itrI = idProoved.listIterator();
+        while (itrI.hasNext()) {
+            System.out.println("Proveedor ID: [" + itrI.next());
+        }
+
+    }//
+
+    private void llenacomboProdPrest() {
+        Connection cn = con2.conexion();
+        idProdPrest.clear();
+        jComBProveedor.removeAllItems();
+        String consul = "SELECT codigo,nombreP from productocal WHERE categoria = 'PRES' ORDER BY nombreP";
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            st = cn.createStatement();
+            rs = st.executeQuery(consul);
+            while (rs.next()) {
+                idProdPrest.add(rs.getString(1));
+                jComBProveedor.addItem(rs.getString(2));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
+    }//
     
+    //*CODIGO PARA CREAR MATRIZ DINAMICA DE VISTA COMPRAS A PROVEEDOR*/
+       public  void consultDetailCompra(int opc,int fila){
+       Connection cn = con2.conexion();
+       int cantColumnas=0, cantFilas=0,temporal=0,bandera=0;
+        String sql ="",sql2="";
+              sql = "SELECT * FROM detailcompraprooved WHERE id_compraP = '"+opc+"'";    
+              sql2 ="SELECT compraprooved.id_compraProve,proveedor.nombreP,SUM(detailcompraprooved.cantCajasC)\n" +
+                "FROM\n" +
+                "	proveedor\n" +
+                "INNER JOIN\n" +
+                "	compraprooved \n" +
+                "ON\n" +
+                "	compraprooved.id_ProveedorC = proveedor.id_Proveedor AND compraprooved.id_compraProve = '"+opc+"'\n" +
+                "INNER JOIN \n" +
+                "	detailcompraprooved\n" +
+                "ON\n" +
+                "	detailcompraprooved.id_compraP = compraprooved.id_compraProve;";
+            Statement st = null;
+            ResultSet rs = null;    
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+               // System.out.print("Filas: "+cantFilas+"\tColumnas: "+cantColumnas+"\n");
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                        for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
+                            if(x==3){//valor,fila,columna
+                                jTabVistaComprasDia.setValueAt(rs.getInt(x+1), fila, rs.getInt(x)+1);//se le suma 1 por las columnas id,nombre de la jTable
+                            }//System.out.print("["+x+"]"+" -> "+rs.getString(x));                   
+                        }//for
+                }//while
+                
+                st=null;rs=null;
+                st = cn.createStatement();
+                rs = st.executeQuery(sql2);
+                while(rs.next()){
+                     jTabVistaComprasDia.setValueAt(rs.getInt(1), fila,0);
+                     jTabVistaComprasDia.setValueAt(rs.getString(2), fila, 1);
+                     jTabVistaComprasDia.setValueAt(rs.getString(3), fila, 8);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally  
+    }//regresaDatos
+    
+       //FUNCION PARA LLENAS LA TABLA DE COMRAS DEL DIA
+       private void cargaComprasDia(String fech){
+       String[][] arre = controlInserts.consultCompra(fech);
+       if(arre.length>0){
+       tabCompras = (DefaultTableModel) jTabVistaComprasDia.getModel();
+       int filas = tabCompras.getRowCount(), filasPrec = tabCompras.getRowCount();
+            if (filas > 0) {
+                   for (int i = 0;filas>i; i++) {
+                        tabCompras.removeRow(0);
+                    }
+            }
+            tabCompras.setRowCount(arre.length);
+            
+            jTabVistaComprasDia.setModel(tabCompras);
+                
+            for (int j = 0; j < arre.length; j++) {
+                for (int k = 0; k < arre[0].length; k++) {
+                   if(k==0){
+                   consultDetailCompra(Integer.parseInt(arre[j][k]),j);//envia matriz con id_compra,id_proveedor,fila
+                   }
+                }
+         }
+       }else{
+           JOptionPane.showMessageDialog(null, "No hay compras del dia");
+       }         
+       }//Fin cargaComprasDia
     //****CODIGO PARA USO EN GENERAL
-        private Date cargafecha(){
+
+    private Date cargafecha() {
         Date fechaAct = new Date();
         return fechaAct;
     }
-        
 
-        
+    public boolean vaciosAltaUsers() {
+        boolean vacios = false;
+        String nomb = jTextNombre.getText(),
+                apes = jTextApellidos.getText(),
+                local = jTextLocalidad.getText(),
+                tel = jTexTelefono.getText(),
+                quin = txtQuintoAltas.getText();
+        if (nomb.isEmpty() && apes.isEmpty() && local.isEmpty()) {
+            vacios = true;
+        }
 
+        return vacios;
+    }
+
+    //****LIMPIAR CAMPOS
+    private void limpiaPrestamoProv() {
+        txtCantPres.setText("");
+        txtPrecProov.setText("");
+        txtImportPres.setText("");
+        textANotaPrestProv.setText("");
+    }
+    private void limpiacompraProved(){
+        txtCantidadCompra.setText("");
+        txtPrecCompraProv.setText("");
+        txtImportComp.setText("");
+        txtCamSubastaCompra.setText("");
+        txtNotaCompra.setText("");
+    }
+    
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Detalle;
     private javax.swing.ButtonGroup butnGPedidos;
+    private javax.swing.ButtonGroup butnGProved;
+    private javax.swing.ButtonGroup buttonGProveedores;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButAltasActualiza;
     private javax.swing.JButton jButAltasElimina;
     private javax.swing.JButton jButGuardaPedidodia;
@@ -2258,34 +3146,37 @@ limpiaCamposAltaCli();
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jCElijaProovedor;
-    private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JComboBox<String> jComBPrestamosProv;
+    private javax.swing.JComboBox<String> jComBProveedor;
+    private javax.swing.JComboBox<String> jComBusPrestamo;
     private javax.swing.JComboBox<String> jComPedBusqCli;
+    private javax.swing.JComboBox<String> jCombBProvBusqPrest;
     private javax.swing.JComboBox<String> jCombOpcBusqPedido;
     private javax.swing.JComboBox<String> jCombPedidoClient;
     private javax.swing.JComboBox<String> jCombProdPedidos;
+    private javax.swing.JComboBox<String> jCombProductProv;
     private javax.swing.JComboBox<String> jComboAltas;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox10;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
-    private javax.swing.JComboBox<String> jComboBox9;
+    private com.toedter.calendar.JDateChooser jDaTFechPrest1;
+    private com.toedter.calendar.JDateChooser jDaTFechPrest2;
+    private com.toedter.calendar.JDateChooser jDatFechaPrest;
     private com.toedter.calendar.JDateChooser jDate2BusqCli;
     private com.toedter.calendar.JDateChooser jDateCHPedido;
     private com.toedter.calendar.JDateChooser jDateChFechaAlta;
     private com.toedter.calendar.JDateChooser jDateChoB1Cli;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
-    private com.toedter.calendar.JDateChooser jDateChooser3;
-    private com.toedter.calendar.JDateChooser jDateChooser4;
-    private com.toedter.calendar.JDateChooser jDateChooser5;
+    private com.toedter.calendar.JDateChooser jDateFechCompraProv;
     private javax.swing.JLabel jLabAdeudaProoved;
     private javax.swing.JLabel jLabBNumerador;
     private javax.swing.JLabel jLabel1;
@@ -2331,9 +3222,6 @@ limpiaCamposAltaCli();
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
-    private javax.swing.JLabel jLabel49;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
@@ -2348,7 +3236,15 @@ limpiaCamposAltaCli();
     private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
+    private javax.swing.JLabel jLabel66;
+    private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelRFCAlta;
@@ -2359,38 +3255,48 @@ limpiaCamposAltaCli();
     private javax.swing.JMenuItem jMIAbonar;
     private javax.swing.JMenuItem jMIEliminar;
     private javax.swing.JMenuItem jMIPPVer;
+    private javax.swing.JMenuItem jMenPago;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPPedidosHist;
     private javax.swing.JPanel jPanAdminist;
     private javax.swing.JPanel jPanAgregarFlete;
     private javax.swing.JPanel jPanAltas;
+    private javax.swing.JPanel jPanBusquedaPrest;
     private javax.swing.JPanel jPanCabezera;
     private javax.swing.JPanel jPanClientOption;
     private javax.swing.JPanel jPanCompraProoved;
     private javax.swing.JPanel jPanConsulPed;
     private javax.swing.JPanel jPanCreaPedido;
+    private javax.swing.JPanel jPanInternoBusquedaPrest;
     private javax.swing.JPanel jPanPrestamoProovedor;
     private javax.swing.JPanel jPanSubastaOption;
     private javax.swing.JPanel jPanVentasPiso;
     private javax.swing.JPanel jPanVistaAlta;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPopupMenu jPopCompraProveedor;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupPrestaProov;
     private javax.swing.JRadioButton jRad1Activo;
+    private javax.swing.JRadioButton jRadBCompraProve;
+    private javax.swing.JRadioButton jRadBConsultaProv;
+    private javax.swing.JRadioButton jRadBPrestamoProv;
     private javax.swing.JRadioButton jRadInactivo;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JRadioButton jRadioConsulPedido;
     private javax.swing.JRadioButton jRadioCreaPedido;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
+    private javax.swing.JScrollPane jScrollPane13;
+    private javax.swing.JScrollPane jScrollPane14;
+    private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -2403,35 +3309,34 @@ limpiaCamposAltaCli();
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JTable jTabBusqPrestProv;
+    private javax.swing.JTable jTabCompraProved;
     private javax.swing.JTable jTabPedidosDiaView;
+    private javax.swing.JTable jTabPrecCompProved;
+    private javax.swing.JTable jTabPreciosPrest;
     private javax.swing.JTable jTabPrestamoProovedores;
+    private javax.swing.JTable jTabVistaComprasDia;
+    private javax.swing.JTable jTabVistaPresta;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable5;
     private javax.swing.JTable jTable8;
     private javax.swing.JTable jTableAltasCli;
     private javax.swing.JTable jTableCreaPedidos;
     private javax.swing.JTable jTablefiltrosBusq;
     private javax.swing.JTextField jTexTelefono;
     private javax.swing.JTextField jTextApellidos;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField16;
     private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField18;
     private javax.swing.JTextField jTextField19;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField20;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextLocalidad;
@@ -2440,12 +3345,21 @@ limpiaCamposAltaCli();
     private javax.swing.JTextField jtxtMontoAdeuda;
     private javax.swing.JTabbedPane paneAltas;
     private javax.swing.JPanel proveedorJP;
+    private javax.swing.JTextArea textANotaPrestProv;
     private javax.swing.JTextField txtBusqAltas;
+    private javax.swing.JTextField txtCamSubastaCompra;
     private javax.swing.JTextField txtCantCreaPedido;
+    private javax.swing.JTextField txtCantPres;
+    private javax.swing.JTextField txtCantidadCompra;
     private javax.swing.JTextField txtIdParam;
+    private javax.swing.JTextField txtImportComp;
+    private javax.swing.JTextField txtImportPres;
+    private javax.swing.JTextField txtNotaCompra;
     private javax.swing.JTextField txtNotePedidoCli;
+    private javax.swing.JTextField txtPrecCompraProv;
+    private javax.swing.JTextField txtPrecProov;
     private javax.swing.JTextField txtQuintoAltas;
+    private javax.swing.JTextField txtTotalPres;
     // End of variables declaration//GEN-END:variables
-
 
 }
