@@ -35,6 +35,7 @@ public class ConexionDBOriginal {
         throw new UnsupportedOperationException("No soportado");
     }
     
+    
     private String cargaConfig() {//List
         File archivo = null;
         FileReader fr = null;

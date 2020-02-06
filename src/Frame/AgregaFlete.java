@@ -155,7 +155,7 @@ public class AgregaFlete extends javax.swing.JFrame {
         jLabel11.setText("PRECIO:");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 90, 30));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 430, 470));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 500, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

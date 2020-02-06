@@ -6,6 +6,7 @@
 package internos.tickets.print;
 
 import com.toedter.calendar.JDateChooser;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,15 +14,20 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author A. Rafael Notario
+ * @author A. Rafael Notario Rodriguez
  */
-
 
 public class Funciones {
 
  SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");//HACE PRUEBAS PARA DATETIME HH:MM:SS
   SimpleDateFormat formatoPrueba = new SimpleDateFormat("dd-MM-yyyy");
   
+  //VARIABLES PARA CALCULO DE DINERO  
+  private static int DECIMALS = 1;
+  private static int ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
+  private BigDecimal fAmountOne;
+  private BigDecimal fAmountTwo;
+ 
 public void setBorder(JPanel name, String title) {
            name.setBorder(javax.swing.BorderFactory.createTitledBorder(null, title, javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 18))); // NOI18N
 }
@@ -38,6 +44,11 @@ public String getFecha(JDateChooser jd){
     }
 }//getFecha
 
+   public Date cargafecha() {
+        Date fechaAct = new Date();
+        return fechaAct;
+    }
+   
 public Date StringDate(String fecha){//tenia: java.util.Date
 //    SimpleDateFormat formato_texto = new SimpleDateFormat("dd/MM/yyyy");
     Date fechaE = null;
@@ -47,7 +58,18 @@ public Date StringDate(String fecha){//tenia: java.util.Date
     }catch(ParseException ex){
         return null;
     }
+}//StringDate
+public Date stringDateTime(String fecha){//tenia: java.util.Date
+//    SimpleDateFormat formato_texto = new SimpleDateFormat("dd/MM/yyyy");
+    Date fechaE = null;
+    try{
+        fechaE = formato.parse(fecha);
+        return fechaE;
+    }catch(ParseException ex){
+        return null;
+    }
 }
+
         public String volteaFecha(String cad,int opc){
             //cad = "16/06/2017";
             char var[];
@@ -83,12 +105,35 @@ public Date StringDate(String fecha){//tenia: java.util.Date
             }           
             newFech=p3+"/"+p2+"/"+p1;
             return newFech;
-        }
+        }//volteaFecha
 
+             //CALCULO DE DINERO $$ ***
+     private BigDecimal rounded(BigDecimal aNumber){
+            return aNumber.setScale(DECIMALS, ROUNDING_MODE);
+     }
+     
+     public BigDecimal multiplicaAmount(BigDecimal aAmountOne, BigDecimal aAmountTwo){
+            fAmountOne = rounded(aAmountOne);
+            fAmountTwo = rounded(aAmountTwo);
+            System.out.println(fAmountOne+" -> "+fAmountTwo);
+        return fAmountOne.multiply(fAmountTwo);
+    }
+     
+      public BigDecimal getDifference(BigDecimal aAmountOne, BigDecimal aAmountTwo){
+            fAmountOne = rounded(aAmountOne);
+            fAmountTwo = rounded(aAmountTwo);
+        return fAmountOne.subtract(fAmountTwo);
+    }
+      public BigDecimal getSum(BigDecimal aAmountOne, BigDecimal aAmountTwo){
+          fAmountOne = rounded(aAmountOne);
+            fAmountTwo = rounded(aAmountTwo);
+          return fAmountOne.add(fAmountTwo);
+      }
+        
     public static void main(String[] args) {
         ticketMuestra tM = new ticketMuestra();
-        tM.imprimirFactura();
-        
+        tM.imprimirFactura();  
     }
+    
     
 }

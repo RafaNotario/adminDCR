@@ -1,4 +1,85 @@
-elementos de ALTA DE CLIENTES adminDCR
+//elementos detalle asignacion pedido
+jTabDetailFletDet
+jTabDetailPedDet
+txtidPed
+txtClieny
+txtTotMoneyMerca
+txtTotCajas
+txtCostFletes
+txtGranTot
+
+matPedidosEst //formaMatriz detallePed
+
+/*ELEMENTOS ASIGNACION*/
+jDCAsignacionDia
+jTabVistaPedidosDia1
+jTabVistaComprasDia3
+jTabFletesDia1
+
+5532838229 CERTIFICATIC
+
+jTDetailAsign
+
+
+txtFolioFleteAsign
+txtCompraAsign
+txtidPedidoAsign
+jTabDetailAsign
+txtTotCajasAsign
+txtCostoAsign
+guardaRelOperaciones //metodoGuardar
+
+paso1 -> consultPedidoAsign(fech);
+paso2-> cargaPedidosDiaAsign(fech)
+
+1.- ColorCelda c = new ColorCelda();
+            c.arrIntRowsIluminados = controlInserts.fnToArray(coloreA);
+            jTabVistaComprasDia3.setDefaultRenderer(Object.class, c);
+            coloreA.clear();
+
+2.- if(controlInserts.validaRelCompPed(Integer.toString(rs.getInt(1)),"id_compraProveed"))
+                        coloreA.add(fila);
+2K0353EPAPAU602
+jLabPed
+jLaComp
+jLabFlet
+
+/***ELEMENTOS FLETES*/
+-Altas
+jLayerFletes
+jRdCreaFletes
+jRHistorFletes
+jPanCreaFletes
+jPanHistorFletes
+
+jCBAltasFletes
+jDFechCreaFlete
+txtFolioFlete
+txtChoferFlete
+txtUnidFlete
+txtCostoFlete
+txtNotaFlete
+jTabFletesDia
+jRPendFlete
+jRPagadopFlete
+jButFleteGuardar
+
+//VENTANA BUSQUEDA FLETES **///
+jCombOpcBusqFletes
+jCfleteroOpc
+jDCFol1
+jDCFol2
+jTablefiltrosBusqflete
+
+FLETERO
+FOLIO
+FECHA
+LAPSO FECHAS
+FLETERO+FECHA
+FLETERO+ LAPSO FECHAS
+
+
+//*****elementos de ALTA DE CLIENTES adminDCR
 txtIdParam
 
 jTextNombre
@@ -16,7 +97,7 @@ jButaltasGuardar
 jButAltasActualiza
 jButAltasElimina
 
-//elementos de detailPedido
+//*****elementos de PEDIDOS **///
 txtFechDetail
 txtNumPedidoDetail
 txtNameCli
@@ -27,3 +108,102 @@ txtCosto
 
 jButGuardDetail
 jTextArea1
+
+//**elementos de prestamo proveedor
+jComBPrestamosProv //proveedor
+jComBProveedor //productos
+
+jDatFechaPrest
+
+txtCantPres
+txtPrecProov
+txtImportPres
+textANotaPrestProv
+
+jTabPrestamoProovedores
+
+txtTotalPres
+
+jRadBPrestamoProv
+jRadBCompraProve
+jRadBConsultaProv
+
+jPanPrestamoProovedor
+jPanCompraProoved
+
+idProdPrest // List producto prestamos
+idProoved // List proveedores
+
+id_ProveedorF,fechaPrestamo,status,notaPrest
+
+//**ELEMENTOS DE COMPRA PROVEEDOR **
+jCElijaProovedor
+jCombProductProv
+txtCantidadCompra
+txtPrecCompraProv
+txtImportComp
+txtCamSubastaCompra
+jDateFechCompraProv
+txtNotaCompra
+jPanSubastaOption	//SI ELIGE SUBASTA
+	txtCamSubastaCompra
+jPanClientOption //SI TIENE ADEUDO SE VE
+
+jTabPrecCompProved
+jTabCompraProved
+
+jTabVistaComprasDia
+
+//**** ELEMENTOS DE VENTANA PAGOS COBROS
+jLabLetreroTransac
+txtidComp
+txtProveedorName
+jLabNameProv
+jDatePayFech
+
+jRadContado
+
+jButContado
+jButCredit
+jButTransfer
+txtContadoRecibe
+txtCambioPAgo
+txtCantCobrar
+
+/*ELEMENTOS EN BUSQUEDA COMPRA*/
+jComBusCompra
+jCombBProvBusqCompra
+jDaTFechComp1
+jDaTFechCompraProv2
+
+
+/*ELEMENTOS  EN VENTAS PISO*/
+jLayVentasPiso
+jPaNVentaPiso
+jPanBusqVentasPiso
+
+jRadCreaVentaPiso
+jRadBusqVentaPiso
+
+jCombCliVentaP
+jCombProdVentaP
+jDFVentaPiso
+txtCantVentaPiso
+txtPrecProdVentaP
+txtImportVentaP
+txtNotaVentP
+jTabDescVentaP
+txtTotalVentaPiso //IR SUMANDO
+jTVistaVentaPisoDia
+
+//list de ids
+iDclisVentaPiso
+idProductsVent
+
+///***BUSQUEDA VENTAS PISO//
+jCombOpcBusqVenta //opc busqueda
+jCCliVentaPiso //numero cliente
+jDateChoBVent1
+jDatebusqVenta2
+jTablefiltrosBusqVent
+

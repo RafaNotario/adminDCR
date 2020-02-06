@@ -25,7 +25,7 @@ import java.sql.PreparedStatement;
  *
  * @author  A. Rafael Notario Rodriguez
  */
-public class detailPedido extends javax.swing.JFrame {
+public class detailCompra extends javax.swing.JFrame {
     
    static int param =0;
 
@@ -35,11 +35,12 @@ controladorCFP controller = new controladorCFP();
     /**
      * Creates new form detailPedido
      */
-    public detailPedido(int param) {
+    public detailCompra(int param) {
         initComponents();
         this.param=param;
-        txtNumPedidoDetail.setText(Integer.toString(param));
+        txtNumCompraDetail.setText(Integer.toString(param));
         consultDetail(param);
+        consultCompra(param);
     }
 
     /**
@@ -62,26 +63,28 @@ controladorCFP controller = new controladorCFP();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        txtNameCli = new javax.swing.JTextField();
+        txtNameProv = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         txtCosto = new javax.swing.JTextField();
         txtFechDetail = new javax.swing.JTextField();
-        txtNumPedidoDetail = new javax.swing.JTextField();
+        txtNumCompraDetail = new javax.swing.JTextField();
         txtTotCajas = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        txtStatusDetail = new javax.swing.JTextField();
+        txtStatusComp = new javax.swing.JTextField();
         jButGuardDetail = new javax.swing.JButton();
         txtEliminaPedido = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTNotaCompra = new javax.swing.JTextArea();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTabDetailEspec = new javax.swing.JTable();
         jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        txtDescriProv = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Detalle de pedido.");
+        setTitle("Detalle de compra.");
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
@@ -89,19 +92,19 @@ controladorCFP controller = new controladorCFP();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Nota");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 150, 99, 26));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 99, 26));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Fecha:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(292, 11, 99, 35));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 99, 35));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("Pedido no:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 33, 99, 35));
+        jLabel3.setText("Compra no:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 80, 35));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Total Cajas:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 290, 99, 35));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, 99, 35));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, 310, 10));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -111,11 +114,11 @@ controladorCFP controller = new controladorCFP();
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Costo           $:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 330, 99, 35));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 370, 99, 35));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel7.setText("Cliente:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 99, 35));
+        jLabel7.setText("Proveedor");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 80, 40));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setText("TERCERA:");
@@ -132,10 +135,10 @@ controladorCFP controller = new controladorCFP();
         jLabel10.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 80, 35));
 
-        txtNameCli.setEditable(false);
-        txtNameCli.setBackground(new java.awt.Color(255, 255, 255));
-        txtNameCli.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        getContentPane().add(txtNameCli, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 110, 40));
+        txtNameProv.setEditable(false);
+        txtNameProv.setBackground(new java.awt.Color(255, 255, 255));
+        txtNameProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        getContentPane().add(txtNameProv, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 70, 130, 40));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel11.setText("SEG_REG:");
@@ -148,29 +151,29 @@ controladorCFP controller = new controladorCFP();
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 80, 35));
 
         txtCosto.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        getContentPane().add(txtCosto, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 330, 80, 40));
+        getContentPane().add(txtCosto, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 370, 80, 40));
 
         txtFechDetail.setEditable(false);
         txtFechDetail.setBackground(new java.awt.Color(255, 255, 255));
-        txtFechDetail.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        getContentPane().add(txtFechDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, 130, 40));
+        txtFechDetail.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        getContentPane().add(txtFechDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, 150, 40));
 
-        txtNumPedidoDetail.setEditable(false);
-        txtNumPedidoDetail.setBackground(new java.awt.Color(255, 255, 255));
-        txtNumPedidoDetail.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        getContentPane().add(txtNumPedidoDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 90, 40));
+        txtNumCompraDetail.setEditable(false);
+        txtNumCompraDetail.setBackground(new java.awt.Color(255, 255, 255));
+        txtNumCompraDetail.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        getContentPane().add(txtNumCompraDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 90, 40));
 
         txtTotCajas.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        getContentPane().add(txtTotCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 290, 80, 40));
+        getContentPane().add(txtTotCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 330, 80, 40));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel13.setText("Status");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 80, 70, 35));
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 140, 70, 35));
 
-        txtStatusDetail.setEditable(false);
-        txtStatusDetail.setBackground(new java.awt.Color(255, 255, 255));
-        txtStatusDetail.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        getContentPane().add(txtStatusDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 80, 100, 40));
+        txtStatusComp.setEditable(false);
+        txtStatusComp.setBackground(new java.awt.Color(255, 255, 255));
+        txtStatusComp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        getContentPane().add(txtStatusComp, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 140, 100, 40));
 
         jButGuardDetail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/save32px.png"))); // NOI18N
         jButGuardDetail.setToolTipText("Actualiza pedido.");
@@ -179,7 +182,7 @@ controladorCFP controller = new controladorCFP();
                 jButGuardDetailActionPerformed(evt);
             }
         });
-        getContentPane().add(jButGuardDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 400, 80, 60));
+        getContentPane().add(jButGuardDetail, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 420, 80, 60));
 
         txtEliminaPedido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/delete32px.png"))); // NOI18N
         txtEliminaPedido.setToolTipText("Elimina pedido.");
@@ -188,13 +191,13 @@ controladorCFP controller = new controladorCFP();
                 txtEliminaPedidoActionPerformed(evt);
             }
         });
-        getContentPane().add(txtEliminaPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 400, 80, 60));
+        getContentPane().add(txtEliminaPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 420, 80, 60));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jTNotaCompra.setColumns(20);
+        jTNotaCompra.setRows(5);
+        jScrollPane1.setViewportView(jTNotaCompra);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 180, 200, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 220, 200, -1));
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel14.setText("Productos:");
@@ -220,9 +223,9 @@ controladorCFP controller = new controladorCFP();
         jTabDetailEspec.setRowMargin(2);
         jScrollPane2.setViewportView(jTabDetailEspec);
         if (jTabDetailEspec.getColumnModel().getColumnCount() > 0) {
-            jTabDetailEspec.getColumnModel().getColumn(0).setMinWidth(0);
-            jTabDetailEspec.getColumnModel().getColumn(0).setPreferredWidth(0);
-            jTabDetailEspec.getColumnModel().getColumn(0).setMaxWidth(0);
+            jTabDetailEspec.getColumnModel().getColumn(0).setMinWidth(50);
+            jTabDetailEspec.getColumnModel().getColumn(0).setPreferredWidth(50);
+            jTabDetailEspec.getColumnModel().getColumn(0).setMaxWidth(50);
         }
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, 210, 310));
@@ -232,25 +235,35 @@ controladorCFP controller = new controladorCFP();
         jLabel15.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 80, 35));
 
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel16.setText("Descripcion:");
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, 90, 40));
+
+        txtDescriProv.setEditable(false);
+        txtDescriProv.setBackground(new java.awt.Color(255, 255, 255));
+        txtDescriProv.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        getContentPane().add(txtDescriProv, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 170, 40));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtEliminaPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEliminaPedidoActionPerformed
-        String borrar=txtNumPedidoDetail.getText();
-        controller.elimaRow("pedidocliente","id_pedido",borrar);
+        String borrar=txtNumCompraDetail.getText();
+        controller.elimaRow("compraprooved","id_compraProve",borrar);
         this.dispose();
     }//GEN-LAST:event_txtEliminaPedidoActionPerformed
 
     private void jButGuardDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButGuardDetailActionPerformed
         int elige = jTabDetailEspec.getSelectedRow();
         Object datoId = jTabDetailEspec.getValueAt(elige, 0),
-                cant = jTabDetailEspec.getValueAt(elige, 1);
-        String id = txtNumPedidoDetail.getText();
-        if(datoId != null && !datoId.toString().isEmpty() && cant != null && !cant.toString().isEmpty())
-            actualizaData(datoId.toString(), cant.toString(), id);
+                cant = jTabDetailEspec.getValueAt(elige, 1),
+                coast =jTabDetailEspec.getValueAt(elige, 2) ;
+        String id = txtNumCompraDetail.getText();
+        if(datoId != null && !datoId.toString().isEmpty() && cant != null && !cant.toString().isEmpty() && coast != null && !coast.toString().isEmpty())
+            actualizaData(datoId.toString(),cant.toString(),coast.toString(),id);
         else
             JOptionPane.showMessageDialog(null, "Debe elegir producto existente");
-        System.out.println(datoId+" "+cant);
+       
         // TODO add your handling code here:
     }//GEN-LAST:event_jButGuardDetailActionPerformed
 
@@ -284,7 +297,7 @@ controladorCFP controller = new controladorCFP();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new detailPedido(param).setVisible(true);
+                new detailCompra(param).setVisible(true);
             }
         });
     }
@@ -292,7 +305,7 @@ controladorCFP controller = new controladorCFP();
      public void consultDetail(int opc){
         Connection cn = con2.conexion();
         String sql ="";
-              sql = "SELECT * FROM detailpedidio WHERE id_PedidioD = '"+opc+"'";           
+              sql = "SELECT * FROM detailcompraprooved WHERE id_compraP = '"+opc+"'";           
             Statement st = null;
             ResultSet rs = null;            
             try {
@@ -313,7 +326,7 @@ controladorCFP controller = new controladorCFP();
                             System.out.println();
                 }//while
             } catch (SQLException ex) {
-                Logger.getLogger(detailPedido.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(detailCompra.class.getName()).log(Level.SEVERE, null, ex);
             }finally{               
              try {        
                  if(st != null) st.close();                
@@ -324,20 +337,55 @@ controladorCFP controller = new controladorCFP();
          }//finally  
     }//regresaDatos
      
-         public void actualizaData(String id, String cantidad, String param){
+          public void consultCompra(int opc){
+        Connection cn = con2.conexion();
+        String sql ="";
+              sql = "SELECT compraprooved.fechaCompra,IF(compraprooved.statusCompra=0,'PENDIENTE','PAGADO') AS edo,compraprooved.notaCompra,\n" +
+                "	 proveedor.nombreP\n" +
+                "	FROM \n" +
+                "	compraprooved \n" +
+                "	INNER JOIN\n" +
+                "	proveedor\n" +
+                "	ON compraprooved.id_ProveedorC = proveedor.id_Proveedor AND compraprooved.id_compraProve = '"+opc+"';";           
+            Statement st = null;
+            ResultSet rs = null;            
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                    txtFechDetail.setText(rs.getString(1));
+                    txtStatusComp.setText(rs.getString(2));
+                    jTNotaCompra.setText(rs.getString(3));
+                    txtDescriProv.setText(rs.getString(4));                         
+                }//while
+            } catch (SQLException ex) {
+                Logger.getLogger(detailCompra.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally  
+    }//regresaDatos
+          
+         public void actualizaData(String id,String cantidad,String coast,String param){
              Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";        
-
-                SQL="UPDATE detailpedidio SET cantidadCajas=? WHERE num_DPedido ='"+id+"' AND id_PedidioD = '"+param+"' ";            
+ System.out.println(param+" "+cantidad+" "+coast+" "+id );
+         SQL="UPDATE detailcompraprooved SET cantCajasC=?, precCajaC=? WHERE num_DCompraP = '"+id+"' AND id_compraP='"+param+"';";            
             try {
                 pps = cn.prepareStatement(SQL);
-                pps.setString(1, cantidad);
+                pps.setInt(1, Integer.parseInt(cantidad));
+                pps.setString(2, coast);
                 pps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Datos de pedido actualizados correctamente.");
+                JOptionPane.showMessageDialog(null, "Datos de compra actualizados correctamente.");
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
-                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);               
+                Logger.getLogger(detailCompra.class.getName()).log(Level.SEVERE, null, ex);               
             }finally{
  //               System.out.println( "cierra conexion a la base de datos" );    
                 try {
@@ -350,15 +398,15 @@ controladorCFP controller = new controladorCFP();
   
     }//actualizaData
      
-     public void recibeListData(List<String> list){
-         txtFechDetail.setText(list.get(1));
-         txtStatusDetail.setText(list.get(2));
-         txtNameCli.setText(list.get(4));
-         txtTotCajas.setText(list.get(5));
-         txtCosto.setText(list.get(6));
-         jTextArea1.setText(list.get(7));
+     public void recibeListData(List<String> list){      
+         txtNameProv.setText(list.get(1));
+         txtTotCajas.setText(list.get(2));
      }
 
+      public void recibeListData2(List<String> list){      
+         txtNameProv.setText(list.get(1));
+         txtCosto.setText(list.get(2));
+     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButGuardDetail;
     private javax.swing.JLabel jLabel1;
@@ -368,9 +416,10 @@ controladorCFP controller = new controladorCFP();
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    public javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -379,14 +428,15 @@ controladorCFP controller = new controladorCFP();
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextArea jTNotaCompra;
     private javax.swing.JTable jTabDetailEspec;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField txtCosto;
+    private javax.swing.JTextField txtDescriProv;
     private javax.swing.JButton txtEliminaPedido;
     private javax.swing.JTextField txtFechDetail;
-    private javax.swing.JTextField txtNameCli;
-    private javax.swing.JTextField txtNumPedidoDetail;
-    private javax.swing.JTextField txtStatusDetail;
-    private javax.swing.JTextField txtTotCajas;
+    private javax.swing.JTextField txtNameProv;
+    private javax.swing.JTextField txtNumCompraDetail;
+    private javax.swing.JTextField txtStatusComp;
+    public javax.swing.JTextField txtTotCajas;
     // End of variables declaration//GEN-END:variables
 }
