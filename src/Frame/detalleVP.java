@@ -181,7 +181,7 @@ static int param=0;
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String id = txtIdPrestamo.getText();
-        controlInserts.elimaRow("creditomerca","num_credito",id);
+        controlInserts.elimaRow("notaventapiso","id_venta",id);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -1,0 +1,10 @@
+txtNombre
+txtApellid
+txtCorre
+txtTel
+txtUser
+txtpass1
+txtpass2
+jDateChooser1
+
+contraseña espe06  -> espe0694

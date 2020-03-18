@@ -31,7 +31,7 @@ public class ColorCelda extends DefaultTableCellRenderer{
         if(FnBoolrowiluminated(row)){
             //if(table.getValueAt(row, column).equals("33")){
            //      this.setBackground(Color.YELLOW);
-                 this.setForeground(Color.MAGENTA);
+                 this.setForeground(Color.BLUE);
                  this.setHorizontalAlignment(SwingConstants.RIGHT);
                  
             }else{

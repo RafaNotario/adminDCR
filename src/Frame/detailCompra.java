@@ -401,6 +401,7 @@ controladorCFP controller = new controladorCFP();
      public void recibeListData(List<String> list){      
          txtNameProv.setText(list.get(1));
          txtTotCajas.setText(list.get(2));
+         txtCosto.setText(list.get(3));
      }
 
       public void recibeListData2(List<String> list){      

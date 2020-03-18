@@ -1,3 +1,15 @@
+//elementos de detailCompra
+txtNumCompraDetail
+txtNameProv
+txtFechDetail
+txtDescriProv
+txtStatusComp
+jTNotaCompra
+txtTotCajas
+txtCosto
+jTabDetailEspec
+
+
 //elementos detalle asignacion pedido
 jTabDetailFletDet
 jTabDetailPedDet

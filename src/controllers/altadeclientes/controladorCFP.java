@@ -19,6 +19,11 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import sun.applet.Main;
 import internos.tickets.print.Funciones;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,6 +32,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -42,7 +48,7 @@ public class controladorCFP {
             String SQL="";        
         switch (tabla){
             case "proveedor":
-                SQL="INSERT INTO proveedor (nombreP,apellidosP,localidadP,fechaAltaP,telefonoP) VALUES (?,?,?,?,?)";                           
+                SQL="INSERT INTO proveedor (nombreP,apellidosP,localidadP,fechaAltaP,telefonoP,tipo) VALUES (?,?,?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, param.get(0));
@@ -50,6 +56,7 @@ public class controladorCFP {
                 pps.setString(3, param.get(2));
                 pps.setString(4, param.get(3));
                 pps.setString(5, param.get(4));               
+                pps.setInt(6, Integer.parseInt(param.get(6)));               
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Datos de Proveedor guardados correctamente.");
             } catch (SQLException ex) {
@@ -193,7 +200,7 @@ public class controladorCFP {
             String SQL="";        
         switch (tabla){
             case "proveedor":
-                SQL="UPDATE proveedor SET nombreP =?, apellidosP=?, localidadP=?, statusP=?, fechaAltaP=?, telefonoP=? WHERE id_Proveedor = '"+id+"' ";                           
+                SQL="UPDATE proveedor SET nombreP =?, apellidosP=?, localidadP=?, statusP=?, fechaAltaP=?, telefonoP=?,tipo=? WHERE id_Proveedor = '"+id+"' ";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, param.get(0));
@@ -202,6 +209,7 @@ public class controladorCFP {
                 pps.setInt(4, Integer.parseInt(param.get(3)));
                 pps.setString(5, param.get(4));
                 pps.setString(6, param.get(5));
+                pps.setInt(7,Integer.parseInt(param.get(7)));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Datos de Proveedor actualizados correctamente.");
             } catch (SQLException ex) {
@@ -1338,26 +1346,80 @@ public void elimaRow(String table,String campo,String id){
     public String[][] matrizCompraProvOpc(int opcBusq,String idCli,String fech1,String fech2){
         Connection cn = con2.conexion();
           String sql ="",aux;
-          if(opcBusq == 0){
+          if(opcBusq == 0){//CLIENTE
               sql = "SELECT\n" +
-                                    "	compraprooved.id_compraProve,compraprooved.fechaCompra,IF(compraprooved.statusCompra=0,'PENDIENTE','PAGADO'),\n" +
-                                    "	proveedor.id_Proveedor,IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP),\n" +
-                                    "	SUM(detailcompraprooved.cantCajasC*detailcompraprooved.precCajaC),\n" +
-                                    "	compraprooved.notaCompra\n" +
-                                    "FROM\n" +
-                                    "	proveedor\n" +
-                                    "INNER JOIN\n" +
-                                    "	compraprooved\n" +
-                                    "ON\n" +
-                                    "	proveedor.id_Proveedor=compraprooved.id_ProveedorC AND proveedor.id_Proveedor = '"+idCli+"'\n" +
-                                    "INNER JOIN\n" +
-                                    "	detailCompraProoved\n" +
-                                    "ON\n" +
-                                    "	compraprooved.id_compraProve=detailCompraProoved.id_compraP\n" +
-                                    "GROUP BY compraprooved.id_compraProve\n" +
-                                    "ORDER BY compraprooved.fechaCompra;";      
+                 "	compraprooved.id_compraProve,compraprooved.fechaCompra,IF(compraprooved.statusCompra=0,'PENDIENTE','PAGADO'),\n" +
+                 "	proveedor.id_Proveedor,IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP),\n" +
+                 "	SUM(detailcompraprooved.cantCajasC*detailcompraprooved.precCajaC),\n" +
+                 "	compraprooved.notaCompra\n" +
+                 "FROM\n" +
+                 "	proveedor\n" +
+                 "INNER JOIN\n" +
+                 "	compraprooved\n" +
+                 "ON\n" +
+                 "	proveedor.id_Proveedor=compraprooved.id_ProveedorC AND proveedor.id_Proveedor = '"+idCli+"'\n" +
+                 "INNER JOIN\n" +
+                 "	detailCompraProoved\n" +
+                 "ON\n" +
+                 "	compraprooved.id_compraProve=detailCompraProoved.id_compraP\n" +
+                 "GROUP BY compraprooved.id_compraProve\n" +
+                 "ORDER BY compraprooved.fechaCompra;";      
           }    
-          if(opcBusq==1){
+          if(opcBusq==1){//mayorista
+           sql = "SELECT compramayoreo.id_compraProveMin,compramayoreo.fechaRel,\n" +
+                "	IF(compraprooved.statusCompra = 0,\"PENDIENTE\",\"PAGADO\") AS condic,\n" +
+                "	compramayoreo.id_compraMay,proveedor.nombreP,\n" +
+                "	SUM(detailcompraprooved.cantCajasC * detailcompraprooved.precCajaC) AS suma,\n" +
+                "	compraprooved.notaCompra\n" +
+                "FROM\n" +
+                "	compraprooved\n" +
+                "INNER JOIN\n" +
+                "	proveedor\n" +
+                "ON \n" +
+                "	proveedor.id_Proveedor = compraprooved.id_ProveedorC\n" +
+                "INNER JOIN\n" +
+                "	compramayoreo\n" +
+                "ON \n" +
+                "	compraprooved.id_compraProve = compramayoreo.id_compraProveMin\n" +
+                "INNER JOIN\n" +
+                "	detailcompraprooved\n" +
+                "ON\n" +
+                "	compraprooved.id_compraProve = detailcompraprooved.id_compraP\n" +
+                "AND \n" +
+                "	compramayoreo.id_ProveedorMay = '"+idCli+"'\n" +
+                "GROUP BY compraprooved.id_compraProve\n" +
+                "ORDER BY compraprooved.fechaCompra DESC;";
+          }
+          
+          if(opcBusq==2){//MAYORISTA+FECHA
+              sql="SELECT compramayoreo.id_compraProveMin,compramayoreo.fechaRel,\n" +
+                "	IF(compraprooved.statusCompra = 0,\"PENDIENTE\",\"PAGADO\") AS condic,\n" +
+                "	compramayoreo.id_compraMay,proveedor.nombreP,\n" +
+                "	SUM(detailcompraprooved.cantCajasC * detailcompraprooved.precCajaC) AS suma,\n" +
+                "	compraprooved.notaCompra\n" +
+                "FROM\n" +
+                "	compraprooved\n" +
+                "INNER JOIN\n" +
+                "	proveedor\n" +
+                "ON \n" +
+                "	proveedor.id_Proveedor = compraprooved.id_ProveedorC\n" +
+                "INNER JOIN\n" +
+                "	compramayoreo\n" +
+                "ON \n" +
+                "	compraprooved.id_compraProve = compramayoreo.id_compraProveMin\n" +
+                "INNER JOIN\n" +
+                "	detailcompraprooved\n" +
+                "ON\n" +
+                "	compraprooved.id_compraProve = detailcompraprooved.id_compraP\n" +
+                "AND \n" +
+                "	compramayoreo.fechaRel = '"+fech1+"'\n" +
+                "AND \n" +
+                "	compramayoreo.id_ProveedorMay = '"+idCli+"'\n" +
+                "GROUP BY compraprooved.id_compraProve\n" +
+                "ORDER BY compraprooved.fechaCompra;";
+          }
+          
+          if(opcBusq==3){//FECHA
            sql = "SELECT\n" +
                 "	compraprooved.id_compraProve,compraprooved.fechaCompra,IF(compraprooved.statusCompra=0,'PENDIENTE','PAGADO'),\n" +
                 "	proveedor.id_Proveedor,IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP),\n" +
@@ -1376,8 +1438,8 @@ public void elimaRow(String table,String campo,String id){
                 "GROUP BY compraprooved.id_compraProve\n" +
                 "ORDER BY compraprooved.id_compraProve DESC;";
           }
-          if(opcBusq==2){
-           sql = "SELECT\n" +
+          if(opcBusq==4){//LAPSO DE FECHAS
+                     sql = "SELECT\n" +
                 "	compraprooved.id_compraProve,compraprooved.fechaCompra,IF(compraprooved.statusCompra=0,'PENDIENTE','PAGADO'),\n" +
                 "	proveedor.id_Proveedor,IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP),\n" +
                 "	SUM(detailcompraprooved.cantCajasC*detailcompraprooved.precCajaC),\n" +
@@ -1395,8 +1457,8 @@ public void elimaRow(String table,String campo,String id){
                 "GROUP BY compraprooved.id_compraProve\n" +
                 "ORDER BY compraprooved.id_compraProve DESC;";
           }
-          if(opcBusq==3){
-                     sql = "SELECT\n" +
+          if(opcBusq==5){//CLIENTE+FECHA
+           sql = "SELECT\n" +
                 "	compraprooved.id_compraProve,compraprooved.fechaCompra,IF(compraprooved.statusCompra=0,'PENDIENTE','PAGADO'),\n" +
                 "	proveedor.id_Proveedor,IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP),\n" +
                 "	SUM(detailcompraprooved.cantCajasC*detailcompraprooved.precCajaC),\n" +
@@ -1413,7 +1475,7 @@ public void elimaRow(String table,String campo,String id){
                 "	compraprooved.id_compraProve=detailCompraProoved.id_compraP\n" +
                 "GROUP BY compraprooved.id_compraProve;";
           }
-          if(opcBusq==4){
+          if(opcBusq==6){//CLIENTE+LAPSO DE FECHAS
            sql = "SELECT\n" +
                 "	compraprooved.id_compraProve,compraprooved.fechaCompra,IF(compraprooved.statusCompra=0,'PENDIENTE','PAGADO'),\n" +
                 "	proveedor.id_Proveedor,IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP),\n" +
@@ -1431,7 +1493,7 @@ public void elimaRow(String table,String campo,String id){
                 "	compraprooved.id_compraProve=detailCompraProoved.id_compraP\n" +
                 "GROUP BY compraprooved.id_compraProve\n" +
                 "ORDER BY compraprooved.id_compraProve DESC;";
-          }
+          }//IF 5          
              int i =0,cantFilas=0, cont=1,cantColumnas=0;
              String[][] mat=null, mat2=null;
               int[] arrIdPedido = null;//int para usar hashMap
@@ -2027,16 +2089,20 @@ return mat;
             String sql = "";
             switch(camp){
                 case "id_compraProveed":
-                             sql = "SELECT '1' FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"' ;";
+                    sql = "SELECT '1' FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"';";
                 break;
                 case "id_pedidoCli":
-                             sql = "SELECT '1' FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"' ;";
+                    sql = "SELECT '1' FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"';";
                 break;
                 case "id_fleteP":
-                             sql = "SELECT '1' FROM relcomprapedido WHERE id_fleteP = '"+idBusq+"' ;";
+                    sql = "SELECT '1' FROM relcomprapedido WHERE id_fleteP = '"+idBusq+"';";
                 break;
                 case "fleteenviado":
-                    sql = "SELECT '1' FROM fleteenviado WHERE id_fleteE = '"+idBusq+"' ";
+                    sql = "SELECT '1' FROM fleteenviado WHERE id_fleteE = '"+idBusq+"';";
+                break;
+                case "compramayoreo":
+                    sql = "SELECT '1' FROM compramayoreo WHERE id_compraProveMin = '"+idBusq+"';";
+                break;
             };
             Statement st = null;
             ResultSet rs= null;
@@ -2338,7 +2404,7 @@ return mat;
         Connection cn = con2.conexion();
           String sql ="",aux;
           if(tipe.equals("pagopedidocli")){//OPCION pago de pedididoscli
-              sql = "SELECT pagopedidocli.id_payPedCli,pagopedidocli.fechapayCliente,pagopedidocli.montoPayCliente,\n" +
+              sql = "SELECT pagopedidocli.idClientePay,pagopedidocli.fechapayCliente,pagopedidocli.montoPayCliente,\n" +
                 "	pagopedidocli.notaPayCliente,modopago.nombrePay\n" +
                 "FROM \n" +
                 "	pagopedidocli\n" +
@@ -2346,6 +2412,46 @@ return mat;
                 "	modopago\n" +
                 "ON\n" +
                 "	pagopedidocli.modoPayCliente = modopago.cod_pago AND pagopedidocli.fechapayCliente = '"+fech+"';";      
+          }
+          if(tipe.equals("pagoventapiso")){//OPCION pago de ventaspiso
+              sql = "SELECT pagoventapiso.num_notaVP,pagoventapiso.fechaPayVP,pagoventapiso.montoVP,\n" +
+                "	pagoventapiso.notaPayVP,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagoventapiso\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagoventapiso.method_payVP = modopago.cod_pago AND pagoventapiso.fechaPayVP = '"+fech+"';";      
+          }
+          if(tipe.equals("pagocreditprooved")){//OPCION pago de credito a proveedor
+              sql = "SELECT pagoCreditProoved.idProovedPay,pagoCreditProoved.fechapayProoved,pagoCreditProoved.montoPayProoved,\n" +
+                "	pagoCreditProoved.notaPayProoved,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagoCreditProoved\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagoCreditProoved.modoPayProoved = modopago.cod_pago AND pagoCreditProoved.fechapayProoved = '"+fech+"';";      
+          }
+          if(tipe.equals("pagoflete")){//OPCION pago de fletes
+              sql = "SELECT pagoflete.id_fleteEnv,pagoflete.fechaPayFlete,pagoflete.montoPayFl,\n" +
+                "	pagoflete.notaPayFlete,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagoflete\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.fechaPayFlete = '"+fech+"';";      
+          }
+          if(tipe.equals("pagarcompraprovee")){//OPCION pago de fletes
+              sql = "SELECT pagarcompraprovee.num_compraProveed,pagarcompraprovee.fechpayProveed,pagarcompraprovee.montoPayProveed,\n" +
+                "	pagarcompraprovee.notaPayProveed,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagarcompraprovee\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagarcompraprovee.modoPayProveed = modopago.cod_pago AND pagarcompraprovee.fechpayProveed = '"+fech+"';";      
           }
           
              int i =0,cantFilas=0, cont=1;
@@ -2427,20 +2533,402 @@ return mat;
                 }
         return prod;
     }//EndtotalCreditProv
+     
+     public String sumAbonos(String param,String id){
+        Connection cn = con2.conexion();
+          Object suma ="";
+           String sql ="";
+           switch (param){
+               case "pagarcompraprovee":
+                     sql = "SELECT SUM(montoPayProveed) FROM pagarcompraprovee WHERE num_compraProveed = '"+id+"'";           
+                   break;
+               case "pagoventapiso":
+                     sql = "SELECT SUM(montoVP) FROM pagoventapiso WHERE num_notaVP = '"+id+"'";          
+                   break;
+               case "pagopedidocli":
+                   sql = "SELECT SUM(montoPayCliente) FROM pagopedidocli WHERE idClientePay = '"+id+"'";    
+                   break;
+               case "pagocreditprooved":
+                    sql = "SELECT SUM(montoPayProoved) FROM pagocreditprooved WHERE idProovedPay = '"+id+"'";           
+                   break;
+               case "pagoflete":
+                   sql = "SELECT SUM(montoPayFl) FROM pagoflete WHERE id_fleteenv = '"+id+"'";
+                   break;
+           };
+            Statement st = null;
+            ResultSet rs = null;            
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                    suma=rs.getString(1);
+                }//while
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+//             System.out.println("cierra conexion a la base de datos");    
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally  
+             if(suma != null && !suma.toString().isEmpty() ){
+                 return suma.toString();
+            }else{
+                 suma = "0.0";
+             }
+            return suma.toString();
+    }//regresaDatos
+
+     //codigo para proveedor mayorista
+    public void guardaMayorista(String idP,String idC,String fech){
+     Connection cn = con2.conexion();
+            PreparedStatement pps=null;
+            String SQL="";        
+                SQL="INSERT INTO compramayoreo (id_ProveedorMay,id_compraProveMin,fechaRel) VALUES (?,?,?)";                           
+            try {
+                pps = cn.prepareStatement(SQL);
+                pps.setString(1, idP);
+                pps.setString(2,idC);
+                pps.setString(3,fech);
+                pps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Asignacion relizada correctamente");
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+            }finally{
+ //               System.out.println( "cierra conexion a la base de datos" );    
+                try {
+                    if(pps != null) pps.close();                
+                    if(cn !=null) cn.close();
+                    } catch (SQLException ex) {
+                     JOptionPane.showMessageDialog(null,ex.getMessage() );    
+                    }
+            }//finally catch
+} //guardacompraMayorista
+    
+  //filtros de detalle pedido en asignacion
+  public String[][] matAsignaMayoristas(String id, String fech){
+        Connection cn = con2.conexion();
+          String sql ="",aux;
+          
+         // sql = "SELECT * FROM compramayoreo WHERE id_ProveedorMay = '"+id+"' AND fechaRel = '"+fech+"'";                
+         sql = "SELECT compramayoreo.id_compraMay,proveedor.nombreP,compramayoreo.id_compraProveMin,\n" +
+                "	compramayoreo.fechaRel\n" +
+                "FROM\n" +
+                "	compramayoreo\n" +
+                "INNER JOIN\n" +
+                "	proveedor\n" +
+                "ON \n" +
+                "	proveedor.id_Proveedor = compramayoreo.id_ProveedorMay \n" +
+                "AND \n" +
+                "	compramayoreo.fechaRel = '"+fech+"'\n" +
+                "AND \n" +
+                "	compramayoreo.id_ProveedorMay = '"+id+"';";
+              int i =0,cantFilas=0, cont=1,cantColumnas=0;
+             String[][] mat=null;
+              int[] arrIdPedido = null;//int para usar hashMap
+            Statement st = null;
+            ResultSet rs = null;            
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }
+               mat = new String[cantFilas][cantColumnas];
+               //aqui iria crear matriz
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                 
+                      for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
+                           // System.out.print("| "+rs.getString(x)+" |");
+                             mat[i][x-1]=rs.getString(x);
+                      //System.out.print(x+" -> "+rs.getString(x));                   
+                      }//for
+                       i++;
+                }//whilE
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+//             System.out.println("cierra conexion a la base de datos");    
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally        
+           if (cantFilas == 0){
+                mat=null;
+                mat = new String[1][cantColumnas];
+                
+                for (int j = 0; j < mat[0].length; j++) {
+                     mat[0][j]="NO DATA";
+                }
+           }
+return mat;            
+}//asignaMayoristas
+  
+  //valida existencia de asigancion a mayoristas
+        public boolean validaCompAsignadas(String idBusq,String fech,String camp){
+            Connection cn = con2.conexion();
+            boolean existe =false;
+            int num=0,i=1;
+            String sql = "";
+            switch(camp){
+                case "comp+fech"://validara si el pedido ya ha sido asignado 
+                             sql = "SELECT '1' FROM compramayoreo WHERE id_compraProveMin = '"+idBusq+"' AND fechaRel = '"+fech+"'; ";
+                break;
+                case "idCli+fech":
+                             sql = "SELECT '1' FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"' ;";
+                break;
+            };
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                rs.beforeFirst();
+                if(rs.next())
+                {
+                    if(rs.getRow() > 0){
+                        existe =true;
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return existe;
+    }//validaComprasSAsignadas
+     
         
+//Validara si el proveedor es mayorista para asignarle las compras de minorista
+        public boolean validaIsMayorista(String idMay){
+            Connection cn = con2.conexion();
+            boolean existe =false;
+            int num=0,i=1;
+            String sql = "";
+            sql = "SELECT '1' FROM proveedor WHERE id_Proveedor = '"+idMay+"' AND tipo = 1";
+
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                rs.beforeFirst();
+                if(rs.next())
+                {
+                    if(rs.getRow() > 0){
+                        existe =true;
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return existe;
+    }//validaProveedorMayorista
+        
+//regresa duma de pedidos asignados a mayoristas
+        public String sumMayorista(String idMay,String fech){
+            Connection cn = con2.conexion();
+            String suma ="";
+            int num=0,i=1;
+            String sql = "";
+            sql = "SELECT SUM(detailcompraprooved.cantCajasC * detailcompraprooved.precCajaC) AS suma\n" +
+                "FROM\n" +
+                "	detailcompraprooved\n" +
+                "INNER JOIN\n" +
+                "	compraprooved\n" +
+                "ON \n" +
+                "	compraprooved.id_compraProve = detailcompraprooved.id_compraP\n" +
+                "INNER JOIN\n" +
+                "	compramayoreo\n" +
+                "ON\n" +
+                "	compramayoreo.id_compraProveMin = compraprooved.id_compraProve\n" +
+                "AND \n" +
+                "	compramayoreo.fechaRel = '"+fech+"'\n" +
+                "AND \n" +
+                "	compramayoreo.id_ProveedorMay = '"+idMay+"';";
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                rs.beforeFirst();
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                    suma=rs.getString(1);
+                }//while
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return suma;
+    }//validaProveedorMayorista
+        
+      public void respButton(){
+                  int resp;
+        JFileChooser RealizarBackupMySQL = new JFileChooser();
+        resp=RealizarBackupMySQL.showSaveDialog(null);//JFileChooser de nombre RealizarBackupMySQL
+        if (resp==JFileChooser.APPROVE_OPTION) {//Si el usuario presiona aceptar; se genera el Backup
+        try{
+        Runtime runtime = Runtime.getRuntime();
+        File backupFile = new File(String.valueOf(RealizarBackupMySQL.getSelectedFile().toString())+".sql");
+        InputStreamReader irs;
+        BufferedReader br;
+            try (FileWriter fw = new FileWriter(backupFile)) {
+                Process child = runtime.exec("C:\\xampp\\mysql\\bin\\mysqldump --routines=TRUE --password=0ehn4TNU5I --user=root --databases admindcr");// | gzip> respadmin_DCR.sql.gz
+                irs = new InputStreamReader(child.getInputStream());
+                br = new BufferedReader(irs);
+                String line;
+                while( (line=br.readLine()) != null ) {
+                    fw.write(line + "\n");
+                }   }
+        irs.close();
+        br.close();
+
+        JOptionPane.showMessageDialog(null, "Archivo generado correctamente.","Verificar",JOptionPane. INFORMATION_MESSAGE);
+        }catch(Exception e){
+        JOptionPane.showMessageDialog(null, "Error no se genero el archivo por el siguiente motivo:"+e.getMessage(), "Verificar",JOptionPane.ERROR_MESSAGE);
+        }
+        //JOptionPane.showMessageDialog(null, "Archivogenerado","Verificar",JOptionPane.INFORMAT ION_MESSAGE);
+        } else if (resp==JFileChooser.CANCEL_OPTION) {
+        JOptionPane.showMessageDialog(null,"Ha sido cancelada la generación del Backup.");
+        }        
+      }//respaldoButton
+      
+        public String cargaConfig() {//List
+                File archivo = null;
+                FileReader fr = null;
+                BufferedReader br = null;
+                 String ruta="C:/adminDCR/respaldo.txt";//2700 los 4; solo dos: 1850del, 1450traseros, 
+                 //List<String> contentL=new ArrayList<String>();
+                 String cadena="",rgresa="";  
+                try {
+                 // Apertura del fichero y creacion de BufferedReader para poder
+                 // hacer una lectura comoda (disponer del metodo readLine()).     
+                fr = new FileReader(ruta);
+                br = new BufferedReader(fr);
+                while((cadena = br.readLine())!=null) {
+                    //contentL.add(cadena.trim());
+                    rgresa=cadena.trim();
+                }
+                br.close();
+                }catch(Exception e){
+                 e.printStackTrace();
+              }finally{
+                 // En el finally cerramos el fichero, para asegurarnos
+                 // que se cierra tanto si todo va bien como si salta 
+                 // una excepcion.
+                 try{                    
+                    if( null != fr){   
+                       fr.close();     
+                    }                  
+                 }catch (Exception e2){ 
+                    e2.printStackTrace();
+                 }
+              }
+
+                return rgresa;
+    }
+          
+              public void insertaCamposUsers( List<String> param){
+            Connection cn = con2.conexion();
+            PreparedStatement pps=null;
+            String SQL="";        
+                SQL="INSERT INTO usersdcr (nombreUser,apellidosUser,nickName,correo,telef,passw,fechAlta) VALUES (?,?,?,?,?,?,?)";                           
+            try {
+                pps = cn.prepareStatement(SQL);
+                pps.setString(1, param.get(0));
+                pps.setString(2, param.get(1));
+                pps.setString(3, param.get(2));
+                pps.setString(4, param.get(3));
+                pps.setString(5, param.get(4));               
+                pps.setString(6, param.get(5));               
+                pps.setString(7, param.get(6));               
+                
+                pps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Datos de Usuario guardados correctamente.");
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+            }finally{
+ //               System.out.println( "cierra conexion a la base de datos" );    
+                try {
+                    if(pps != null) pps.close();                
+                    if(cn !=null) cn.close();
+                    } catch (SQLException ex) {
+                     JOptionPane.showMessageDialog(null,ex.getMessage() );    
+                    }
+            }//finally catch
+        }//inserta usuarios login
+        
+        public boolean validaLoginUsers(String user, String pass){
+            Connection cn = con2.conexion();
+            boolean existe =false;
+            int num=0,i=1;
+            String sql = "";
+            sql = "SELECT '1' FROM usersdcr WHERE nickName = '"+user+"' AND passw = '"+pass+"'";
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                rs.beforeFirst();
+                if(rs.next())
+                {
+                    if(rs.getRow() > 0){
+                        existe =true;
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return existe;
+    }//validaloginUsers
+              
     public static void main(String[] argv){
        controladorCFP control = new controladorCFP();
        List<String> contentL= control.regresaDatos(1,"4");
        ListIterator<String> itr=contentL.listIterator();
        
        String[][] mat = control.matFletEstados("2020-01-29");
-        for (int i = 0; i < mat.length; i++) {
+        /*for (int i = 0; i < mat.length; i++) {
             for (int j = 0; j < mat[0].length; j++) {
                 System.out.print("{"+mat[i][j]+"]");
             }
             System.out.println();
         }
-        
-       System.out.println("ASIGNADAS"+control.calcAsignAPed("50","1","id_pedidoCli"));
+       */
+        System.out.println("ASIGNADAS \n"+control.cargaConfig());
     }//main
 }//class

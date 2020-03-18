@@ -36,6 +36,14 @@ public void setBorder(JPanel name, String title) {
      */
     
  //****USO DE FECHAS
+    public String setDateActualGuion(){
+    //        DateFormat df = DateFormat.getDateInstance();
+        Date fechaAct = new Date();    
+    //        jDateChooser1.setDate(fechaAct);
+            return formatoPrueba.format(fechaAct);
+    }
+
+
 public String getFecha(JDateChooser jd){
     if(jd.getDate()!= null){
         return formato.format(jd.getDate());
