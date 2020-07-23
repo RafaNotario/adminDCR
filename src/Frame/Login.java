@@ -14,10 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
-/**
- *
- * @author Antonio R. Notario
- */
+
 public class Login extends javax.swing.JFrame {
 
     Funciones func = new Funciones();
@@ -382,16 +379,21 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordField1KeyPressed
 
     private void jlabelMusicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlabelMusicaMouseClicked
-    String code = JOptionPane.showInputDialog(null,"Ingrese codigo para crear nuevo usuario");
-    if(code.equals("dcrpass123")){
-        jPNewUser.setVisible(true);
-        jPanel1.setVisible(false);
-        limpiaCampos();
+    Object code = ""; 
+         code = JOptionPane.showInputDialog(null,"Ingrese codigo para crear nuevo usuario");
+    if(code.toString().isEmpty() || code == null){
+        System.out.println("vacion");
     }else{
-        JOptionPane.showMessageDialog(null, "Codigo incorrecto");
-        jPNewUser.setVisible(false);
-        jPanel1.setVisible(true);
-    }
+            if(code.equals("dcrpass123")){
+                jPNewUser.setVisible(true);
+                jPanel1.setVisible(false);
+                limpiaCampos();
+            }else{
+                JOptionPane.showMessageDialog(null, "Codigo incorrecto");
+                jPNewUser.setVisible(false);
+                jPanel1.setVisible(true);
+            }
+  }
     }//GEN-LAST:event_jlabelMusicaMouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

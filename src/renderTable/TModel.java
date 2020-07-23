@@ -1,10 +1,9 @@
 package renderTable;
 
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-/**
- * @web http://jc-mouse.net/
- * @author Mouse
- */
+import javax.swing.table.TableColumn;
+
 public class TModel extends DefaultTableModel{
     
 /*    Class[] types = new Class [] {
@@ -19,12 +18,13 @@ public class TModel extends DefaultTableModel{
          super(mat,cab);         
          isCellEditable(mat.length, mat[0].length);
     }
-    
+   
+
      
             @Override
             public boolean isCellEditable (int fila, int columna) {
              //   if(fila>1)
-                return false;
+                return true;
                // else
                  //   return true;
             }

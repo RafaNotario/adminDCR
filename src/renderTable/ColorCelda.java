@@ -32,14 +32,14 @@ public class ColorCelda extends DefaultTableCellRenderer{
             //if(table.getValueAt(row, column).equals("33")){
            //      this.setBackground(Color.YELLOW);
                  this.setForeground(Color.BLUE);
-                 this.setHorizontalAlignment(SwingConstants.RIGHT);
+                 this.setHorizontalAlignment(SwingConstants.CENTER);
                  
             }else{
           //  this.setBackground(Color.white);
             this.setForeground(Color.black);
             this.setHorizontalAlignment(SwingConstants.LEFT);
         }
-        setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+   //     setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         //}
         return this;
     }

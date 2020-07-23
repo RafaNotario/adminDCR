@@ -139,8 +139,7 @@ public Date stringDateTime(String fecha){//tenia: java.util.Date
       }
         
     public static void main(String[] args) {
-        ticketMuestra tM = new ticketMuestra();
-        tM.imprimirFactura();  
+
     }
     
     

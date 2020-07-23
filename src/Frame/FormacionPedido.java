@@ -259,6 +259,8 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jTabDetailFletDet.setModel(new TModel(matFlet,cabFlet));
         txtCostFletes.setText(calcPrecFlet(idD));
         
+       // JOptionPane.showMessageDialog(null, "costo flete : "+calcPrecFlet(idD));
+        
         BigDecimal amountOne = new BigDecimal(txtCostFletes.getText());//monto a cobrar
             BigDecimal amountTwo = new BigDecimal(txtTotMoneyMerca.getText());//cantidad recivida
             txtGranTot.setText(fn.getSum(amountOne, amountTwo).toString());
@@ -274,11 +276,25 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         try {
             st = cn.createStatement();
             rs = st.executeQuery(sql);
-            while(rs.next())
+  /*          while(rs.next())
             {
                 prod[0] = rs.getString(1);
                 prod[1] = rs.getString(2);
             }
+ */
+
+            if(rs.next())
+            {
+                    if(rs.getRow() > 0){
+                        prod[0] = rs.getString(1);
+                        prod[1] = rs.getString(2);
+                    }else{
+                            prod[0] = "0.00";
+                            prod[1] = "0.00"; 
+                    }
+            }
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(FormacionPedido.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
@@ -355,7 +371,8 @@ return mat;
      
       public String calcPrecFlet(String idPed){
         Connection cn = con2.conexion();
-        String prod = "";
+        Object prod = "";
+        String prod2 ="0";
         String sql = "SELECT\n" +
                 "	SUM(DISTINCT(fleteenviado.costoFlete)) AS mercan\n" +
                 "FROM\n" +
@@ -382,7 +399,11 @@ return mat;
                        JOptionPane.showMessageDialog(null,ex.getMessage() );    
                     }
                 }
-        return prod;
+        
+        if(prod != null && !prod.toString().isEmpty())
+            prod2 = prod.toString();
+        
+        return prod2;
     }
       
     public void actualizaCostoPedido(String id,String coast,String nota){

@@ -319,6 +319,11 @@ controladorCFP controller = new controladorCFP();
                                         jTabDetailEspec.setValueAt(rs.getInt(x-2), rs.getInt(x)-1, 0);//valor,fila,columna
                                         jTabDetailEspec.setValueAt(rs.getInt(x+1), rs.getInt(x)-1, 1);//valor,fila,columna
                                         jTabDetailEspec.setValueAt(rs.getString(x+2), rs.getInt(x)-1, 2);//valor,fila,columna restamos uno porque el indice del jtable comienza en cero
+                             if(controller.validaIsMasDeUnProducto(opc,rs.getInt(x)) > 1 ){//si existe mas de una vez ese producto en la compra a mayorista, => hacemos la sumatoria y reescribimos eso
+                      //           System.out.println("\tExiste+de 1 vex: "+rs.getInt(x));
+                                // jTabVistaComprasDia.setValueAt(controller.sumaIsMasDeUnProducto(opc,rs.getInt(x)), fila, rs.getInt(x)+1);
+                                 jTabDetailEspec.setValueAt(controller.sumaIsMasDeUnProducto(opc,rs.getInt(x)), rs.getInt(x)-1, 1);
+                             }
   //                                  }
                                 }
                             //System.out.print("["+x+"]"+" -> "+rs.getString(x));                   

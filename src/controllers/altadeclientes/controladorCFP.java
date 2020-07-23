@@ -312,7 +312,6 @@ public void guardaPedidoCli(List<String> param){
      Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";        
-
                 SQL="INSERT INTO pedidocliente (id_clienteP,fechaPedidio,notaPed) VALUES (?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
@@ -1112,9 +1111,8 @@ return mat;
         Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL=""; 
-        
           //  No.setFecha_inicio(new java.sql.Date(((Date) celda.getDateCellValue()).getTime()));
-                SQL="INSERT INTO compraProoved (id_ProveedorC,fechaCompra,descripcionSubasta,notaCompra,statusCompra) VALUES (?,?,?,?,?)";                           
+          SQL="INSERT INTO compraProoved (id_ProveedorC,fechaCompra,descripcionSubasta,notaCompra,statusCompra) VALUES (?,?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, param.get(0));
@@ -1136,7 +1134,6 @@ return mat;
                      JOptionPane.showMessageDialog(null,ex.getMessage() );    
                     }
             }//finally catch
-    
 } //guardaCompraProveedor 
  
      public String[] ultimoRegistroCompra(){
@@ -1212,6 +1209,7 @@ public void elimaRow(String table,String campo,String id){
             JOptionPane.showMessageDialog(null, "Eliminado");
 
         } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
 //            System.out.println("cierra conexion a la base de datos");    
@@ -1219,7 +1217,8 @@ public void elimaRow(String table,String campo,String id){
                 if(preparedStmt != null) preparedStmt.close();                
                 if(cn !=null) cn.close();
             } catch (SQLException ex) {
-                System.err.println(ex.getMessage()); 
+                System.err.println("RAFA"); 
+                JOptionPane.showMessageDialog(null, ex.getMessage());
 //                System.out.println("Error al cerrar la conexon");
             }//catch
         }//finally 
@@ -2189,7 +2188,8 @@ return mat;
            }
 return mat;            
 }
-        
+ 
+// devuelve el total de producto asiganado segun el tipo a un pedido co le fin de no excederel total
        public String calcAsignAPed(String idPed, String idProd,String camp){
         Connection cn = con2.conexion();
         String prod = "";
@@ -2595,7 +2595,7 @@ return mat;
                 pps.setString(2,idC);
                 pps.setString(3,fech);
                 pps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Asignacion relizada correctamente");
+                JOptionPane.showMessageDialog(null, "Asignacion a compra mayorista realizada correctamente");
             } catch (SQLException ex) {
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
@@ -2686,7 +2686,7 @@ return mat;
                              sql = "SELECT '1' FROM compramayoreo WHERE id_compraProveMin = '"+idBusq+"' AND fechaRel = '"+fech+"'; ";
                 break;
                 case "idCli+fech":
-                             sql = "SELECT '1' FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"' ;";
+                             sql = "SELECT '1' FROM relcomprapedido WHERE id_detailComp = '"+idBusq+"' ;";// id_pedidoCli
                 break;
             };
             Statement st = null;
@@ -2766,7 +2766,7 @@ return mat;
                 "AND \n" +
                 "	compramayoreo.fechaRel = '"+fech+"'\n" +
                 "AND \n" +
-                "	compramayoreo.id_ProveedorMay = '"+idMay+"';";
+                "	compramayoreo.id_compraProveMin = '"+idMay+"';";//id_ProveedorMay
             Statement st = null;
             ResultSet rs= null;
             try {
@@ -2789,8 +2789,10 @@ return mat;
            return suma;
     }//validaProveedorMayorista
         
+        
+        
       public void respButton(){
-                  int resp;
+          int resp;
         JFileChooser RealizarBackupMySQL = new JFileChooser();
         resp=RealizarBackupMySQL.showSaveDialog(null);//JFileChooser de nombre RealizarBackupMySQL
         if (resp==JFileChooser.APPROVE_OPTION) {//Si el usuario presiona aceptar; se genera el Backup
@@ -2915,13 +2917,219 @@ return mat;
                     }
            return existe;
     }//validaloginUsers
-              
+         
+         public int validaIsMasDeUnProducto(int idMay,int idProd){
+            Connection cn = con2.conexion();
+            String[] existe = new String[2];
+            int num=0,i=1;
+            String sql = "";
+            sql = "SELECT count(*) FROM detailcompraprooved WHERE id_compraP = '"+idMay+"' AND codigoProdC = '"+idProd+"' GROUP BY codigoProdC ";
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                //rs.beforeFirst();
+               while(rs.next())
+                {
+                        num =rs.getInt(1);
+                                        }
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return num;
+    }//validasiexiste mas de un producto del mismo tipo
+ 
+         public int sumaIsMasDeUnProducto(int idMay,int idProd){
+            Connection cn = con2.conexion();
+            String[] existe = new String[2];
+            int num=0,i=1;
+            String sql = "";
+            sql = "SELECT SUM(cantCajasC) FROM detailcompraprooved WHERE id_compraP = '"+idMay+"' AND codigoProdC = '"+idProd+"' ";//GROUP BY codigoProdC
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                //rs.beforeFirst();
+               while(rs.next())
+                {
+                        num =rs.getInt(1);
+                                        }
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return num;
+    }//validasiexiste mas de un producto del mismo tipo
+             
+         //***RETORNA MATRIZ DECOMPRA A MAYORISTA
+        public String[][] regresacompMayorisa(String idC,String fech){
+        Connection cn = con2.conexion();
+          String sql ="",aux;
+          if(fech.isEmpty()){
+             sql = "SELECT detailcompraprooved.id_compraP,detailcompraprooved.num_DCompraP,productocal.codigo,productocal.nombreP,\n" +
+                "	detailcompraprooved.cantCajasC,detailcompraprooved.precCajaC,(detailcompraprooved.cantCajasC*detailcompraprooved.precCajaC) AS prod\n" +
+                "FROM \n" +
+                "	detailcompraprooved\n" +
+                "INNER JOIN \n" +
+                "	compraprooved\n" +
+                "ON\n" +
+                "	detailcompraprooved.id_compraP = compraprooved.id_compraProve AND\n" +//AND compraprooved.fechaCompra = '"+fech+"' 
+                "	compraprooved.id_compraProve = '"+idC+"'\n" +
+                "INNER JOIN\n" +
+                "	productocal\n" +
+                "ON\n" +
+                "	productocal.codigo = detailcompraprooved.codigoProdC;";
+          }else{
+              sql = "SELECT detailcompraprooved.id_compraP,detailcompraprooved.num_DCompraP,productocal.nombreP,\n" +
+                "	detailcompraprooved.cantCajasC,detailcompraprooved.precCajaC,(detailcompraprooved.cantCajasC*detailcompraprooved.precCajaC) AS prod\n" +
+                "FROM \n" +
+                "	detailcompraprooved\n" +
+                "INNER JOIN \n" +
+                "	compraprooved\n" +
+                "ON\n" +
+                "	detailcompraprooved.id_compraP = compraprooved.id_compraProve AND compraprooved.fechaCompra = '"+fech+"' AND\n" +
+                "	compraprooved.id_compraProve = '"+idC+"'\n" +
+                "INNER JOIN\n" +
+                "	productocal\n" +
+                "ON\n" +
+                "	productocal.codigo = detailcompraprooved.codigoProdC;";      
+          }
+          
+             int i =0,cantFilas=0, cont=1;
+             String[][] mat=null, mat2=null;
+              int[] arrIdPedido = null;//int para usar hashMap
+            Statement st = null;
+            ResultSet rs = null;    
+            int cantColumnas=0;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }
+               mat = new String[cantFilas][cantColumnas];
+               //aqui iria crear matriz
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                 
+                      for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
+                           // System.out.print("| "+rs.getString(x)+" |");
+                             mat[i][x-1]=rs.getString(x);
+                      //System.out.print(x+" -> "+rs.getString(x));                   
+                      }//for
+                       i++;
+                }//whilE
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+//             System.out.println("cierra conexion a la base de datos");    
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally 
+            
+           // System.out.println("filas: "+cantFilas);
+            if (cantFilas == 0){
+                mat=null;
+                mat = new String[1][cantColumnas];
+                
+                for (int j = 0; j < mat[0].length; j++) {
+                     mat[0][j]="NO DATA";
+                }
+           }
+    return mat;            
+}//regresaPays 
+        
+            /// CARGA LA SUMA DE CAJAS, IMPORTE TOTAL DE COMPRAS Y SUMA DE TIPO DE MERCANCIA EN EL DIA
+    protected void cargaTotCompDayProveedor(){
+        Connection cn = con2.conexion();
+        int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0;
+        String sql = "", sql2 = "";
+        sql = "SELECT productocal.codigo,\n" +
+                "	SUM(detailcompraprooved.cantCajasC) AS sumaType\n" +
+                "FROM \n" +
+                "	detailcompraprooved\n" +
+                "INNER JOIN \n" +
+                "	compraprooved\n" +
+                "ON\n" +
+                "	detailcompraprooved.id_compraP = compraprooved.id_compraProve \n" +
+                "	AND compraprooved.fechaCompra = '2020-03-31'\n" +
+                "INNER JOIN\n" +
+                "	productocal\n" +
+                "ON\n" +
+                "	productocal.codigo = detailcompraprooved.codigoProdC\n" +
+                "GROUP BY productocal.codigo;";
+        sql2 = "";
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            st = cn.createStatement();
+            rs = st.executeQuery(sql);
+            // System.out.print("Filas: "+cantFilas+"\tColumnas: "+cantColumnas+"\n");
+            while (rs.next()) {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+            //    for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
+                   // if (x == 3) {//valor,fila,columna
+                   //jTabSumTotales.setValueAt(rs.getInt(x + 1), 0, rs.getInt(x) -1);//se le suma 1 por las columnas id,nombre de la jTable
+                //}
+                    System.out.print(rs.getString(1));//"["+x+"]"+" -> "+                   
+                    System.out.println();
+                    System.out.print(rs.getString(2));//"["+x+"]"+" -> "+                   
+              //  }//for
+                
+            }//while
+   //         st = null;
+     //       rs = null;
+ /*           st = cn.createStatement();
+            rs = st.executeQuery(sql2);
+            while (rs.next()) {
+                jTabVistaPedidosDia1.setValueAt(rs.getInt(1), fila, 0);
+                if (controlInserts.validaRelCompPed(Integer.toString(rs.getInt(1)), "id_pedidoCli")) {
+                    coloreB.add(fila);
+                }
+
+                jTabVistaPedidosDia1.setValueAt(rs.getString(2), fila, 1);
+                jTabVistaPedidosDia1.setValueAt(rs.getString(3), fila, 9);
+            }
+    */    } catch (SQLException ex) {
+            Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        }//finally  
+    } 
+        
     public static void main(String[] argv){
        controladorCFP control = new controladorCFP();
        List<String> contentL= control.regresaDatos(1,"4");
        ListIterator<String> itr=contentL.listIterator();
        
-       String[][] mat = control.matFletEstados("2020-01-29");
+       //String[] mat = control.validaIsMasDeUnProducto(10,8);
         /*for (int i = 0; i < mat.length; i++) {
             for (int j = 0; j < mat[0].length; j++) {
                 System.out.print("{"+mat[i][j]+"]");
@@ -2929,6 +3137,6 @@ return mat;
             System.out.println();
         }
        */
-        System.out.println("ASIGNADAS \n"+control.cargaConfig());
+        control.cargaTotCompDayProveedor();
     }//main
 }//class

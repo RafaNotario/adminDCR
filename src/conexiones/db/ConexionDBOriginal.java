@@ -21,9 +21,11 @@ public class ConexionDBOriginal {
     
     public Connection conexion() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-          cn = DriverManager.getConnection("jdbc:mysql://"+cargaConfig()+"/admindcr","root","0ehn4TNU5I");//0ehn4TNU5I +cargaConfig()+
-//System.out.println("CONEXION EXITOSA ConexionDBOriginal");
+            Class.forName("com.mysql.cj.jdbc.Driver");//com.mysql.jdbc.Driver 
+// cn = DriverManager.getConnection("jdbc:mysql://"+cargaConfig()+"/admindcr?","root","0ehn4TNU5I");//Version de conector 5.1.24 DrNuño
+//NUEVA VERSION DE CONECTOR PA MYSQLSERVER MAMALON POWER+++ 8.0.17 FUCKK
+cn = DriverManager.getConnection("jdbc:mysql://"+cargaConfig()+"/admindcr?useSSL=false&useTimezone=true&serverTimezone=UTC","root","0ehn4TNU5I");//0ehn4TNU5I +cargaConfig()+
+    //System.out.println("CONEXION EXITOSA ConexionDBOriginal");
         } catch (Exception ex) {
             System.out.println("ERROR EN CONEXION");
             JOptionPane.showMessageDialog(null,ex.getMessage());
