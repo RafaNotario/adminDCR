@@ -2055,7 +2055,7 @@ return mat;
      Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";        
-                SQL="INSERT INTO relcomprapedido (id_compraProveed,id_pedidoCli,cantidadCajasRel,tipoMercanRel,id_fleteP,precioAjust) VALUES (?,?,?,?,?,?)";                           
+                SQL="INSERT INTO relcomprapedido (id_compraProveed,id_pedidoCli,cantidadCajasRel,tipoMercanRel,id_fleteP,precioAjust,id_detailComp) VALUES (?,?,?,?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, dots.get(0));
@@ -2064,11 +2064,12 @@ return mat;
                 pps.setString(4,dots.get(3));
                 pps.setString(5, dots.get(4));
                 pps.setString(6, dots.get(5));
+                pps.setString(7, dots.get(6));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Asignacion Guardada correctamente");
             } catch (SQLException ex) {
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+                JOptionPane.showMessageDialog(null,ex);
             }finally{
 //               System.out.println( "finally detail->cierra conexion a la base de datos" );    
                 try {
