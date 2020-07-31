@@ -152,6 +152,11 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
                 txtContadoRecibeFocusLost(evt);
             }
         });
+        txtContadoRecibe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtContadoRecibeActionPerformed(evt);
+            }
+        });
         jPanContadoPay.add(txtContadoRecibe, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 120, 50));
 
         tipoPay.add(jRadContado);
@@ -388,6 +393,8 @@ if(jPanContadoPay.isVisible()){
                         actualizaData(var_id,"creditomerca");
                     else if(tipe.equals("pagoflete"))
                         actualizaData(var_id,"fleteenviado");
+                    
+                    jButton1.doClick();//cerrar esta ventana de pago
                 }
                 
             }else if(jRadParcial.isSelected()){
@@ -407,42 +414,17 @@ if(jPanContadoPay.isVisible()){
         jPanContadoPay.setVisible(false);
         jPanCreditPay.setVisible(false);
         limpiaCampos();
+       //this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButContadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButContadoActionPerformed
         jPanContadoPay.setVisible(true);
         jPanCreditPay.setVisible(false);
         jPanReferenciaPay.setVisible(false);
-       
-        
     }//GEN-LAST:event_jButContadoActionPerformed
 
     private void txtContadoRecibeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtContadoRecibeFocusLost
-         String cant = txtCantCobrar.getText(),//costo total
-                cos = txtContadoRecibe.getText(),
-                 abonos = txtAbonosPays.getText();//monto abonados
-                txtCambioPAgo.setText("");
 
-        if (cant.isEmpty() || cos.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Campo cantidad o monto vacios\n Verifique Por favor");
-        } else {
-            
-            BigDecimal amountOne = new BigDecimal(cant);//monto a cobrar
-            BigDecimal amountTwo = new BigDecimal(cos);//cantidad recivida
-            BigDecimal amountTres = new BigDecimal(abonos);//cantidad recivida
-            BigDecimal res = new BigDecimal(0);//cantidad recivida
-            
-             res =fn.getDifference(amountOne,amountTres);
-             
-            if(jRadContado.isSelected() ){
-                jLabel28.setText("Cambio : ");
-                
-            }else if(jRadParcial.isSelected()){
-            //    txtCambioPAgo.setText(fn.getDifference(amountOne,amountTwo).toString());
-                jLabel28.setText("Restan: ");
-            }
-                txtCambioPAgo.setText(fn.getDifference(res,amountTwo).toString());
-        }
     }//GEN-LAST:event_txtContadoRecibeFocusLost
 
     private void jRadParcialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadParcialActionPerformed
@@ -465,7 +447,7 @@ if(jPanContadoPay.isVisible()){
         limpiaCampos();
         if(abonado.equals("0.0")){
             jLaBRecomen.setText("<-Debe ser mayor o igual que el total");
-            
+            txtContadoRecibe.setText(cant);
         }else{
              BigDecimal amountOne = new BigDecimal(cant);//monto a cobrar
             BigDecimal amountTwo = new BigDecimal(abonado);//cantidad recivida
@@ -555,6 +537,34 @@ if(jPanContadoPay.isVisible()){
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCantCobrarActionPerformed
 
+    private void txtContadoRecibeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContadoRecibeActionPerformed
+                String cant = txtCantCobrar.getText(),//costo total
+                cos = txtContadoRecibe.getText(),
+                 abonos = txtAbonosPays.getText();//monto abonados
+                txtCambioPAgo.setText("");
+
+        if (cant.isEmpty() || cos.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Campo cantidad o monto vacios\n Verifique Por favor");
+        } else {
+            
+            BigDecimal amountOne = new BigDecimal(cant);//monto a cobrar
+            BigDecimal amountTwo = new BigDecimal(cos);//cantidad recivida
+            BigDecimal amountTres = new BigDecimal(abonos);//cantidad recivida
+            BigDecimal res = new BigDecimal(0);//cantidad recivida
+            
+             res =fn.getDifference(amountOne,amountTres);
+             
+            if(jRadContado.isSelected() ){
+                jLabel28.setText("Cambio : ");
+                
+            }else if(jRadParcial.isSelected()){
+            //    txtCambioPAgo.setText(fn.getDifference(amountOne,amountTwo).toString());
+                jLabel28.setText("Restan: ");
+            }
+                txtCambioPAgo.setText(fn.getDifference(res,amountTwo).toString());
+        }
+    }//GEN-LAST:event_txtContadoRecibeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -611,7 +621,6 @@ if(jPanContadoPay.isVisible()){
                     SQL = "INSERT INTO pagoflete (id_fleteEnv,fechaPayFlete,montoPayFl,notaPayFlete,modPay) VALUES (?,?,?,?,?)";                    
                 break;
             };
-   
                 try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, datas.get(0));

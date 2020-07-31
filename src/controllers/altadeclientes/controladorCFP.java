@@ -1229,13 +1229,23 @@ public void elimaRow(String table,String campo,String id){
             JOptionPane.showMessageDialog(null,"Sin data a eliminar");
 }
 
-     public String[][] consultCompra(String opc){
+     public String[][] consultCompra(String opc,String filt){
         Connection cn = con2.conexion();
         int cantColumnas=0,cantFilas=0;
         String[][] arre=null;
         String sql ="";
+        if(filt.isEmpty()){
               sql = "SELECT id_compraProve,id_ProveedorC FROM compraprooved WHERE fechaCompra = '"+opc+"'";           
-            Statement st = null;
+     }else{
+               sql = "SELECT compraprooved.id_compraProve,compraprooved.id_ProveedorC FROM compraprooved "+
+                        "INNER JOIN proveedor"+
+                        " ON  compraprooved.id_ProveedorC = proveedor.id_Proveedor AND compraprooved.fechaCompra = '"+opc+"' AND "
+                       + "(proveedor.nombreP LIKE '"+filt+"%'  OR compraprooved.descripcionSubasta LIKE '%"+filt+"%') "
+                       + "ORDER BY compraprooved.id_compraProve;";           
+
+        } 
+        
+        Statement st = null;
             ResultSet rs = null;            
             int i =0;
             try {
@@ -3123,8 +3133,117 @@ return mat;
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }//finally  
-    } 
+    }
+    
+       public void actualizaDataC(String id,String table){
+             Connection cn = con2.conexion();
+            PreparedStatement pps=null;
+            String SQL="";  
+            switch(table){
+                case "compraprooved":
+                     SQL="UPDATE compraprooved SET statusCompra =? WHERE id_compraProve = '"+id+"' ";      
+                    break;
+                case "notaventapiso":
+                     SQL="UPDATE notaventapiso SET statusVent =? WHERE id_venta = '"+id+"' ";      
+                    break;
+                case "pedidocliente":
+                     SQL="UPDATE pedidocliente SET status =? WHERE id_pedido = '"+id+"' ";      
+                    break;
+                 case "creditomerca":
+                     SQL="UPDATE creditomerca SET status =? WHERE num_credito = '"+id+"' ";      
+                    break;
+            case "fleteenviado":
+                     SQL="UPDATE fleteenviado SET status =? WHERE id_fleteE = '"+id+"' ";      
+                    break;
+           };
+            try {
+                pps = cn.prepareStatement(SQL);
+                pps.setInt(1, 1);
+                pps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Pago realizado correctamente a compra No:"+id);
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+            }finally{
+ //               System.out.println( "cierra conexion a la base de datos" );    
+                try {
+                    if(pps != null) pps.close();                
+                    if(cn !=null) cn.close();
+                    } catch (SQLException ex) {
+                     JOptionPane.showMessageDialog(null,ex.getMessage() );    
+                    }
+            }
+        }//actualizaData 
         
+       public void actualizaDataCompra(String[] id){
+             Connection cn = con2.conexion();
+            PreparedStatement pps=null;
+            String SQL="";  
+                     SQL="UPDATE detailcompraprooved SET cantCajasC =?,precCajaC=? WHERE num_DCompraP = '"+id[0]+"' ";      
+            try {
+                pps = cn.prepareStatement(SQL);
+                pps.setString(1, id[1]);
+                pps.setString(2, id[2]);
+                pps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Actualizado correctamente a compra No:"+id[0]);
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+            }finally{
+ //               System.out.println( "cierra conexion a la base de datos" );    
+                try {
+                    if(pps != null) pps.close();                
+                    if(cn !=null) cn.close();
+                    } catch (SQLException ex) {
+                     JOptionPane.showMessageDialog(null,ex.getMessage() );    
+                    }
+            }
+        }//actualizaData 
+       
+            public void guardaPayCompraContrl(List<String> datas, String table){
+     Connection cn = con2.conexion();
+            PreparedStatement pps=null;
+            String SQL="",SQL2="";     
+            switch(table){
+                case "pagarcompraprovee":
+                    SQL="INSERT INTO pagarcompraprovee (num_compraProveed,fechpayProveed,montoPayProveed,notaPayProveed,modoPayProveed) VALUES (?,?,?,?,?)";                    
+                break;
+                case "pagoventapiso":
+                    SQL ="INSERT INTO pagoventapiso (num_notaVP,fechaPayVP,montoVP,notaPayVP,method_payVP) VALUES(?,?,?,?,?)";
+                break;
+                case "pagopedidocli":
+                    SQL = "INSERT INTO pagopedidocli (idClientePay,fechapayCliente,montoPayCliente,notaPaycliente,modoPaycliente) VALUES (?,?,?,?,?)";                    
+                break;
+                case "pagocreditprooved":
+                    SQL = "INSERT INTO pagocreditprooved (idProovedPay,fechapayProoved,montoPayProoved,notaPayProoved,modoPayProoved) VALUES (?,?,?,?,?)";                    
+                break;
+                case "pagoflete":
+                    SQL = "INSERT INTO pagoflete (id_fleteEnv,fechaPayFlete,montoPayFl,notaPayFlete,modPay) VALUES (?,?,?,?,?)";                    
+                break;
+            };
+                try {
+                pps = cn.prepareStatement(SQL);
+                pps.setString(1, datas.get(0));
+                pps.setString(2,datas.get(1));
+                pps.setString(3,datas.get(2));
+                pps.setString(4,datas.get(3));
+                pps.setString(5,datas.get(4));
+                pps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Pago realizado correctamente");
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+            }finally{
+//               System.out.println( "finally detail->cierra conexion a la base de datos" );    
+                try {
+                    if(pps != null) pps.close();                
+                    if(cn !=null) cn.close();
+                    } catch (SQLException ex) {
+                     JOptionPane.showMessageDialog(null,ex.getMessage() );    
+                    }
+            }//finally catch
+} //guardaPagoPrveedor
+       
     public static void main(String[] argv){
        controladorCFP control = new controladorCFP();
        List<String> contentL= control.regresaDatos(1,"4");

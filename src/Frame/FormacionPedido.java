@@ -80,7 +80,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTabDetailFletDet.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jTabDetailFletDet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTabDetailFletDet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -92,8 +92,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
 
             }
         ));
-        jTabDetailFletDet.setRowHeight(32);
-        jTabDetailFletDet.setRowMargin(2);
+        jTabDetailFletDet.setRowHeight(25);
         jScrollPane1.setViewportView(jTabDetailFletDet);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, 470, 200));
@@ -101,6 +100,8 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("FLETES:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 120, 30));
+
+        txtTotMoneyMerca.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jPanel1.add(txtTotMoneyMerca, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 430, 100, 40));
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/price_refresh.png"))); // NOI18N
@@ -112,7 +113,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 480, -1, 60));
 
-        jTabDetailPedDet.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jTabDetailPedDet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTabDetailPedDet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -124,8 +125,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
 
             }
         ));
-        jTabDetailPedDet.setRowHeight(32);
-        jTabDetailPedDet.setRowMargin(2);
+        jTabDetailPedDet.setRowHeight(25);
         jScrollPane2.setViewportView(jTabDetailPedDet);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 730, 420));
@@ -138,6 +138,8 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("COSTO FLETES $ : ");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 710, 120, 40));
+
+        txtCostFletes.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jPanel1.add(txtCostFletes, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 710, 140, 40));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -151,6 +153,8 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("COSTO MERCANCIA: $ : ");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 430, 160, 40));
+
+        txtTotCajas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jPanel1.add(txtTotCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 430, 80, 40));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -158,7 +162,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 650, 50, 60));
 
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jTextArea1.setWrapStyleWord(true);
@@ -167,11 +171,15 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(556, 640, 170, 70));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 51, 750, 770));
+
+        txtClieny.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         getContentPane().add(txtClieny, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, 160, 40));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("ID PEDIDO:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 120, 40));
+
+        txtidPed.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         getContentPane().add(txtidPed, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 160, 40));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

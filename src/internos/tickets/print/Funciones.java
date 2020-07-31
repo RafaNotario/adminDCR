@@ -123,7 +123,7 @@ public Date stringDateTime(String fecha){//tenia: java.util.Date
      public BigDecimal multiplicaAmount(BigDecimal aAmountOne, BigDecimal aAmountTwo){
             fAmountOne = rounded(aAmountOne);
             fAmountTwo = rounded(aAmountTwo);
-            System.out.println(fAmountOne+" -> "+fAmountTwo);
+        //    System.out.println(fAmountOne+" -> "+fAmountTwo);
         return fAmountOne.multiply(fAmountTwo);
     }
      

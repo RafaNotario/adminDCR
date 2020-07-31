@@ -381,7 +381,7 @@ public class Login extends javax.swing.JFrame {
     private void jlabelMusicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlabelMusicaMouseClicked
     Object code = ""; 
          code = JOptionPane.showInputDialog(null,"Ingrese codigo para crear nuevo usuario");
-    if(code.toString().isEmpty() || code == null){
+    if( code ==null || code.toString().isEmpty() ){//error que marcaba val2 != null && !val2.toString().isEmpty()
         System.out.println("vacion");
     }else{
             if(code.equals("dcrpass123")){
