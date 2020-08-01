@@ -345,7 +345,7 @@ controladorCFP controller = new controladorCFP();
           public void consultCompra(int opc){
         Connection cn = con2.conexion();
         String sql ="";
-              sql = "SELECT compraprooved.fechaCompra,IF(compraprooved.statusCompra=0,'PENDIENTE','PAGADO') AS edo,compraprooved.notaCompra,\n" +
+              sql = "SELECT CONCAT(compraprooved.fechaCompra,', ',DATE_FORMAT(compraprooved.horaCompra, '%H : %i') ),IF(compraprooved.statusCompra=0,'PENDIENTE','PAGADO') AS edo,compraprooved.notaCompra,\n" +
                 "	 proveedor.nombreP\n" +
                 "	FROM \n" +
                 "	compraprooved \n" +

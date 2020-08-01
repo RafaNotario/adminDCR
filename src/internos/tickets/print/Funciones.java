@@ -9,6 +9,7 @@ import com.toedter.calendar.JDateChooser;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JPanel;
 
@@ -138,6 +139,16 @@ public Date stringDateTime(String fecha){//tenia: java.util.Date
           return fAmountOne.add(fAmountTwo);
       }
         
+public String getHour(){
+    Calendar calendario = Calendar.getInstance();    
+    int hora, minutos, segundos;
+    hora =calendario.get(Calendar.HOUR_OF_DAY);
+    minutos = calendario.get(Calendar.MINUTE);
+    segundos = calendario.get(Calendar.SECOND);
+    String hor = Integer.toString(hora)+":"+Integer.toString(minutos)+":"+Integer.toString(segundos);
+    return hor;
+}
+
     public static void main(String[] args) {
 
     }

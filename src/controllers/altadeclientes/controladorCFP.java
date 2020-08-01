@@ -1112,7 +1112,7 @@ return mat;
             PreparedStatement pps=null;
             String SQL=""; 
           //  No.setFecha_inicio(new java.sql.Date(((Date) celda.getDateCellValue()).getTime()));
-          SQL="INSERT INTO compraProoved (id_ProveedorC,fechaCompra,descripcionSubasta,notaCompra,statusCompra) VALUES (?,?,?,?,?)";                           
+          SQL="INSERT INTO compraProoved (id_ProveedorC,fechaCompra,descripcionSubasta,notaCompra,statusCompra,horaCompra,idTurno) VALUES (?,?,?,?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, param.get(0));
@@ -1120,6 +1120,8 @@ return mat;
                 pps.setString(3,param.get(2));
                 pps.setString(4,param.get(3));
                 pps.setInt(5,Integer.parseInt(param.get(4)));
+                pps.setString(6,param.get(5));
+                pps.setString(7,param.get(6));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Compra guardada correctamente.");
             } catch (SQLException ex) {
@@ -1242,7 +1244,6 @@ public void elimaRow(String table,String campo,String id){
                         " ON  compraprooved.id_ProveedorC = proveedor.id_Proveedor AND compraprooved.fechaCompra = '"+opc+"' AND "
                        + "(proveedor.nombreP LIKE '"+filt+"%'  OR compraprooved.descripcionSubasta LIKE '%"+filt+"%') "
                        + "ORDER BY compraprooved.id_compraProve;";           
-
         } 
         
         Statement st = null;
@@ -1891,7 +1892,7 @@ return mat;
             PreparedStatement pps=null;
             String SQL="";        
   
-                SQL="INSERT INTO fleteenviado (id_fleteE,id_FleteroE,fechaFlete,choferFlete,trocaFlete,costoFlete,status,recivioFlete) VALUES (?,?,?,?,?,?,?,?)";                           
+                SQL="INSERT INTO fleteenviado (id_fleteE,id_FleteroE,fechaFlete,choferFlete,trocaFlete,costoFlete,status,recivioFlete,cargaParcial) VALUES (?,?,?,?,?,?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, param.get(0));
@@ -1902,6 +1903,7 @@ return mat;
                 pps.setString(6, param.get(5));               
                 pps.setInt(7, 0);               
                 pps.setString(8, param.get(6));               
+                pps.setString(9, param.get(7));               
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Flete creado correctamente.");
             } catch (SQLException ex) {
@@ -1922,7 +1924,7 @@ return mat;
              Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";        
-                SQL="UPDATE fleteenviado SET id_FleteroE =?, fechaFlete =?, choferFlete=?, trocaFlete=?, costoFlete=?, status=?, recivioFlete=? WHERE id_fleteE = '"+id+"' ";                           
+                SQL="UPDATE fleteenviado SET id_FleteroE =?, fechaFlete =?, choferFlete=?, trocaFlete=?, costoFlete=?, status=?, recivioFlete=?,cargaParcial=? WHERE id_fleteE = '"+id+"' ";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, param.get(0));
@@ -1932,7 +1934,7 @@ return mat;
                 pps.setString(5, param.get(4));
                 pps.setInt(6, Integer.parseInt(param.get(5)));
                 pps.setString(7, param.get(6));
-                
+                pps.setString(8, param.get(7));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Flete actualizado correctamente.");
             } catch (SQLException ex) {
