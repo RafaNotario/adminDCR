@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  *
  * @author monit
  */
-public class ColorCelda extends DefaultTableCellRenderer{
+public class colorCeldaComplete extends DefaultTableCellRenderer{
     
     public Integer[] arrIntRowsIluminados;
     
@@ -27,11 +27,17 @@ public class ColorCelda extends DefaultTableCellRenderer{
                                                                                         int row,
                                                                                         int column){
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        if(FnBoolrowiluminated(row)){  
-            this.setForeground(Color.RED);
-        }else{
-               this.setForeground(Color.BLACK);
-       }
+        if(FnBoolrowiluminated(row)){
+            //if(table.getValueAt(row, column).equals("33")){
+                 this.setBackground(Color.YELLOW);
+                // this.setForeground(Color.blue);
+              //   this.setHorizontalAlignment(SwingConstants.CENTER);
+        } //else{
+           // this.setBackground(Color.white);
+           
+        //}
+   //     setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        //}
         return this;
     }
     

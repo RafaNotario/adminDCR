@@ -784,13 +784,15 @@ return mat;
             String SQL=""; 
         
           //  No.setFecha_inicio(new java.sql.Date(((Date) celda.getDateCellValue()).getTime()));
-                SQL="INSERT INTO creditomerca (id_ProveedorF,fechaPrestamo,status,notaPrest) VALUES (?,?,?,?)";                           
+                SQL="INSERT INTO creditomerca (id_ProveedorF,fechaPrestamo,status,notaPrest,horaCredi,idTurno) VALUES (?,?,?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, param.get(0));
                 pps.setString(2,param.get(1));
                 pps.setInt(3,Integer.parseInt(param.get(2)));
                 pps.setString(4,param.get(3));
+                pps.setString(5,param.get(4));
+                pps.setString(6,param.get(5));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Prestamo creado correctamente.");
             } catch (SQLException ex) {
@@ -837,17 +839,17 @@ return mat;
         return arre;
     }
 
-public void guardaDetallePrestamoProv(String numCP,String codP, int cantP,String costP){
+public void guardaDetallePrestamoProv(List<String> param){
      Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";        
                 SQL="INSERT INTO detallecreditproveed (num_creditCP,codigoProdCP,cantidadCP,costoCP) VALUES (?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
-                pps.setString(1, numCP);
-                pps.setString(2,codP);
-                pps.setInt(3,cantP);
-                pps.setString(4,costP);
+                pps.setString(1, param.get(0));
+                pps.setString(2,param.get(1));
+                pps.setString(3,param.get(2));
+                pps.setString(4,param.get(3));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Prestamo guardado correctamente");
             } catch (SQLException ex) {
@@ -868,20 +870,20 @@ public void guardaDetallePrestamoProv(String numCP,String codP, int cantP,String
         Connection cn = con2.conexion();
           String sql ="",aux;
               sql = "SELECT\n" +
-                    "	creditomerca.num_credito,creditomerca.fechaPrestamo,creditomerca.status,\n" +
-                    "	proveedor.id_Proveedor,proveedor.nombreP,\n" +
-                    "	SUM(detallecreditproveed.cantidadCP*detallecreditproveed.costoCP) AS TOTAL,\n" +
-                    "	creditomerca.notaPrest\n" +
+                    "creditomerca.num_credito,creditomerca.fechaPrestamo,creditomerca.status,\n" +
+                    "proveedor.id_Proveedor,proveedor.nombreP,\n" +
+                    "SUM(detallecreditproveed.cantidadCP*detallecreditproveed.costoCP) AS TOTAL,\n" +
+                    "creditomerca.notaPrest\n" +
                     "FROM\n" +
-                    "	proveedor\n" +
+                    "proveedor\n" +
                     "INNER JOIN\n" +
-                    "	creditomerca\n" +
+                    "creditomerca\n" +
                     "ON\n" +
-                    "	proveedor.id_Proveedor = creditomerca.id_ProveedorF AND creditomerca.fechaPrestamo = '"+fech+"'\n" +
+                    "proveedor.id_Proveedor = creditomerca.id_ProveedorF AND creditomerca.fechaPrestamo = '"+fech+"'\n" +
                     "INNER JOIN \n" +
-                    "	detallecreditproveed\n" +
+                    "detallecreditproveed\n" +
                     "ON\n" +
-                    "	creditomerca.num_credito=detallecreditproveed.num_creditCP\n" +
+                    "creditomerca.num_credito=detallecreditproveed.num_creditCP\n" +
                     "GROUP BY creditomerca.num_credito\n" +
                     "ORDER BY creditomerca.num_credito DESC;";      
               
@@ -936,20 +938,20 @@ return mat;
           String sql ="",aux;
           if(opcBusq == 0){
               sql = "SELECT\n" +
-                    "	creditomerca.num_credito,creditomerca.fechaPrestamo,creditomerca.status,\n" +
-                    "	proveedor.id_Proveedor,proveedor.nombreP,\n" +
-                    "	SUM(detallecreditproveed.cantidadCP*detallecreditproveed.costoCP) AS TOTAL,\n" +
-                    "	creditomerca.notaPrest\n" +
+                    "creditomerca.num_credito,creditomerca.fechaPrestamo,creditomerca.status,\n" +
+                    "proveedor.id_Proveedor,proveedor.nombreP,\n" +
+                    "SUM(detallecreditproveed.cantidadCP*detallecreditproveed.costoCP) AS TOTAL,\n" +
+                    "creditomerca.notaPrest\n" +
                     "FROM\n" +
-                    "	proveedor\n" +
+                    "proveedor\n" +
                     "INNER JOIN\n" +
-                    "	creditomerca\n" +
+                    "creditomerca\n" +
                     "ON\n" +
-                    "	proveedor.id_Proveedor = creditomerca.id_ProveedorF AND creditomerca.id_ProveedorF = '"+idCli+"'\n" +
+                    "proveedor.id_Proveedor = creditomerca.id_ProveedorF AND creditomerca.id_ProveedorF = '"+idCli+"'\n" +
                     "INNER JOIN \n" +
-                    "	detallecreditproveed\n" +
+                    "detallecreditproveed\n" +
                     "ON\n" +
-                    "	creditomerca.num_credito=detallecreditproveed.num_creditCP\n" +
+                    "creditomerca.num_credito=detallecreditproveed.num_creditCP\n" +
                     "GROUP BY creditomerca.num_credito\n" +
                     "ORDER BY creditomerca.num_credito DESC;";      
           }    
@@ -1180,7 +1182,7 @@ return mat;
                 pps.setInt(3,cantP);
                 pps.setString(4,costP);
                 pps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Compra Guardada correctamente");
+              //  JOptionPane.showMessageDialog(null, "Compra Guardada correctamente");
             } catch (SQLException ex) {
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
@@ -1231,17 +1233,17 @@ public void elimaRow(String table,String campo,String id){
             JOptionPane.showMessageDialog(null,"Sin data a eliminar");
 }
 
-     public String[][] consultCompra(String opc,String filt){
+     public String[][] consultCompra(String fech1,String filt){
         Connection cn = con2.conexion();
         int cantColumnas=0,cantFilas=0;
         String[][] arre=null;
         String sql ="";
         if(filt.isEmpty()){
-              sql = "SELECT id_compraProve,id_ProveedorC FROM compraprooved WHERE fechaCompra = '"+opc+"'";           
+              sql = "SELECT id_compraProve,id_ProveedorC FROM compraprooved WHERE fechaCompra = '"+fech1+"'";           
      }else{
                sql = "SELECT compraprooved.id_compraProve,compraprooved.id_ProveedorC FROM compraprooved "+
                         "INNER JOIN proveedor"+
-                        " ON  compraprooved.id_ProveedorC = proveedor.id_Proveedor AND compraprooved.fechaCompra = '"+opc+"' AND "
+                        " ON  compraprooved.id_ProveedorC = proveedor.id_Proveedor AND compraprooved.fechaCompra = '"+fech1+"' AND "
                        + "(proveedor.nombreP LIKE '"+filt+"%'  OR compraprooved.descripcionSubasta LIKE '%"+filt+"%') "
                        + "ORDER BY compraprooved.id_compraProve;";           
         } 
@@ -1261,16 +1263,8 @@ public void elimaRow(String table,String campo,String id){
                arre = new String[cantFilas][cantColumnas];
                 while(rs.next())
                 {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
-                        //for (int x=1;x<= rs.getMetaData().getColumnCount()-1;x++) {
-                          //      if(x==3){
-//                                    if(rs.getInt(x)==1){
                        arre[i][0]=rs.getString(1);
                        arre[i][1]=rs.getString(2);
-                            //    }
-                            //System.out.print("["+x+"]"+" -> "+rs.getString(x));                   
-                        //}//for
-                            //System.out.println(rs.getString(1));
-                          //  consultDetailCompra(rs.getInt(1));
                       i++;      
                 }//while
             } catch (SQLException ex) {
@@ -1351,6 +1345,57 @@ public void elimaRow(String table,String campo,String id){
                 }
         return prod;
     }
+       
+       //mostrar compra a proveedor con filtros de busqueda, por if, fehca, lapso de fechas
+     public String[][] consultComprafilters(String idPro,String fech1,String fech2,String status){
+        Connection cn = con2.conexion();
+        int cantColumnas=0,cantFilas=0;
+        String[][] arre=null;
+        String sql ="";
+        if(status.isEmpty()){
+               sql = "SELECT compraprooved.id_compraProve,compraprooved.id_ProveedorC FROM compraprooved "+
+                        "INNER JOIN proveedor"+
+                        " ON  compraprooved.id_ProveedorC = proveedor.id_Proveedor AND (compraprooved.fechaCompra >= '"+fech1+"' AND compraprooved.fechaCompra <= '"+fech2+"'  )"
+                       + " AND compraprooved.id_ProveedorC = '"+idPro+"' "           
+                       + "ORDER BY compraprooved.id_compraProve;";           
+        }else{
+                           sql = "SELECT compraprooved.id_compraProve,compraprooved.id_ProveedorC FROM compraprooved "+
+                        "INNER JOIN proveedor"+
+                        " ON  compraprooved.id_ProveedorC = proveedor.id_Proveedor AND (compraprooved.fechaCompra >= '"+fech1+"' AND compraprooved.fechaCompra <= '"+fech2+"'  )"
+                       + " AND compraprooved.id_ProveedorC = '"+idPro+"' AND compraprooved.statusCompra = '"+status+"' "           
+                       + "ORDER BY compraprooved.id_compraProve;";           
+        }
+        Statement st = null;
+            ResultSet rs = null;            
+            int i =0;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                
+            cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }     
+               arre = new String[cantFilas][cantColumnas];
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                       arre[i][0]=rs.getString(1);
+                       arre[i][1]=rs.getString(2);
+                      i++;      
+                }//while
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally  
+            return arre;
+    }//@end consultComprafilters
          
  //Filtros de busqueda compra a proveedor
     public String[][] matrizCompraProvOpc(int opcBusq,String idCli,String fech1,String fech2){
@@ -2140,6 +2185,53 @@ return mat;
            return existe;
     }
         
+             //VALIDAR SI FLETE,PEDIDO Y COMPRA YA ESTAN ASIGNADOS EN LA TABLA relcomprapedido
+        public int sumaRelCompPed(String idBusq,String camp){
+            Connection cn = con2.conexion();
+            int totalon =-1;
+            int num=0,i=1;
+            String sql = "";
+            switch(camp){
+                case "id_compraProveed":
+                    sql = "SELECT SUM(cantidadCajasRel) FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"';";
+                break;
+                case "id_pedidoCli":
+                    sql = "SELECT '1' FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"';";
+                break;
+                case "id_fleteP":
+                    sql = "SELECT '1' FROM relcomprapedido WHERE id_fleteP = '"+idBusq+"';";
+                break;
+                case "fleteenviado":
+                    sql = "SELECT '1' FROM fleteenviado WHERE id_fleteE = '"+idBusq+"';";
+                break;
+                case "compramayoreo":
+                    sql = "SELECT '1' FROM compramayoreo WHERE id_compraProveMin = '"+idBusq+"';";
+                break;
+            };
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                rs.beforeFirst();
+                if(rs.next())
+                {
+                    if(rs.getRow() > 0){
+                        totalon =rs.getInt(1);
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return totalon;
+    }
+        
         //CARGA VISTA DE ESTADOS DE CARGA FLETES
         public String[][] matFletEstados(String fech){
         Connection cn = con2.conexion();
@@ -2519,8 +2611,8 @@ return mat;
         
      public String totalCreditProv(String credit){//regresa el total de la compra a proveedor
         Connection cn = con2.conexion();
-        String prod = "";
-        String sql = "SELECT\n" +
+        String prod = "",sql ="";
+        sql = "SELECT\n" +
                 "	SUM(detallecreditproveed.cantidadCP*detallecreditproveed.costoCP) AS coste\n" +
                 "FROM\n" +
                 "	detallecreditproveed\n" +
@@ -3108,20 +3200,7 @@ return mat;
               //  }//for
                 
             }//while
-   //         st = null;
-     //       rs = null;
- /*           st = cn.createStatement();
-            rs = st.executeQuery(sql2);
-            while (rs.next()) {
-                jTabVistaPedidosDia1.setValueAt(rs.getInt(1), fila, 0);
-                if (controlInserts.validaRelCompPed(Integer.toString(rs.getInt(1)), "id_pedidoCli")) {
-                    coloreB.add(fila);
-                }
-
-                jTabVistaPedidosDia1.setValueAt(rs.getString(2), fila, 1);
-                jTabVistaPedidosDia1.setValueAt(rs.getString(3), fila, 9);
-            }
-    */    } catch (SQLException ex) {
+    } catch (SQLException ex) {
             Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -3162,7 +3241,7 @@ return mat;
                 pps = cn.prepareStatement(SQL);
                 pps.setInt(1, 1);
                 pps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Pago realizado correctamente a compra No:"+id);
+                //JOptionPane.showMessageDialog(null, "Pago realizado correctamente a compra No:"+id);
             } catch (SQLException ex) {
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
@@ -3231,7 +3310,7 @@ return mat;
                 pps.setString(4,datas.get(3));
                 pps.setString(5,datas.get(4));
                 pps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Pago realizado correctamente");
+                //JOptionPane.showMessageDialog(null, "Pago realizado correctamente");
             } catch (SQLException ex) {
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
@@ -3246,19 +3325,404 @@ return mat;
             }//finally catch
 } //guardaPagoPrveedor
        
-    public static void main(String[] argv){
+         //***RETORNA MATRIZ DETALLE PRESTAMO A PROVEEDOR
+        public String[][] regresaprestProveedor(int idC,String fech){
+        Connection cn = con2.conexion();
+          String sql ="",aux;
+    /*       "SELECT detallecreditproveed.num_creditCP,detallecreditproveed.num_detalleCP,productocal.codigo,productocal.nombreP,\n" +
+                "	detallecreditproveed.cantidadCP,detallecreditproveed.costoCP,(detallecreditproveed.cantidadCP*detallecreditproveed.costoCP) AS prod\n" +
+       */      
+          if(fech.isEmpty()){//detallecreditproveed U creditomerca
+             sql = "SELECT detallecreditproveed.cantidadCP,\n" +
+                "productocal.nombreP,detallecreditproveed.costoCP,(detallecreditproveed.cantidadCP*detallecreditproveed.costoCP) AS prod\n" +
+                "FROM \n" +
+                "	detallecreditproveed\n" +
+                "INNER JOIN \n" +
+                "	creditomerca\n" +
+                "ON\n" +
+                "	detallecreditproveed.num_creditCP = creditomerca.num_credito AND\n" +//AND compraprooved.fechaCompra = '"+fech+"' 
+                "	creditomerca.num_credito = '"+idC+"'\n" +
+                "INNER JOIN\n" +
+                "	productocal\n" +
+                "ON\n" +
+                "	productocal.codigo = detallecreditproveed.codigoProdCP;";
+          }else{
+              sql = "SELECT detailcompraprooved.id_compraP,detailcompraprooved.num_DCompraP,productocal.nombreP,\n" +
+                "	detailcompraprooved.cantCajasC,detailcompraprooved.precCajaC,(detailcompraprooved.cantCajasC*detailcompraprooved.precCajaC) AS prod\n" +
+                "FROM \n" +
+                "	detailcompraprooved\n" +
+                "INNER JOIN \n" +
+                "	compraprooved\n" +
+                "ON\n" +
+                "	detailcompraprooved.id_compraP = compraprooved.id_compraProve AND compraprooved.fechaCompra = '"+fech+"' AND\n" +
+                "	compraprooved.id_compraProve = '"+idC+"'\n" +
+                "INNER JOIN\n" +
+                "	productocal\n" +
+                "ON\n" +
+                "	productocal.codigo = detailcompraprooved.codigoProdC;";      
+          }
+          
+             int i =0,cantFilas=0, cont=1;
+             String[][] mat=null, mat2=null;
+              int[] arrIdPedido = null;//int para usar hashMap
+            Statement st = null;
+            ResultSet rs = null;    
+            int cantColumnas=0;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }
+               mat = new String[cantFilas][cantColumnas];
+               //aqui iria crear matriz
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                 
+                      for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
+                           // System.out.print("| "+rs.getString(x)+" |");
+                             mat[i][x-1]=rs.getString(x);
+                      //System.out.print(x+" -> "+rs.getString(x));                   
+                      }//for
+                       i++;
+                }//whilE
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+//             System.out.println("cierra conexion a la base de datos");    
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally 
+            
+           // System.out.println("filas: "+cantFilas);
+            if (cantFilas == 0){
+                mat=null;
+                mat = new String[1][cantColumnas];
+                
+                for (int j = 0; j < mat[0].length; j++) {
+                     mat[0][j]="NO DATA";
+                }
+           }
+    return mat;            
+}//regresaPays
+        
+       //mostrar compra a proveedor con filtros de busqueda, por if, fehca, lapso de fechas
+     public String[][] consultPrestfilters(String idPro,String fech1,String fech2,String status){
+        Connection cn = con2.conexion();
+        int cantColumnas=0,cantFilas=0;
+        String[][] arre=null;
+        String sql ="";
+        if(status.isEmpty()){
+              sql = "SELECT creditomerca.num_credito,creditomerca.id_ProveedorF FROM creditomerca "+
+                        "INNER JOIN proveedor"+
+                        " ON  creditomerca.id_ProveedorF = proveedor.id_Proveedor AND  (creditomerca.fechaPrestamo >= '"+fech1+"' AND creditomerca.fechaPrestamo <= '"+fech2+"'  )"
+                       + "AND creditomerca.id_ProveedorF = '"+idPro+"' "           
+                       + "ORDER BY creditomerca.fechaPrestamo;";           
+        }else{
+          sql = "SELECT creditomerca.num_credito,creditomerca.id_ProveedorF FROM creditomerca "+
+                        "INNER JOIN proveedor"+
+                        " ON  creditomerca.id_ProveedorF = proveedor.id_Proveedor AND  (creditomerca.fechaPrestamo >= '"+fech1+"' AND creditomerca.fechaPrestamo <= '"+fech2+"'  )"
+                       + "AND creditomerca.id_ProveedorF = '"+idPro+"' AND creditomerca.status = '"+status+"' "           
+                       + "ORDER BY creditomerca.fechaPrestamo;";           
+        }
+        Statement st = null;
+            ResultSet rs = null;            
+            int i =0;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                
+            cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }     
+               arre = new String[cantFilas][cantColumnas];
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                       arre[i][0]=rs.getString(1);
+                       arre[i][1]=rs.getString(2);
+                      i++;      
+                }//while
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally  
+            return arre;
+    }//@end consultComprafilters
+     
+              public int validaIsMasDeUnProductoPrest(int idMay,int idProd){
+            Connection cn = con2.conexion();
+            String[] existe = new String[2];
+            int num=0,i=1;
+            String sql = "";
+            sql = "SELECT count(*) FROM detallecreditproveed WHERE num_creditCP = '"+idMay+"' AND codigoProdCP = '"+idProd+"' GROUP BY codigoProdCP ";
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                //rs.beforeFirst();
+               while(rs.next())
+                {
+                        num =rs.getInt(1);
+                                        }
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return num;
+    }//validasiexiste mas de un producto del mismo tipo
+            
+           public int sumaIsMasDeUnProductoPrest(int idMay,int idProd){
+            Connection cn = con2.conexion();
+            String[] existe = new String[2];
+            int num=0,i=1;
+            String sql = "";
+            sql = "SELECT SUM(cantidadCP) FROM detallecreditproveed WHERE num_creditCP = '"+idMay+"' AND codigoProdCP = '"+idProd+"' ";//GROUP BY codigoProdC
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                //rs.beforeFirst();
+               while(rs.next())
+                {
+                        num =rs.getInt(1);
+                                        }
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return num;
+    }//validasiexiste mas de un producto del mismo tipo     
+         
+//*filtros buscar pedidos*/
+        public String[][] regresaPaysDetPerfil(String idCli,String fech1,String fech2,String tipe){
+        Connection cn = con2.conexion();
+          String sql ="",aux;
+          if(tipe.equals("pagopedidocli")){//OPCION pago de pedididoscli
+              sql = "SELECT pagopedidocli.id_payPedCli,pagopedidocli.fechapayCliente,pagopedidocli.montoPayCliente,\n" +
+                "	pagopedidocli.notaPayCliente,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagopedidocli\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagopedidocli.modoPayCliente = modopago.cod_pago AND pagopedidocli.idClientePay = '"+idCli+"';";      
+          }
+          if(tipe.equals("pagarcompraprovee")){//OPCION pago de pedididoscli
+              sql = "SELECT pagarcompraprovee.id_paycompra,pagarcompraprovee.num_compraProveed,pagarcompraprovee.fechpayProveed,pagarcompraprovee.montoPayProveed,\n" +
+                "	pagarcompraprovee.notaPayProveed\n" +
+                "FROM \n" +
+                "	pagarcompraprovee\n" +
+                "INNER JOIN \n" +
+                "	compraprooved\n" +
+                "ON\n" +
+                "	pagarcompraprovee.num_compraProveed = compraprooved.id_compraProve AND (compraprooved.fechaCompra >=  '"+fech1+"' AND  compraprooved.fechaCompra <=  '"+fech2+"'   )"
+                      + "AND compraprooved.id_ProveedorC =  '"+idCli+"'";      
+          }
+         if(tipe.equals("pagocreditprooved")){//OPCION pagoS de cREDIIT PROVEEDOR
+              sql = "SELECT pagoCreditProoved.id_pay,pagoCreditProoved.fechapayProoved,pagoCreditProoved.montoPayProoved,\n" +
+                "	pagoCreditProoved.notaPayProoved\n" +
+                "FROM \n" +
+                "	pagoCreditProoved\n" +
+                "INNER JOIN \n" +
+                "	creditomerca\n" +
+                "ON\n" +
+                "	pagoCreditProoved.idProovedPay = creditomerca.num_credito AND (creditomerca.fechaPrestamo >=  '"+fech1+"' AND  creditomerca.fechaPrestamo <=  '"+fech2+"')"
+              + "AND creditomerca.id_ProveedorF =  '"+idCli+"'";      ;      
+          }
+          if(tipe.equals("pagoflete")){//OPCION pagoS de cREDIIT PROVEEDOR
+              sql = "SELECT pagoflete.id_pagoFlete,pagoflete.fechaPayFlete,pagoflete.montoPayFl,\n" +
+                "	pagoflete.notaPayFlete,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagoflete\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.id_fleteEnv = '"+idCli+"';";      
+          }
+           if(tipe.equals("pagoventapiso")){//OPCION pagoS de cREDIIT PROVEEDOR
+              sql = "SELECT pagoventapiso.id_payVentaP,pagoventapiso.fechaPayVP,pagoventapiso.montoVP,\n" +
+                "	pagoventapiso.notaPayVP,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagoventapiso\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagoventapiso.method_payVP = modopago.cod_pago AND pagoventapiso.num_notaVP = '"+idCli+"';";      
+          }
+
+             int i =0,cantFilas=0, cont=1;
+             String[][] mat=null, mat2=null;
+              int[] arrIdPedido = null;//int para usar hashMap
+            Statement st = null;
+            ResultSet rs = null;    
+            int cantColumnas=0;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }
+               mat = new String[cantFilas][cantColumnas];
+               //aqui iria crear matriz
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                 
+                      for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
+                           // System.out.print("| "+rs.getString(x)+" |");
+                             mat[i][x-1]=rs.getString(x);
+                      //System.out.print(x+" -> "+rs.getString(x));                   
+                      }//for
+                       i++;
+                }//whilE
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+//             System.out.println("cierra conexion a la base de datos");    
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally 
+            
+           // System.out.println("filas: "+cantFilas);
+            if (cantFilas == 0){
+                mat=null;
+                mat = new String[1][cantColumnas];
+                
+                for (int j = 0; j < mat[0].length; j++) {
+                     mat[0][j]="NO DATA";
+                }
+           }
+return mat;            
+}//regresaPays  
+          
+//*filtros buscar pedidos*/
+        public String regresaPaysSumaAll(String idCli,String fech1,String fech2,String tipe){
+        Connection cn = con2.conexion();
+          String sql ="",aux;
+          if(tipe.equals("pagopedidocli")){//OPCION pago de pedididoscli
+              sql = "SELECT pagopedidocli.id_payPedCli,pagopedidocli.fechapayCliente,pagopedidocli.montoPayCliente,\n" +
+                "	pagopedidocli.notaPayCliente,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagopedidocli\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagopedidocli.modoPayCliente = modopago.cod_pago AND pagopedidocli.idClientePay = '"+idCli+"';";      
+          }
+          if(tipe.equals("pagarcompraprovee")){//OPCION pago de pedididoscli
+              sql = "SELECT SUM(pagarcompraprovee.montoPayProveed)\n" +
+                "FROM \n" +
+                "	pagarcompraprovee\n" +
+                "INNER JOIN \n" +
+                "	compraprooved\n" +
+                "ON\n" +
+                "	pagarcompraprovee.num_compraProveed = compraprooved.id_compraProve AND (compraprooved.fechaCompra >=  '"+fech1+"' AND  compraprooved.fechaCompra <=  '"+fech2+"'   )"
+                      + "AND compraprooved.id_ProveedorC =  '"+idCli+"'";      
+          }
+         if(tipe.equals("pagocreditprooved")){//OPCION pagoS de cREDIIT PROVEEDOR
+              sql = "SELECT SUM(pagocreditprooved.montoPayProoved)\n" +
+                "FROM \n" +
+                "	pagoCreditProoved\n" +
+                "INNER JOIN \n" +
+                "	creditomerca\n" +
+                "ON\n" +
+                "	pagoCreditProoved.idProovedPay = creditomerca.num_credito AND (creditomerca.fechaPrestamo >=  '"+fech1+"' AND  creditomerca.fechaPrestamo <=  '"+fech2+"')"
+              + "AND creditomerca.id_ProveedorF =  '"+idCli+"'";      ;      
+          }
+          if(tipe.equals("pagoflete")){//OPCION pagoS de cREDIIT PROVEEDOR
+              sql = "SELECT pagoflete.id_pagoFlete,pagoflete.fechaPayFlete,pagoflete.montoPayFl,\n" +
+                "	pagoflete.notaPayFlete,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagoflete\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.id_fleteEnv = '"+idCli+"';";      
+          }
+           if(tipe.equals("pagoventapiso")){//OPCION pagoS de cREDIIT PROVEEDOR
+              sql = "SELECT pagoventapiso.id_payVentaP,pagoventapiso.fechaPayVP,pagoventapiso.montoVP,\n" +
+                "	pagoventapiso.notaPayVP,modopago.nombrePay\n" +
+                "FROM \n" +
+                "	pagoventapiso\n" +
+                "INNER JOIN \n" +
+                "	modopago\n" +
+                "ON\n" +
+                "	pagoventapiso.method_payVP = modopago.cod_pago AND pagoventapiso.num_notaVP = '"+idCli+"';";      
+          }
+         if(tipe.equals("totalcreditSum")){//OPCION pagoS de cREDIIT PROVEEDOR
+              sql = "SELECT SUM(detallecreditproveed.cantidadCP * detallecreditproveed.costoCP )\n" +
+                "FROM \n" +
+                "	detallecreditproveed\n" +
+                "INNER JOIN \n" +
+                "	creditomerca\n" +
+                "ON\n" +
+                "	detallecreditproveed.num_creditCP = creditomerca.num_credito AND (creditomerca.fechaPrestamo >=  '"+fech1+"' AND  creditomerca.fechaPrestamo <=  '"+fech2+"')"
+              + "AND creditomerca.id_ProveedorF =  '"+idCli+"'";      ;      
+          }
+             int i =0,cantFilas=0, cont=1;
+             String resultado="-1";
+              int[] arrIdPedido = null;//int para usar hashMap
+            Statement st = null;
+            ResultSet rs = null;    
+            int cantColumnas=0;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                while(rs.next())
+                {
+                    resultado=rs.getString(1);
+                }//whilE
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+//             System.out.println("cierra conexion a la base de datos");    
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally 
+     
+
+                return resultado;            
+}//@end regresaPaysSumaAll
+        
+            public static void main(String[] argv){
        controladorCFP control = new controladorCFP();
        List<String> contentL= control.regresaDatos(1,"4");
        ListIterator<String> itr=contentL.listIterator();
-       
-       //String[] mat = control.validaIsMasDeUnProducto(10,8);
-        /*for (int i = 0; i < mat.length; i++) {
-            for (int j = 0; j < mat[0].length; j++) {
-                System.out.print("{"+mat[i][j]+"]");
-            }
-            System.out.println();
-        }
-       */
         control.cargaTotCompDayProveedor();
     }//main
 }//class

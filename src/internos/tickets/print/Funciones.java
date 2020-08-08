@@ -11,6 +11,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 /**
@@ -60,17 +62,18 @@ public String getFecha(JDateChooser jd){
    
 public Date StringDate(String fecha){//tenia: java.util.Date
 //    SimpleDateFormat formato_texto = new SimpleDateFormat("dd/MM/yyyy");
-    Date fechaE = null;
-    try{
-        fechaE = formato.parse(fecha);
-        return fechaE;
-    }catch(ParseException ex){
-        return null;
-    }
+    Date date1 = null;  
+     try {
+         date1 = new SimpleDateFormat("dd/MM/yyyy").parse(fecha);
+     } catch (ParseException ex) {
+         Logger.getLogger(Funciones.class.getName()).log(Level.SEVERE, null, ex);
+     }
+        return date1;
 }//StringDate
+
 public Date stringDateTime(String fecha){//tenia: java.util.Date
 //    SimpleDateFormat formato_texto = new SimpleDateFormat("dd/MM/yyyy");
-    Date fechaE = null;
+    java.util.Date fechaE = null;
     try{
         fechaE = formato.parse(fecha);
         return fechaE;

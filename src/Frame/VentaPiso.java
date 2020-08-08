@@ -404,6 +404,7 @@ if(jPanContadoPay.isVisible()){
                 dataList.add(var_nota);
                 dataList.add(var_metod);
                 guardaPayCompra(dataList,tipe);
+                 jButton1.doClick();
             }//else if jRadParcial
              }else{//if comparacion que no guarde mas de la cantidad    
            JOptionPane.showMessageDialog(null, "No puede guardar mas que el total de la compra");
