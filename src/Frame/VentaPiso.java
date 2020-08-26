@@ -107,6 +107,7 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
         txtProveedorName = new javax.swing.JTextField();
         jLabNameProv = new javax.swing.JLabel();
         jLabLetreroTransac = new javax.swing.JLabel();
+        jLabTurno = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PAGOS");
@@ -143,6 +144,11 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
         txtCambioPAgo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtCambioPAgo.setForeground(new java.awt.Color(0, 51, 204));
         txtCambioPAgo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCambioPAgo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCambioPAgoKeyReleased(evt);
+            }
+        });
         jPanContadoPay.add(txtCambioPAgo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 140, 90, 50));
 
         txtContadoRecibe.setFont(new java.awt.Font("Tahoma", 1, 17)); // NOI18N
@@ -157,10 +163,15 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
                 txtContadoRecibeActionPerformed(evt);
             }
         });
+        txtContadoRecibe.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtContadoRecibeKeyReleased(evt);
+            }
+        });
         jPanContadoPay.add(txtContadoRecibe, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 120, 50));
 
         tipoPay.add(jRadContado);
-        jRadContado.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jRadContado.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jRadContado.setText("TOTAL");
         jRadContado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,6 +181,7 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
         jPanContadoPay.add(jRadContado, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 150, 40));
 
         tipoPay.add(jRadParcial);
+        jRadParcial.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jRadParcial.setText("PARCIAL");
         jRadParcial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -187,6 +199,11 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
         jPanContadoPay.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 110, 40));
 
         txtnotaPay.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        txtnotaPay.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtnotaPayKeyReleased(evt);
+            }
+        });
         jPanContadoPay.add(txtnotaPay, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, 340, 50));
 
         jLaBRecomen.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -334,7 +351,7 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
         txtidComp.setBackground(new java.awt.Color(153, 255, 153));
         txtidComp.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         txtidComp.setBorder(null);
-        jPanel3.add(txtidComp, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, 80, 50));
+        jPanel3.add(txtidComp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 100, 50));
 
         txtProveedorName.setEditable(false);
         txtProveedorName.setBackground(new java.awt.Color(153, 255, 153));
@@ -350,7 +367,11 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
         jLabLetreroTransac.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         jLabLetreroTransac.setForeground(new java.awt.Color(51, 0, 204));
         jLabLetreroTransac.setText("COBRAR VENTA");
-        jPanel3.add(jLabLetreroTransac, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 220, 50));
+        jPanel3.add(jLabLetreroTransac, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 160, 50));
+
+        jLabTurno.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabTurno.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel3.add(jLabTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 30, 20));
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 50));
 
@@ -366,7 +387,6 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
                 var_nota = txtnotaPay.getText(),
                 var_metod = "1";//para metodo de pago
                 List<String> dataList = new ArrayList<String>();
-               
             BigDecimal amountOne = new BigDecimal(var_paga);//monto a cobrar
             BigDecimal amountTwo = new BigDecimal(var_abonos);//cantidad recivida
             BigDecimal amountThree = new BigDecimal(var_cant);
@@ -382,6 +402,8 @@ if(jPanContadoPay.isVisible()){
                    dataList.add(var_paga);
                    dataList.add(var_nota);
                    dataList.add(var_metod);
+                   dataList.add(fn.getHour());
+                   dataList.add(jLabTurno.getText());
                     guardaPayCompra(dataList,tipe);
                     if(tipe.equals("pagarcompraprovee"))//nombre de la tabla a la q se le aplicara el pago
                         actualizaData(var_id,"compraprooved");
@@ -393,18 +415,18 @@ if(jPanContadoPay.isVisible()){
                         actualizaData(var_id,"creditomerca");
                     else if(tipe.equals("pagoflete"))
                         actualizaData(var_id,"fleteenviado");
-                    
                     jButton1.doClick();//cerrar esta ventana de pago
                 }
-                
             }else if(jRadParcial.isSelected()){
                 dataList.add(var_id);
                 dataList.add(var_fech);
                 dataList.add(var_paga);
                 dataList.add(var_nota);
                 dataList.add(var_metod);
+                dataList.add(fn.getHour());
+                dataList.add(jLabTurno.getText());
                 guardaPayCompra(dataList,tipe);
-                 jButton1.doClick();
+                jButton1.doClick();
             }//else if jRadParcial
              }else{//if comparacion que no guarde mas de la cantidad    
            JOptionPane.showMessageDialog(null, "No puede guardar mas que el total de la compra");
@@ -415,7 +437,6 @@ if(jPanContadoPay.isVisible()){
         jPanContadoPay.setVisible(false);
         jPanCreditPay.setVisible(false);
         limpiaCampos();
-       //this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButContadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButContadoActionPerformed
@@ -566,6 +587,24 @@ if(jPanContadoPay.isVisible()){
         }
     }//GEN-LAST:event_txtContadoRecibeActionPerformed
 
+    private void txtnotaPayKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnotaPayKeyReleased
+       if (evt.getKeyCode() == evt.VK_ENTER) {
+            jButton2.doClick();
+        }
+    }//GEN-LAST:event_txtnotaPayKeyReleased
+
+    private void txtContadoRecibeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContadoRecibeKeyReleased
+       if (evt.getKeyCode() == evt.VK_ENTER) {
+            jButton2.doClick();
+        }
+    }//GEN-LAST:event_txtContadoRecibeKeyReleased
+
+    private void txtCambioPAgoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCambioPAgoKeyReleased
+       if (evt.getKeyCode() == evt.VK_ENTER) {
+            jButton2.doClick();
+        }
+    }//GEN-LAST:event_txtCambioPAgoKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -607,19 +646,19 @@ if(jPanContadoPay.isVisible()){
             String SQL="",SQL2="";     
             switch(table){
                 case "pagarcompraprovee":
-                    SQL="INSERT INTO pagarcompraprovee (num_compraProveed,fechpayProveed,montoPayProveed,notaPayProveed,modoPayProveed) VALUES (?,?,?,?,?)";                    
+                    SQL="INSERT INTO pagarcompraprovee (num_compraProveed,fechpayProveed,montoPayProveed,notaPayProveed,modoPayProveed,horaPayCompProov,idTurno) VALUES (?,?,?,?,?,?,?)";                    
                 break;
                 case "pagoventapiso":
-                    SQL ="INSERT INTO pagoventapiso (num_notaVP,fechaPayVP,montoVP,notaPayVP,method_payVP) VALUES(?,?,?,?,?)";
+                    SQL ="INSERT INTO pagoventapiso (num_notaVP,fechaPayVP,montoVP,notaPayVP,method_payVP,horaPayVentaPiso,idTurno) VALUES(?,?,?,?,?,?,?)";
                 break;
-                case "pagopedidocli":
-                    SQL = "INSERT INTO pagopedidocli (idClientePay,fechapayCliente,montoPayCliente,notaPaycliente,modoPaycliente) VALUES (?,?,?,?,?)";                    
+                case "pagopedidocli"://
+                    SQL = "INSERT INTO pagopedidocli (idClientePay,fechapayCliente,montoPayCliente,notaPaycliente,modoPaycliente,horaPayPedido,idTurno) VALUES (?,?,?,?,?,?,?)";                    
                 break;
                 case "pagocreditprooved":
-                    SQL = "INSERT INTO pagocreditprooved (idProovedPay,fechapayProoved,montoPayProoved,notaPayProoved,modoPayProoved) VALUES (?,?,?,?,?)";                    
+                    SQL = "INSERT INTO pagocreditprooved (idProovedPay,fechapayProoved,montoPayProoved,notaPayProoved,modoPayProoved,horaPayCreditProov,idTurno) VALUES (?,?,?,?,?,?,?)";                    
                 break;
                 case "pagoflete":
-                    SQL = "INSERT INTO pagoflete (id_fleteEnv,fechaPayFlete,montoPayFl,notaPayFlete,modPay) VALUES (?,?,?,?,?)";                    
+                    SQL = "INSERT INTO pagoflete (id_fleteEnv,fechaPayFlete,montoPayFl,notaPayFlete,modPay,horaPayFlete,idTurno) VALUES (?,?,?,?,?,?,?)";                    
                 break;
             };
                 try {
@@ -629,13 +668,14 @@ if(jPanContadoPay.isVisible()){
                 pps.setString(3,datas.get(2));
                 pps.setString(4,datas.get(3));
                 pps.setString(5,datas.get(4));
+                pps.setString(6,datas.get(5));
+                pps.setString(7,datas.get(6));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Pago realizado correctamente");
             } catch (SQLException ex) {
                 Logger.getLogger(VentaPiso.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+                JOptionPane.showMessageDialog(null, "Error durante la transaccion."+ex);
             }finally{
-//               System.out.println( "finally detail->cierra conexion a la base de datos" );    
                 try {
                     if(pps != null) pps.close();                
                     if(cn !=null) cn.close();
@@ -737,7 +777,7 @@ if(jPanContadoPay.isVisible()){
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButContado;
+    public javax.swing.JButton jButContado;
     public javax.swing.JButton jButTransfer;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -747,6 +787,7 @@ if(jPanContadoPay.isVisible()){
     public javax.swing.JLabel jLabLetreroTransac;
     public javax.swing.JLabel jLabNameProv;
     private javax.swing.JLabel jLabPagaOMonto;
+    public javax.swing.JLabel jLabTurno;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -763,7 +804,7 @@ if(jPanContadoPay.isVisible()){
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadContado;
+    public javax.swing.JRadioButton jRadContado;
     private javax.swing.JRadioButton jRadParcial;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -778,6 +819,6 @@ if(jPanContadoPay.isVisible()){
     private javax.swing.JTextField txtContadoRecibe;
     public javax.swing.JTextField txtProveedorName;
     public javax.swing.JTextField txtidComp;
-    private javax.swing.JTextField txtnotaPay;
+    public javax.swing.JTextField txtnotaPay;
     // End of variables declaration//GEN-END:variables
 }

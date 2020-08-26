@@ -258,7 +258,6 @@ controladorCFP controller = new controladorCFP();
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -292,7 +291,7 @@ controladorCFP controller = new controladorCFP();
      public void consultDetail(int opc){
         Connection cn = con2.conexion();
         String sql ="";
-              sql = "SELECT * FROM detailpedidio WHERE id_PedidioD = '"+opc+"'";           
+            sql = "SELECT * FROM detailpedidio WHERE id_PedidioD = '"+opc+"'";           
             Statement st = null;
             ResultSet rs = null;            
             try {
@@ -302,13 +301,10 @@ controladorCFP controller = new controladorCFP();
                 {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
                         for (int x=1;x<= rs.getMetaData().getColumnCount()-1;x++) {
                                 if(x==3){
-//                                    if(rs.getInt(x)==1){
                                         jTabDetailEspec.setValueAt(rs.getInt(x-2), rs.getInt(x)-1, 0);//valor,fila,columna
                                         jTabDetailEspec.setValueAt(rs.getInt(x+1), rs.getInt(x)-1, 1);//valor,fila,columna
                                         jTabDetailEspec.setValueAt(rs.getString(x+2), rs.getInt(x)-1, 2);//valor,fila,columna restamos uno porque el indice del jtable comienza en cero
-  //                                  }
                                 }
-                            //System.out.print("["+x+"]"+" -> "+rs.getString(x));                   
                         }//for
                             System.out.println();
                 }//while
@@ -328,7 +324,6 @@ controladorCFP controller = new controladorCFP();
              Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";        
-
                 SQL="UPDATE detailpedidio SET cantidadCajas=? WHERE num_DPedido ='"+id+"' AND id_PedidioD = '"+param+"' ";            
             try {
                 pps = cn.prepareStatement(SQL);
@@ -339,7 +334,6 @@ controladorCFP controller = new controladorCFP();
                 JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);               
             }finally{
- //               System.out.println( "cierra conexion a la base de datos" );    
                 try {
                     if(pps != null) pps.close();                
                     if(cn !=null) cn.close();
@@ -347,7 +341,6 @@ controladorCFP controller = new controladorCFP();
                       JOptionPane.showMessageDialog(null, ex.getMessage() );    
                     }                
             }//finally catch                
-  
     }//actualizaData
      
      public void recibeListData(List<String> list){

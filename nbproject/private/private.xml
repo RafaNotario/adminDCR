@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/adminDCR/src/Frame/historProveedor.java</file>
-            <file>file:/C:/adminDCR/src/controllers/altadeclientes/datesControl.java</file>
-            <file>file:/C:/adminDCR/src/renderTable/ColorCelda.java</file>
             <file>file:/C:/adminDCR/src/internos/interno1.java</file>
+            <file>file:/C:/adminDCR/src/Frame/detailPedido.java</file>
             <file>file:/C:/adminDCR/src/controllers/altadeclientes/controladorCFP.java</file>
+            <file>file:/C:/adminDCR/src/Frame/VentaPiso.java</file>
         </group>
     </open-files>
 </project-private>

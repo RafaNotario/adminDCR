@@ -312,12 +312,14 @@ public void guardaPedidoCli(List<String> param){
      Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";        
-                SQL="INSERT INTO pedidocliente (id_clienteP,fechaPedidio,notaPed) VALUES (?,?,?)";                           
+                SQL="INSERT INTO pedidocliente (id_clienteP,fechaPedidio,notaPed,horaPedido,idTurno) VALUES (?,?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, param.get(0));
                 pps.setString(2,param.get(1));
                 pps.setString(3,param.get(2));
+                pps.setString(4,param.get(3));
+                pps.setString(5,param.get(4));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Pedido guardado correctamente.");
             } catch (SQLException ex) {
@@ -510,13 +512,33 @@ for (Integer key : treeMap.keySet()) {
     *//////////
 
 //CREAR PEDIDOS CON VISTA DE DETALLES EN TABLA
-     public String[][] consultPedidoAsign(String opc){
+     public String[][] consultPedidoAsign(String idPro,String fech1,String fech2,String status){
         Connection cn = con2.conexion();
         int cantColumnas=0,cantFilas=0;
         String[][] arre=null;
         String sql ="";
-              sql = "SELECT id_pedido,id_clienteP FROM pedidocliente WHERE fechaPedidio = '"+opc+"'";           
-            Statement st = null;
+        
+        if(idPro.isEmpty()){
+            sql = "SELECT id_pedido,id_clienteP FROM pedidocliente WHERE fechaPedidio = '"+fech1+"'";           
+        }else{
+                if(status.isEmpty()){
+                     sql = "SELECT pedidocliente.id_pedido,pedidocliente.id_clienteP FROM pedidocliente "+
+                        "INNER JOIN clientepedidos"+
+                        " ON  pedidocliente.id_clienteP = clientepedidos.id_cliente AND (pedidocliente.fechaPedidio >= '"+fech1+"' AND pedidocliente.fechaPedidio <= '"+fech2+"'  )"
+                       + " AND pedidocliente.id_clienteP = '"+idPro+"' "           
+                       + "ORDER BY pedidocliente.id_pedido;";
+            }else{
+                    sql = "SELECT pedidocliente.id_pedido,pedidocliente.id_clienteP FROM pedidocliente "+
+                        "INNER JOIN clientepedidos"+
+                        " ON  pedidocliente.id_clienteP = clientepedidos.id_cliente AND (pedidocliente.fechaPedidio >= '"+fech1+"' AND pedidocliente.fechaPedidio <= '"+fech2+"'  )"
+                       + " AND pedidocliente.id_clienteP = '"+idPro+"' AND pedidocliente.status = '"+status+"' "        
+                       + "ORDER BY pedidocliente.id_pedido;";
+            }            
+        }  
+        
+
+        
+              Statement st = null;
             ResultSet rs = null;            
             int i =0;
             try {
@@ -1600,18 +1622,20 @@ return mat;
         Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL=""; 
-                SQL="INSERT INTO notaventapiso (id_clientePiso,fechVenta,statusVent,notaVent) VALUES (?,?,?,?)";                           
+                SQL="INSERT INTO notaventapiso (id_clientePiso,fechVenta,statusVent,notaVent,horaVentaPiso,idTurno) VALUES (?,?,?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, param.get(0));
                 pps.setString(2,param.get(1));
                 pps.setInt(3,0);
                 pps.setString(4,param.get(2));
+                pps.setString(5,param.get(3));
+                pps.setString(6,param.get(4));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Venta agregada correctamente.");
             } catch (SQLException ex) {
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+                JOptionPane.showMessageDialog(null, "Error durante la transaccion."+ex);
             }finally{
                 try {
                     if(pps != null) pps.close();                
@@ -1997,65 +2021,127 @@ return mat;
         }
        
 //++++FILTROS DE BUSQUEDA DE FLETES
-     public String[][] matrizFletesFilter(int opcBusq,String idCli,String fech1,String fech2){
+     public String[][] matrizFletesFilter(int opcBusq,String idCli,String fech1,String fech2,String stat){
         Connection cn = con2.conexion();
           String sql ="",aux;
           if(opcBusq==0){//OPCION BUSQUEDA DE NOMBRE
-              sql = "SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
-                "fleteEnviado.trocaFlete,fleteEnviado.costoFlete,fleteEnviado.status,fleteEnviado.recivioFlete\n" +
-                "FROM\n" +
-                "	fleteEnviado\n" +
-                "INNER JOIN\n" +
-                "	fletero\n" +
-                "ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_FleteroE = '"+idCli+"';";      
+              if(stat.isEmpty()){
+                sql = "SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
+                  "fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                  "FROM\n" +
+                  "	fleteEnviado\n" +
+                  "INNER JOIN\n" +
+                  "	fletero\n" +
+                  "ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_FleteroE = '"+idCli+"';";      
+            }else{
+                sql = "SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
+                  "fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                  "FROM\n" +
+                  "	fleteEnviado\n" +
+                  "INNER JOIN\n" +
+                  "	fletero\n" +
+                  "ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_FleteroE = '"+idCli+"' AND fleteEnviado.status = '"+stat+"';";                  
+              }
           }
           
           if(opcBusq==1){//OPCION BUSQUEDA FOLIO
-              sql = "SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
-                "fleteEnviado.trocaFlete,fleteEnviado.costoFlete,fleteEnviado.status,fleteEnviado.recivioFlete\n" +
-                "FROM\n" +
-                "	fleteEnviado\n" +
-                "INNER JOIN\n" +
-                "	fletero\n" +
-                "ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_fleteE = '"+idCli+"';";//folio      
+             if(stat.isEmpty()){ 
+                    sql = "SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
+                      "fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                      "FROM\n" +
+                      "fleteEnviado\n" +
+                      "INNER JOIN\n" +
+                      "fletero\n" +
+                      "ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_fleteE = '"+idCli+"';";//folio      
+            }else{
+                    sql = "SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
+                      "fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                      "FROM\n" +
+                      "fleteEnviado\n" +
+                      "INNER JOIN\n" +
+                      "fletero\n" +
+                      "ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_fleteE = '"+idCli+"' AND fleteEnviado.status = '"+stat+"';";//folio      
+             }
           }
           if(opcBusq==2){//OPCION BUSQUEDA POR FECHA
+            if(stat.isEmpty()){    
               sql="SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
-                "fleteEnviado.trocaFlete,fleteEnviado.costoFlete,fleteEnviado.status,fleteEnviado.recivioFlete\n" +
-                "	FROM\n" +
-                "		fleteEnviado\n" +
-                "	INNER JOIN\n" +
-                "		fletero\n" +
-                "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.fechaFlete = '"+fech1+"';";
+                  "fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                  "	FROM\n" +
+                  "	fleteEnviado\n" +
+                  "	INNER JOIN\n" +
+                  "	fletero\n" +
+                  "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.fechaFlete = '"+fech1+"';";
+          }else{
+              sql="SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
+                  "fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                  "	FROM\n" +
+                  "	fleteEnviado\n" +
+                  "	INNER JOIN\n" +
+                  "	fletero\n" +
+                  "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.fechaFlete = '"+fech1+"' AND fleteEnviado.status = '"+stat+"';";
+            }
           }
           if(opcBusq==3){//LAPSO DE FECHAS
-              sql="SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
-                "	fleteEnviado.trocaFlete,fleteEnviado.costoFlete,fleteEnviado.status,fleteEnviado.recivioFlete\n" +
-                "	FROM\n" +
-                "		fleteEnviado\n" +
-                "	INNER JOIN\n" +
-                "		fletero\n" +
-                "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.fechaFlete BETWEEN '"+fech1+"' AND '"+fech2+"';";
+              if(stat.isEmpty()){
+                sql="SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
+                  "	fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                  "	FROM\n" +
+                  "	fleteEnviado\n" +
+                  "	INNER JOIN\n" +
+                  "	fletero\n" +
+                  "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND (fleteEnviado.fechaFlete >= '"+fech1+"' AND fleteEnviado.fechaFlete <= '"+fech2+"');";
+          }else{
+                sql="SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
+                  "	fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                  "	FROM\n" +
+                  "	fleteEnviado\n" +
+                  "	INNER JOIN\n" +
+                  "	fletero\n" +
+                  "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.status = '"+stat+"' AND (fleteEnviado.fechaFlete >= '"+fech1+"' AND fleteEnviado.fechaFlete <=  '"+fech2+"') ;";
+              }
           }
           if(opcBusq ==4){//fletero + fecha
+            if(stat.isEmpty()){ 
               sql="SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
-                "	fleteEnviado.trocaFlete,fleteEnviado.costoFlete,fleteEnviado.status,fleteEnviado.recivioFlete\n" +
+                "	fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
                 "	FROM\n" +
-                "		fleteEnviado\n" +
+                "	fleteEnviado\n" +
                 "	INNER JOIN\n" +
-                "		fletero\n" +
+                "	fletero\n" +
                 "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_FleteroE = '"+idCli+"' AND\n" +
-                "	 fleteEnviado.fechaFlete = '"+fech1+"';";
+                "	fleteEnviado.fechaFlete = '"+fech1+"';";
+          }else{
+              sql="SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
+                "	fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                "	FROM\n" +
+                "	fleteEnviado\n" +
+                "	INNER JOIN\n" +
+                "	fletero\n" +
+                "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_FleteroE = '"+idCli+"' AND\n" +
+                "	fleteEnviado.fechaFlete = '"+fech1+"' AND fleteEnviado.status = '"+stat+"' ;";
+            }
           }
-          if(opcBusq ==5){//fletero lapso de fechas
+          if(opcBusq ==5){//fletero + lapso de fechas
+              if(stat.isEmpty()){
               sql="SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
-                "	fleteEnviado.trocaFlete,fleteEnviado.costoFlete,fleteEnviado.status,fleteEnviado.recivioFlete\n" +
+                "	fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
                 "	FROM\n" +
-                "		fleteEnviado\n" +
+                "	fleteEnviado\n" +
                 "	INNER JOIN\n" +
-                "		fletero\n" +
+                "	fletero\n" +
                 "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_FleteroE = '"+idCli+"' AND\n" +
-                "	 fleteEnviado.fechaFlete BETWEEN '"+fech1+"' AND '"+fech2+"';";
+                "	fleteEnviado.status = '"+stat+"' AND (fleteEnviado.fechaFlete >= '"+fech1+"' AND fleteEnviado.fechaFlete <= '"+fech2+"');";
+          }else{
+             sql="SELECT fleteEnviado.id_fleteE, fletero.nombreF,fleteEnviado.fechaFlete,fleteEnviado.choferFlete,\n" +
+                "	fleteEnviado.trocaFlete,fleteEnviado.costoFlete,IF(fleteEnviado.status = 0,'Pendiente','Pagado'),fleteEnviado.recivioFlete\n" +
+                "	FROM\n" +
+                "	fleteEnviado\n" +
+                "	INNER JOIN\n" +
+                "	fletero\n" +
+                "	ON fletero.id_Fletero = fleteEnviado.id_FleteroE AND fleteEnviado.id_FleteroE = '"+idCli+"' AND\n" +
+                "	(fleteEnviado.fechaFlete >= '"+fech1+"' AND fleteEnviado.fechaFlete <= '"+fech2+"');";
+              }
           }
              int i =0,cantFilas=0, cont=1;
              String[][] mat=null, mat2=null;
@@ -3524,17 +3610,18 @@ return mat;
         Connection cn = con2.conexion();
           String sql ="",aux;
           if(tipe.equals("pagopedidocli")){//OPCION pago de pedididoscli
-              sql = "SELECT pagopedidocli.id_payPedCli,pagopedidocli.fechapayCliente,pagopedidocli.montoPayCliente,\n" +
-                "	pagopedidocli.notaPayCliente,modopago.nombrePay\n" +
+              sql = "SELECT pagopedidocli.id_payPedCli,pagopedidocli.idClientePay,CONCAT(pagopedidocli.fechapayCliente,' , ', IF(pagopedidocli.horaPayPedido IS NULL,' -- ', pagopedidocli.horaPayPedido) ),pagopedidocli.montoPayCliente,\n" +
+                "	pagopedidocli.notaPayCliente\n" +
                 "FROM \n" +
                 "	pagopedidocli\n" +
                 "INNER JOIN \n" +
-                "	modopago\n" +
+                "pedidocliente\n" +
                 "ON\n" +
-                "	pagopedidocli.modoPayCliente = modopago.cod_pago AND pagopedidocli.idClientePay = '"+idCli+"';";      
+                "	pagopedidocli.idClientePay = pedidocliente.id_pedido AND pedidocliente.id_clienteP = '"+idCli+"'"
+                      + "AND (pedidocliente.fechaPedidio >= '"+fech1+"' AND pedidocliente.fechaPedidio <= '"+fech2+"' );";      
           }
           if(tipe.equals("pagarcompraprovee")){//OPCION pago de pedididoscli
-              sql = "SELECT pagarcompraprovee.id_paycompra,pagarcompraprovee.num_compraProveed,pagarcompraprovee.fechpayProveed,pagarcompraprovee.montoPayProveed,\n" +
+              sql = "SELECT pagarcompraprovee.id_paycompra,pagarcompraprovee.num_compraProveed,CONCAT(pagarcompraprovee.fechpayProveed,', ',IF(pagarcompraprovee.horaPayCompProov IS NULL,'--',pagarcompraprovee.horaPayCompProov)),pagarcompraprovee.montoPayProveed,\n" +
                 "	pagarcompraprovee.notaPayProveed\n" +
                 "FROM \n" +
                 "	pagarcompraprovee\n" +
@@ -3545,7 +3632,7 @@ return mat;
                       + "AND compraprooved.id_ProveedorC =  '"+idCli+"'";      
           }
          if(tipe.equals("pagocreditprooved")){//OPCION pagoS de cREDIIT PROVEEDOR
-              sql = "SELECT pagoCreditProoved.id_pay,pagoCreditProoved.fechapayProoved,pagoCreditProoved.montoPayProoved,\n" +
+              sql = "SELECT pagoCreditProoved.id_pay,pagoCreditProoved.idProovedPay,CONCAT(pagoCreditProoved.fechapayProoved,', ',IF(pagoCreditProoved.horaPayCreditProov IS NULL,'--',pagoCreditProoved.horaPayCreditProov)),pagoCreditProoved.montoPayProoved,\n" +
                 "	pagoCreditProoved.notaPayProoved\n" +
                 "FROM \n" +
                 "	pagoCreditProoved\n" +
@@ -3566,14 +3653,15 @@ return mat;
                 "	pagoflete.modPay = modopago.cod_pago AND pagoflete.id_fleteEnv = '"+idCli+"';";      
           }
            if(tipe.equals("pagoventapiso")){//OPCION pagoS de cREDIIT PROVEEDOR
-              sql = "SELECT pagoventapiso.id_payVentaP,pagoventapiso.fechaPayVP,pagoventapiso.montoVP,\n" +
-                "	pagoventapiso.notaPayVP,modopago.nombrePay\n" +
+              sql = "SELECT pagoventapiso.id_payVentaP,pagoventapiso.num_notaVP,CONCAT(pagoventapiso.fechaPayVP,', ',IF(pagoventapiso.horaPayVentaPiso IS NULL,'--',pagoventapiso.horaPayVentaPiso)),pagoventapiso.montoVP,\n" +
+                "	pagoventapiso.notaPayVP\n" +
                 "FROM \n" +
                 "	pagoventapiso\n" +
                 "INNER JOIN \n" +
-                "	modopago\n" +
+                "	notaventapiso\n" +
                 "ON\n" +
-                "	pagoventapiso.method_payVP = modopago.cod_pago AND pagoventapiso.num_notaVP = '"+idCli+"';";      
+                "	pagoventapiso.num_notaVP = notaventapiso.id_venta AND (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"')"
+                      + " AND notaventapiso.id_clientePiso = '"+idCli+"';";      
           }
 
              int i =0,cantFilas=0, cont=1;
@@ -3613,8 +3701,6 @@ return mat;
                  JOptionPane.showMessageDialog(null,ex.getMessage()); 
              }
          }//finally 
-            
-           // System.out.println("filas: "+cantFilas);
             if (cantFilas == 0){
                 mat=null;
                 mat = new String[1][cantColumnas];
@@ -3631,14 +3717,14 @@ return mat;
         Connection cn = con2.conexion();
           String sql ="",aux;
           if(tipe.equals("pagopedidocli")){//OPCION pago de pedididoscli
-              sql = "SELECT pagopedidocli.id_payPedCli,pagopedidocli.fechapayCliente,pagopedidocli.montoPayCliente,\n" +
-                "	pagopedidocli.notaPayCliente,modopago.nombrePay\n" +
+              sql = "SELECT SUM(pagopedidocli.montoPayCliente)\n" +
                 "FROM \n" +
                 "	pagopedidocli\n" +
-                "INNER JOIN \n" +
-                "	modopago\n" +
+               "INNER JOIN \n" +
+                "pedidocliente\n" +
                 "ON\n" +
-                "	pagopedidocli.modoPayCliente = modopago.cod_pago AND pagopedidocli.idClientePay = '"+idCli+"';";      
+                "	pagopedidocli.idClientePay = pedidocliente.id_pedido AND pedidocliente.id_clienteP = '"+idCli+"'"
+                      + "AND (pedidocliente.fechaPedidio >= '"+fech1+"' AND pedidocliente.fechaPedidio <= '"+fech2+"' );";
           }
           if(tipe.equals("pagarcompraprovee")){//OPCION pago de pedididoscli
               sql = "SELECT SUM(pagarcompraprovee.montoPayProveed)\n" +
@@ -3671,14 +3757,14 @@ return mat;
                 "	pagoflete.modPay = modopago.cod_pago AND pagoflete.id_fleteEnv = '"+idCli+"';";      
           }
            if(tipe.equals("pagoventapiso")){//OPCION pagoS de cREDIIT PROVEEDOR
-              sql = "SELECT pagoventapiso.id_payVentaP,pagoventapiso.fechaPayVP,pagoventapiso.montoVP,\n" +
-                "	pagoventapiso.notaPayVP,modopago.nombrePay\n" +
+              sql = "SELECT SUM(pagoventapiso.montoVP)\n" +
                 "FROM \n" +
                 "	pagoventapiso\n" +
                 "INNER JOIN \n" +
-                "	modopago\n" +
+                "	notaventapiso\n" +
                 "ON\n" +
-                "	pagoventapiso.method_payVP = modopago.cod_pago AND pagoventapiso.num_notaVP = '"+idCli+"';";      
+                "	pagoventapiso.num_notaVP = notaventapiso.id_venta AND (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"')"
+                + " AND notaventapiso.id_clientePiso = '"+idCli+"';";      
           }
          if(tipe.equals("totalcreditSum")){//OPCION pagoS de cREDIIT PROVEEDOR
               sql = "SELECT SUM(detallecreditproveed.cantidadCP * detallecreditproveed.costoCP )\n" +
@@ -3690,6 +3776,16 @@ return mat;
                 "	detallecreditproveed.num_creditCP = creditomerca.num_credito AND (creditomerca.fechaPrestamo >=  '"+fech1+"' AND  creditomerca.fechaPrestamo <=  '"+fech2+"')"
               + "AND creditomerca.id_ProveedorF =  '"+idCli+"'";      ;      
           }
+         if(tipe.equals("totalventPiso")){//OPCION pagoS de cREDIIT PROVEEDOR
+              sql = "SELECT SUM(detailventapiso.cantidadV * detailventapiso.precioPV )\n" +
+                "FROM \n" +
+                "	detailventapiso\n" +
+                "INNER JOIN \n" +
+                "	notaventapiso\n" +
+                "ON\n" +
+                "	detailventapiso.num_notaV = notaventapiso.id_venta AND (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"')"
+                + " AND notaventapiso.id_clientePiso = '"+idCli+"';";      
+         }
              int i =0,cantFilas=0, cont=1;
              String resultado="-1";
               int[] arrIdPedido = null;//int para usar hashMap
@@ -3714,10 +3810,59 @@ return mat;
                  JOptionPane.showMessageDialog(null,ex.getMessage()); 
              }
          }//finally 
-     
-
                 return resultado;            
 }//@end regresaPaysSumaAll
+
+       //mostrar compra a proveedor con filtros de busqueda, por if, fehca, lapso de fechas
+     public String[][] consultVentPisofilters(String idPro,String fech1,String fech2,String status){
+        Connection cn = con2.conexion();
+        int cantColumnas=0,cantFilas=0;
+        String[][] arre=null;
+        String sql ="";
+        if(status.isEmpty()){
+            sql = "SELECT notaventapiso.id_venta,notaventapiso.id_clientePiso FROM notaventapiso "+
+                        "INNER JOIN clientepedidos"+
+                        " ON  notaventapiso.id_clientePiso = clientepedidos.id_cliente AND  (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"'  )"
+                       + "AND notaventapiso.id_clientePiso = '"+idPro+"' "           
+                       + "ORDER BY notaventapiso.fechVenta;";
+        }else{
+          sql = "SELECT notaventapiso.id_venta,notaventapiso.id_clientePiso FROM notaventapiso "+
+                        "INNER JOIN clientepedidos"+
+                        " ON  notaventapiso.id_clientePiso = clientepedidos.id_cliente AND  (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"'  )"
+                       + "AND notaventapiso.id_clientePiso = '"+idPro+"'  AND notaventapiso.statusVent = '"+status+"'"           
+                       + "ORDER BY notaventapiso.fechVenta;";
+        }
+        Statement st = null;
+            ResultSet rs = null;            
+            int i =0;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                
+            cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }     
+               arre = new String[cantFilas][cantColumnas];
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                       arre[i][0]=rs.getString(1);
+                       arre[i][1]=rs.getString(2);
+                      i++;      
+                }//while
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally  
+            return arre;
+    }//@end consultVentPisofilters
         
             public static void main(String[] argv){
        controladorCFP control = new controladorCFP();

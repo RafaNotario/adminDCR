@@ -202,7 +202,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                 gT = txtGranTot.getText(),
                 not = jTextArea1.getText();
         actualizaCostoPedido(id,gT,not);
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
