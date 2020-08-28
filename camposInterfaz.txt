@@ -28,6 +28,16 @@ jTabVistaPedidosDia1
 jTabVistaComprasDia3
 jTabFletesDia1
 
+	**Elementos de detail Asgnacion compra a provvedor --jDialDetailCompraProov
+jLabId
+jLabNomProov
+jLabContad
+jTabDetProvView
+
+jLabNumAsogna
+jLabFaltant	
+
+
 5532838229 CERTIFICATIC
 
 jTDetailAsign
@@ -219,3 +229,26 @@ jDateChoBVent1
 jDatebusqVenta2
 jTablefiltrosBusqVent
 
+
+        int fila = jTablefiltrosBusqflete.getSelectedRow();
+        String val = "", name = "", costo = "";
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Debe elegir una fila.");
+        } else {
+            val = jTablefiltrosBusqflete.getValueAt(fila, 0).toString();
+            name = jTablefiltrosBusqflete.getValueAt(fila, 1).toString();
+            costo = jTablefiltrosBusqflete.getValueAt(fila, 5).toString();
+            vP = new VentaPiso(costo, val, "pagoflete");
+            vP.setVisible(true);
+            vP.setEnabled(true);
+            vP.validate();
+            vP.jLabLetreroTransac.setText("Pago de Flete No.");
+            vP.txtidComp.setText(val);
+            vP.jLabNameProv.setText("Fletero: ");
+            vP.txtProveedorName.setText(name);
+            vP.jLabTurno.setText(jLabTurno.getText());
+            
+            vP.jButContado.doClick();
+            vP.jRadContado.doClick();
+            vP.txtnotaPay.requestFocus(true);
+        }

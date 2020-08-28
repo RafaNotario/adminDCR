@@ -95,7 +95,9 @@ public class interno1 extends javax.swing.JFrame {
     String[] cabMayAsignados = {"IdR", "Mayorista", "idC", "Fech"};
     String[] cabMayView = {"#Compra", "id", "Tipo", "Cantidad", "Costo", "Importe"};
     String[] cabMayViewcHECK = {"#Compra", "id", "idtype", "Tipo", "Cantidad", "Costo", "Importe", "Select", "A Asignar", "Asignados", "Disponibles"};
-
+    String[] cabDetcompra = {"#IdRel", "Flete", "#Pedido", "Cliente", "Tipo", "Cantidad","$Unitario","Importe$"};
+    String[] cabDetFlet = {"#IdRel", "Id_Pedido", "Id_Compra", "Proveedor", "Tipo", "Cantidad","$Unitario","Importe$"};
+    
     String[][] matLlenaPed = null;
 
     AgregaFlete aF;
@@ -230,22 +232,44 @@ public class interno1 extends javax.swing.JFrame {
         jPopupMenActualizaCompra = new javax.swing.JPopupMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         butGrpFleterFilters = new javax.swing.ButtonGroup();
-        jDialDetailFlete = new javax.swing.JDialog();
-        jLabel107 = new javax.swing.JLabel();
-        jLabel108 = new javax.swing.JLabel();
-        jLabel109 = new javax.swing.JLabel();
-        jLabel113 = new javax.swing.JLabel();
-        jLabel124 = new javax.swing.JLabel();
-        jLabel127 = new javax.swing.JLabel();
-        jLabel128 = new javax.swing.JLabel();
+        jDialDetailCompraProov = new javax.swing.JDialog();
         jScrollPane10 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTabDetProvView = new javax.swing.JTable();
         jLabel129 = new javax.swing.JLabel();
-        jLabel130 = new javax.swing.JLabel();
+        jLabNumAsogna = new javax.swing.JLabel();
         jLabel131 = new javax.swing.JLabel();
-        jLabel132 = new javax.swing.JLabel();
-        jLabel133 = new javax.swing.JLabel();
-        jLabel134 = new javax.swing.JLabel();
+        jLabFaltant = new javax.swing.JLabel();
+        jLabel130 = new javax.swing.JLabel();
+        jLabel108 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel107 = new javax.swing.JLabel();
+        jLabId = new javax.swing.JLabel();
+        jLabel109 = new javax.swing.JLabel();
+        jLabContad = new javax.swing.JLabel();
+        jLabel113 = new javax.swing.JLabel();
+        jLabNomProov = new javax.swing.JLabel();
+        jPopMnDetailCompAsign = new javax.swing.JPopupMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jDialDetailFlete1 = new javax.swing.JDialog();
+        jLabel140 = new javax.swing.JLabel();
+        jLabel141 = new javax.swing.JLabel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jLabel142 = new javax.swing.JLabel();
+        jLabel143 = new javax.swing.JLabel();
+        jLabel144 = new javax.swing.JLabel();
+        jLabel145 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel135 = new javax.swing.JLabel();
+        jLabel136 = new javax.swing.JLabel();
+        jLabel138 = new javax.swing.JLabel();
+        jLabel139 = new javax.swing.JLabel();
+        jLabel146 = new javax.swing.JLabel();
+        jLabel147 = new javax.swing.JLabel();
+        jLabel137 = new javax.swing.JLabel();
+        jLabel124 = new javax.swing.JLabel();
+        jPpMnDetFletes = new javax.swing.JPopupMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jPanCabezera = new javax.swing.JPanel();
         jLabel52 = new javax.swing.JLabel();
         jTextField17 = new javax.swing.JTextField();
@@ -666,7 +690,8 @@ public class interno1 extends javax.swing.JFrame {
         });
         jPopVentaPisoBusq.add(jMnPayVentaP);
 
-        jMItDetailVer.setText("Ver detalle");
+        jMItDetailVer.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jMItDetailVer.setText("<html>\n<h2 style=\"color:rgb(11, 239, 251)\">Ver detalle</h2>\n</html>");
         jMItDetailVer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMItDetailVerActionPerformed(evt);
@@ -845,33 +870,14 @@ public class interno1 extends javax.swing.JFrame {
         });
         jPopupMenActualizaCompra.add(jMenuItem1);
 
-        jDialDetailFlete.setTitle("Detalle Flete");
+        jDialDetailCompraProov.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jDialDetailCompraProov.setBackground(new java.awt.Color(222, 255, 216));
+        jDialDetailCompraProov.setMinimumSize(new java.awt.Dimension(700, 400));
+        jDialDetailCompraProov.setName(""); // NOI18N
+        jDialDetailCompraProov.setPreferredSize(new java.awt.Dimension(700, 400));
 
-        jLabel107.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel107.setText("Folio:");
-
-        jLabel108.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel108.setText("jLabel108");
-        jLabel108.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jLabel109.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel109.setText("Detalle Flete");
-
-        jLabel113.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel113.setText("Fletero:");
-
-        jLabel124.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel124.setText("jLabel124");
-        jLabel124.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jLabel127.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel127.setText("Carga;");
-
-        jLabel128.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel128.setText("jLabel128");
-        jLabel128.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTabDetProvView.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jTabDetProvView.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -882,109 +888,301 @@ public class interno1 extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane10.setViewportView(jTable2);
+        jTabDetProvView.setRowHeight(25);
+        jScrollPane10.setViewportView(jTabDetProvView);
 
         jLabel129.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jLabel129.setText("Asignados:");
 
-        jLabel130.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel130.setText("jLabel130");
-        jLabel130.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabNumAsogna.setBackground(new java.awt.Color(255, 255, 255));
+        jLabNumAsogna.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabNumAsogna.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabNumAsogna.setOpaque(true);
 
         jLabel131.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jLabel131.setText("Restantes:");
 
-        jLabel132.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel132.setText("jLabel130");
-        jLabel132.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabFaltant.setBackground(new java.awt.Color(255, 255, 255));
+        jLabFaltant.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabFaltant.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabFaltant.setOpaque(true);
 
-        jLabel133.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel133.setText("Unidad:");
+        jLabel130.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel130.setText("Total de cajas:");
 
-        jLabel134.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel134.setText("jLabel124");
-        jLabel134.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel108.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel108.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel108.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel108.setOpaque(true);
 
-        javax.swing.GroupLayout jDialDetailFleteLayout = new javax.swing.GroupLayout(jDialDetailFlete.getContentPane());
-        jDialDetailFlete.getContentPane().setLayout(jDialDetailFleteLayout);
-        jDialDetailFleteLayout.setHorizontalGroup(
-            jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                .addGroup(jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
-                                .addGap(11, 11, 11))
-                            .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                                .addGroup(jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                                        .addComponent(jLabel107, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel108)
-                                        .addGap(26, 26, 26)
-                                        .addComponent(jLabel113)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel124))
-                                    .addComponent(jLabel109))
-                                .addGap(18, 18, 18)
-                                .addGroup(jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jLabel127)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel128))
-                                    .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                                        .addComponent(jLabel133)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel134, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                        .addGap(206, 206, 206)
+        jPanel5.setBackground(new java.awt.Color(222, 255, 216));
+
+        jLabel107.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel107.setText("Id compra:");
+
+        jLabId.setBackground(new java.awt.Color(255, 255, 255));
+        jLabId.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+        jLabId.setText("jLabel108");
+        jLabId.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabId.setOpaque(true);
+
+        jLabel109.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel109.setText("Detalle de asignaciones:");
+
+        jLabContad.setBackground(new java.awt.Color(255, 255, 255));
+        jLabContad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabContad.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabContad.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabContad.setOpaque(true);
+
+        jLabel113.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel113.setText("Proveedor:");
+
+        jLabNomProov.setBackground(new java.awt.Color(255, 255, 255));
+        jLabNomProov.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabNomProov.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabNomProov.setOpaque(true);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel109)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabContad, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel107)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabId)
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel113)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabNomProov)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabId)
+                    .addComponent(jLabel113)
+                    .addComponent(jLabNomProov)
+                    .addComponent(jLabel107))
+                .addGap(5, 5, 5)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel109, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabContad, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jDialDetailCompraProovLayout = new javax.swing.GroupLayout(jDialDetailCompraProov.getContentPane());
+        jDialDetailCompraProov.getContentPane().setLayout(jDialDetailCompraProovLayout);
+        jDialDetailCompraProovLayout.setHorizontalGroup(
+            jDialDetailCompraProovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialDetailCompraProovLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jDialDetailCompraProovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDialDetailCompraProovLayout.createSequentialGroup()
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
+                        .addGap(11, 11, 11))
+                    .addGroup(jDialDetailCompraProovLayout.createSequentialGroup()
+                        .addComponent(jLabel130)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel108, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(81, 81, 81)
                         .addComponent(jLabel129)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel130)
-                        .addGap(36, 36, 36)
+                        .addComponent(jLabNumAsogna, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel131)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel132)))
+                        .addComponent(jLabFaltant, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jDialDetailCompraProovLayout.setVerticalGroup(
+            jDialDetailCompraProovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialDetailCompraProovLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDialDetailCompraProovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabNumAsogna, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialDetailCompraProovLayout.createSequentialGroup()
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDialDetailCompraProovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabFaltant, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jDialDetailCompraProovLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel129)
+                                .addComponent(jLabel131)
+                                .addComponent(jLabel130)
+                                .addComponent(jLabel108, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(5, 5, 5))
+        );
+
+        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jMenuItem2.setText("<html>\n<h2 style=\"color:rgb(11, 239, 251)\">Ver detalle</h2>\n</html>\n");
+        jMenuItem2.setActionCommand("");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jPopMnDetailCompAsign.add(jMenuItem2);
+
+        jDialDetailFlete1.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jDialDetailFlete1.setMinimumSize(new java.awt.Dimension(700, 400));
+        jDialDetailFlete1.setName(""); // NOI18N
+        jDialDetailFlete1.setPreferredSize(new java.awt.Dimension(700, 400));
+        jDialDetailFlete1.setSize(new java.awt.Dimension(700, 400));
+
+        jLabel140.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel140.setText("Carga:");
+
+        jLabel141.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel141.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel141.setText("jLabel128");
+        jLabel141.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel141.setOpaque(true);
+
+        jTable3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable3.setRowHeight(25);
+        jScrollPane11.setViewportView(jTable3);
+
+        jLabel142.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel142.setText("Asignados:");
+
+        jLabel143.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel143.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel143.setText("jLabel130");
+        jLabel143.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel143.setOpaque(true);
+
+        jLabel144.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel144.setText("Restantes:");
+
+        jLabel145.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel145.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel145.setText("jLabel130");
+        jLabel145.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel145.setOpaque(true);
+
+        jPanel6.setBackground(new java.awt.Color(222, 255, 216));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel135.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel135.setText("Folio:");
+        jPanel6.add(jLabel135, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 60, -1));
+
+        jLabel136.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel136.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+        jLabel136.setText("jLabel108");
+        jLabel136.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel136.setOpaque(true);
+        jPanel6.add(jLabel136, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, -1));
+
+        jLabel138.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel138.setText("Fletero:");
+        jPanel6.add(jLabel138, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, -1));
+
+        jLabel139.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel139.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel139.setText("jLabel124");
+        jLabel139.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel139.setOpaque(true);
+        jPanel6.add(jLabel139, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, -1, -1));
+
+        jLabel146.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel146.setText("Unidad:");
+        jPanel6.add(jLabel146, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 20, -1, -1));
+
+        jLabel147.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel147.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel147.setText("jLabel124");
+        jLabel147.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel147.setOpaque(true);
+        jPanel6.add(jLabel147, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, -1, -1));
+
+        jLabel137.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel137.setText("Detalle Flete");
+        jPanel6.add(jLabel137, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
+
+        jLabel124.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel124.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel124.setText("jLabel124");
+        jLabel124.setOpaque(true);
+        jPanel6.add(jLabel124, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, -1, -1));
+
+        javax.swing.GroupLayout jDialDetailFlete1Layout = new javax.swing.GroupLayout(jDialDetailFlete1.getContentPane());
+        jDialDetailFlete1.getContentPane().setLayout(jDialDetailFlete1Layout);
+        jDialDetailFlete1Layout.setHorizontalGroup(
+            jDialDetailFlete1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialDetailFlete1Layout.createSequentialGroup()
+                .addGroup(jDialDetailFlete1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jDialDetailFlete1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jDialDetailFlete1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane11)
+                            .addGroup(jDialDetailFlete1Layout.createSequentialGroup()
+                                .addComponent(jLabel140)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel141)
+                                .addGap(86, 86, 86)
+                                .addComponent(jLabel142)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel143)
+                                .addGap(36, 36, 36)
+                                .addComponent(jLabel144)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel145)))))
+                .addGap(0, 0, 0))
+        );
+        jDialDetailFlete1Layout.setVerticalGroup(
+            jDialDetailFlete1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialDetailFlete1Layout.createSequentialGroup()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jDialDetailFlete1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel142)
+                    .addComponent(jLabel143)
+                    .addComponent(jLabel144)
+                    .addComponent(jLabel145)
+                    .addComponent(jLabel140)
+                    .addComponent(jLabel141))
                 .addContainerGap())
         );
-        jDialDetailFleteLayout.setVerticalGroup(
-            jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel107)
-                    .addComponent(jLabel108)
-                    .addComponent(jLabel113)
-                    .addComponent(jLabel124)
-                    .addComponent(jLabel133)
-                    .addComponent(jLabel134))
-                .addGroup(jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel109))
-                    .addGroup(jDialDetailFleteLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel127)
-                            .addComponent(jLabel128))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDialDetailFleteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel129)
-                    .addComponent(jLabel130)
-                    .addComponent(jLabel131)
-                    .addComponent(jLabel132))
-                .addGap(20, 20, 20))
-        );
+
+        jMenuItem3.setText("<html>\n<h2 style=\"color:rgb(11, 239, 251)\">Ver detalle</h2>\n</html>\n");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jPpMnDetFletes.add(jMenuItem3);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADMINISTRACION DCR");
         setIconImage(getIconImage());
-        setPreferredSize(new java.awt.Dimension(1600, 900));
 
         jPanCabezera.setBackground(new java.awt.Color(117, 229, 255));
 
@@ -3120,6 +3318,11 @@ public class interno1 extends javax.swing.JFrame {
                 jTabFletesDiaMousePressed(evt);
             }
         });
+        jTabFletesDia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTabFletesDiaKeyReleased(evt);
+            }
+        });
         jScrollPane19.setViewportView(jTabFletesDia);
 
         jLabel93.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
@@ -3153,7 +3356,7 @@ public class interno1 extends javax.swing.JFrame {
                 .addComponent(jDFechCreaFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton20)
-                .addGap(0, 554, Short.MAX_VALUE))
+                .addGap(0, 560, Short.MAX_VALUE))
             .addGroup(jPanCreaFletesLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(jPanCreaFletesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3201,6 +3404,11 @@ public class interno1 extends javax.swing.JFrame {
         jTablefiltrosBusqflete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTablefiltrosBusqfleteMousePressed(evt);
+            }
+        });
+        jTablefiltrosBusqflete.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTablefiltrosBusqfleteKeyReleased(evt);
             }
         });
         jScrollPane20.setViewportView(jTablefiltrosBusqflete);
@@ -3328,7 +3536,7 @@ public class interno1 extends javax.swing.JFrame {
                                 .addComponent(jLabel28)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel103, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 387, Short.MAX_VALUE)))
+                        .addGap(0, 158, Short.MAX_VALUE)))
                 .addGap(54, 54, 54))
         );
         jPanHistorFletesLayout.setVerticalGroup(
@@ -4148,11 +4356,11 @@ public class interno1 extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "CLIENTE", "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "3_RA", "TOT_CAJA"
+                "ID", "CLIENTE", "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "3_RA", "TOT_CAJA", "FALTAN"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -4167,8 +4375,8 @@ public class interno1 extends javax.swing.JFrame {
         jTabVistaPedidosDia1.setRowHeight(23);
         jTabVistaPedidosDia1.setSelectionBackground(new java.awt.Color(153, 255, 153));
         jTabVistaPedidosDia1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTabVistaPedidosDia1FocusLost(evt);
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTabVistaPedidosDia1FocusGained(evt);
             }
         });
         jScrollPane23.setViewportView(jTabVistaPedidosDia1);
@@ -4183,6 +4391,8 @@ public class interno1 extends javax.swing.JFrame {
             jTabVistaPedidosDia1.getColumnModel().getColumn(6).setPreferredWidth(20);
             jTabVistaPedidosDia1.getColumnModel().getColumn(7).setPreferredWidth(20);
             jTabVistaPedidosDia1.getColumnModel().getColumn(8).setPreferredWidth(15);
+            jTabVistaPedidosDia1.getColumnModel().getColumn(9).setPreferredWidth(30);
+            jTabVistaPedidosDia1.getColumnModel().getColumn(10).setPreferredWidth(25);
         }
 
         jLabel110.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -4200,25 +4410,26 @@ public class interno1 extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "PROVEEDOR", "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "3_RA", "TOT_CAJA"
+                "ID", "PROVEEDOR", "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "3_RA", "TOT_CAJA", "FALTAN"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTabVistaComprasDia3.setComponentPopupMenu(jPopMnDetailCompAsign);
         jTabVistaComprasDia3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jTabVistaComprasDia3.setEditingColumn(0);
         jTabVistaComprasDia3.setEditingRow(0);
         jTabVistaComprasDia3.setRowHeight(23);
         jTabVistaComprasDia3.setSelectionBackground(new java.awt.Color(153, 255, 153));
         jTabVistaComprasDia3.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jTabVistaComprasDia3FocusLost(evt);
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTabVistaComprasDia3FocusGained(evt);
             }
         });
         jScrollPane25.setViewportView(jTabVistaComprasDia3);
@@ -4233,6 +4444,8 @@ public class interno1 extends javax.swing.JFrame {
             jTabVistaComprasDia3.getColumnModel().getColumn(6).setPreferredWidth(20);
             jTabVistaComprasDia3.getColumnModel().getColumn(7).setPreferredWidth(20);
             jTabVistaComprasDia3.getColumnModel().getColumn(8).setPreferredWidth(15);
+            jTabVistaComprasDia3.getColumnModel().getColumn(9).setPreferredWidth(30);
+            jTabVistaComprasDia3.getColumnModel().getColumn(10).setPreferredWidth(25);
         }
 
         jButton17.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -4256,6 +4469,7 @@ public class interno1 extends javax.swing.JFrame {
 
             }
         ));
+        jTabFletesDia1.setComponentPopupMenu(jPpMnDetFletes);
         jTabFletesDia1.setRowHeight(23);
         jTabFletesDia1.setSelectionBackground(new java.awt.Color(153, 255, 153));
         jTabFletesDia1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -4279,7 +4493,7 @@ public class interno1 extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Asignacion de Flete-Mercancia-Pedido", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 14))); // NOI18N
 
         jLabel114.setFont(new java.awt.Font("Calibri", 0, 15)); // NOI18N
-        jLabel114.setText("PARA PEDIDO:");
+        jLabel114.setText("ID PEDIDO:");
 
         jLabel115.setFont(new java.awt.Font("Calibri", 0, 15)); // NOI18N
         jLabel115.setText("ID COMPRA:");
@@ -4396,14 +4610,14 @@ public class interno1 extends javax.swing.JFrame {
                             .addComponent(jScrollPane33, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(48, 48, 48)
-                        .addComponent(jLabel114, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtidPedidoAsign, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel114, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtidPedidoAsign, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
                         .addComponent(jLabel115, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCompraAsign, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4515,7 +4729,7 @@ public class interno1 extends javax.swing.JFrame {
                     .addGroup(jPanNominasLayout.createSequentialGroup()
                         .addGroup(jPanNominasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanNominasLayout.createSequentialGroup()
-                                .addGap(0, 39, Short.MAX_VALUE)
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel112, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtBusqAignCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4528,8 +4742,7 @@ public class interno1 extends javax.swing.JFrame {
                                 .addGap(56, 56, 56)
                                 .addComponent(jLabel110, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(259, 259, 259)
-                                .addComponent(jLabFlet, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jLabFlet, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(14, 14, 14)
                         .addGroup(jPanNominasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -6256,8 +6469,10 @@ public class interno1 extends javax.swing.JFrame {
                 jTable1.setValueAt("", i, j);
             }
         }
+        
         cargaComprasDiaAsign(fechAs, "");//carga las compras del dia 
-        cargaPedidosDiaAsign(fechAs);
+        cargaPedidosDiaAsign(fechAs);//carga los pedidos del dia 
+        
         mostrarTablaFletesDiaAsign(fechAs);
         cargaTotPedidoDay(jTable1,fechAs);
         cargaTotCompDayProveedor(jTable1,fechAs,1);
@@ -6317,99 +6532,22 @@ public class interno1 extends javax.swing.JFrame {
         llenaTabPayDayPedidos(fech);
     }//GEN-LAST:event_jButFleteGuardar1ActionPerformed
 
-    private void jTabVistaPedidosDia1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabVistaPedidosDia1FocusLost
-        int var = jTabVistaPedidosDia1.getSelectedRow(), col = jTabVistaPedidosDia1.getColumnCount(), difer = 0;
-       if(var > -1){
-        String id_Busq = jTabVistaPedidosDia1.getValueAt(var, 0).toString();
-        System.err.println("id_Busq"+id_Busq);
-        Object val2 = null, totSum = null;
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 2; j++) {
-                jTabDetailAsignTotales.setValueAt("", i, j);
-            }
-        }
-        for (int i = 2; i < col - 1; i++) {
-            val2 = jTabVistaPedidosDia1.getValueAt(var, i);
-            if (val2 != null && !val2.toString().isEmpty()) {
-                //controlInserts.guardaDetallePedidoCli(ultimo[0], Integer.toString(i + 1), Integer.parseInt(jTableCreaPedidos.getValueAt(0, i).toString()));
-                //System.out.print("prodComp= "+(i)+" "+jTabVistaPedidosDia1.getColumnName(i)+"\t-> val= "+jTabVistaPedidosDia1.getValueAt(var, i).toString());
-                // System.out.println("envia: "+id_Busq+" -> "+(i-1));
-                totSum = controlInserts.calcAsignAPed(id_Busq, Integer.toString(i - 1), "id_pedidoCli");
-
-                if (totSum != null && !totSum.toString().isEmpty()) {
-                    difer = Integer.parseInt(val2.toString()) - Integer.parseInt(totSum.toString());
-                    jTabDetailAsignTotales.setValueAt(difer, i - 2, 1);
-                    jTabDetailAsignTotales.setValueAt(totSum, i - 2, 0);
-                } else {
-                    jTabDetailAsignTotales.setValueAt(val2, i - 2, 1);
-                    jTabDetailAsignTotales.setValueAt(0, i - 2, 0);
-                }
-            }//if null
-        }
-       }else{
-           
-       }
-    }//GEN-LAST:event_jTabVistaPedidosDia1FocusLost
-
-    private void jTabVistaComprasDia3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabVistaComprasDia3FocusLost
-        int var = jTabVistaComprasDia3.getSelectedRow(),
-                col = jTabVistaComprasDia3.getColumnCount(),
-                var2 = jTabVistaPedidosDia1.getSelectedRow(),
-                col2 = jTabVistaPedidosDia1.getSelectedColumnCount(),
-                difer = 0;
-        boolean bandera = false;
-        String concid = "";
-        Object val = null, val2 = null, totSum = null;
-        //VERIFICAR SI LA MERCANCIA ES DEL MISMO TIPO DEL PEDIDO       
-        for (int i = 0; i < 7; i++) {//limpia la tabla de totales asignados
-            for (int j = 0; j < 2; j++) {
-                jTabDetailAsignTotales1.setValueAt("", i, j);
-            }
-        }
-        for (int i = 2; i < col - 1; i++) {
-            val = jTabVistaComprasDia3.getValueAt(var, i);
-            val2 = jTabVistaPedidosDia1.getValueAt(var2, i);
-            if (val != null && val2 != null && !val.toString().isEmpty() && !val2.toString().isEmpty()) {
-                //controlInserts.guardaDetallePedidoCli(ultimo[0], Integer.toString(i + 1), Integer.parseInt(jTableCreaPedidos.getValueAt(0, i).toString()));
-                //    System.out.print("prodComp= "+(i)+" "+jTabVistaComprasDia3.getColumnName(i)+"\t-> val= "+jTabVistaComprasDia3.getValueAt(var, i).toString());
-                bandera = true;
-                //      System.out.print("/t prodPed= "+(i)+" "+jTabVistaPedidosDia1.getColumnName(i)+"\t-> val= "+jTabVistaPedidosDia1.getValueAt(var2, i).toString());
-            }//if null
-        }
-        if (!bandera) {
-            JOptionPane.showMessageDialog(null, "Mercancia no es del mismo tipo del pedido seleccionado; \n Verfique por favor.");
-            jButton18.doClick();//para des seleccionar las filas de todas las tablas
-        } else {
-            String id_Busq = jTabVistaComprasDia3.getValueAt(var, 0).toString();
-            for (int i = 2; i < col - 1; i++) {
-                val2 = jTabVistaComprasDia3.getValueAt(var, i);
-                if (val2 != null && !val2.toString().isEmpty()) {
-                    //controlInserts.guardaDetallePedidoCli(ultimo[0], Integer.toString(i + 1), Integer.parseInt(jTableCreaPedidos.getValueAt(0, i).toString()));
-                    //System.out.print("prodComp= "+(i)+" "+jTabVistaPedidosDia1.getColumnName(i)+"\t-> val= "+jTabVistaPedidosDia1.getValueAt(var, i).toString());
-                    // System.out.println("CP envia: "+id_Busq+" -> "+(i-1));
-                    totSum = controlInserts.calcAsignAPed(id_Busq, Integer.toString(i - 1), "id_compraProveed");
-                    //System.out.println("CP regresa : "+totSum);
-                    if (totSum != null && !totSum.toString().isEmpty()) {
-                        difer = Integer.parseInt(val2.toString()) - Integer.parseInt(totSum.toString());
-                        jTabDetailAsignTotales1.setValueAt(difer, i - 2, 1);
-                        jTabDetailAsignTotales1.setValueAt(totSum, i - 2, 0);
-                    } else {
-                        jTabDetailAsignTotales1.setValueAt(val2, i - 2, 1);
-                        jTabDetailAsignTotales1.setValueAt(0, i - 2, 0);
-                    }
-                }//if null
-            }
-        }
-    }//GEN-LAST:event_jTabVistaComprasDia3FocusLost
-
     private void jMItDetailVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMItDetailVerActionPerformed
         int opc = jTabVistaPedidosDia1.getSelectedRow();
         if (opc > -1) {
-            String param = jTabVistaPedidosDia1.getValueAt(opc, 0).toString(), nombre = jTabVistaPedidosDia1.getValueAt(opc, 1).toString();
-            fP = new FormacionPedido(Integer.parseInt(param), nombre);
-            fP.setEnabled(true);
-            fP.setVisible(true);
-            fP.validate();
+            String val = jTabVistaPedidosDia1.getValueAt(opc, 0).toString();
+            if(controlInserts.validaRelCompPed(val, "id_pedidoCli")){
+                String param = jTabVistaPedidosDia1.getValueAt(opc, 0).toString(), nombre = jTabVistaPedidosDia1.getValueAt(opc, 1).toString();
+                fP = new FormacionPedido(Integer.parseInt(param), nombre);
+                fP.setEnabled(true);
+                fP.setVisible(true);
+                fP.validate();
+            }else{
+                JOptionPane.showMessageDialog(null, "Aun no hay asignaciones para pedido No: "+val);
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "<html> <h2>Debe elegir alguna fila de la tabla</h2> </html>");
         }
     }//GEN-LAST:event_jMItDetailVerActionPerformed
 
@@ -6503,6 +6641,9 @@ public class interno1 extends javax.swing.JFrame {
             vP.jLabNameProv.setText("Fletero: ");
             vP.txtProveedorName.setText(name);
             vP.jLabTurno.setText(jLabTurno.getText());
+            vP.jButContado.doClick();
+            vP.jRadContado.doClick();
+            vP.txtnotaPay.requestFocus(true);
         }
     }//GEN-LAST:event_jMItPayFleteActionPerformed
 
@@ -6615,27 +6756,6 @@ public class interno1 extends javax.swing.JFrame {
             dComp.validate();
             dComp.recibeListData(detailPedidoCli);
         }
-
-        /*        String datePed = fn.getFecha(jDateFechCompraProv);
-        int opc = jCElijaProovedor.getSelectedIndex(),
-                id_comp = jTabVistaComprasDia.getSelectedRow();
-
-        if (id_comp > -1) {
-            String id_cli = idProoved.get(opc),
-                    guardacom = jTabVistaComprasDia.getValueAt(id_comp, 0).toString(),
-                    importe = jTabVistaComprasDia.getValueAt(id_comp, 10).toString();
-
-            if (controlInserts.validaIsMayorista(id_cli)) {
-                if (controlInserts.validaCompAsignadas(guardacom, datePed, "comp+fech")) {
-                    JOptionPane.showMessageDialog(null, "Compra ya ha sido asignada");
-                } 
-            } else {
-                JOptionPane.showMessageDialog(null, "Solo puede asignar compras a Proveedor Mayorista");
-            }//else valida si es mayorista
-        } else {
-            JOptionPane.showMessageDialog(null, "Debe elegir una compra de proveedor");
-        }*/
-
     }//GEN-LAST:event_AgregarMayoreoActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -7109,6 +7229,176 @@ public class interno1 extends javax.swing.JFrame {
                 break;
         };
     }//GEN-LAST:event_jCombOpcBusqFletesActionPerformed
+
+    private void jTabVistaPedidosDia1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabVistaPedidosDia1FocusGained
+         int var = jTabVistaPedidosDia1.getSelectedRow(), col = jTabVistaPedidosDia1.getColumnCount(), difer = 0;
+       if(var > -1){
+        String id_Busq = jTabVistaPedidosDia1.getValueAt(var, 0).toString();
+        txtidPedidoAsign.setText(id_Busq);
+        Object val2 = null, totSum = null;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 2; j++) {
+                jTabDetailAsignTotales.setValueAt("", i, j);
+            }
+        }
+        for (int i = 2; i < col - 2; i++) {//menos dos porque aumento una columna de faltantes
+            val2 = jTabVistaPedidosDia1.getValueAt(var, i);
+            if (val2 != null && !val2.toString().isEmpty()) {
+                //controlInserts.guardaDetallePedidoCli(ultimo[0], Integer.toString(i + 1), Integer.parseInt(jTableCreaPedidos.getValueAt(0, i).toString()));
+                //System.out.print("prodComp= "+(i)+" "+jTabVistaPedidosDia1.getColumnName(i)+"\t-> val= "+jTabVistaPedidosDia1.getValueAt(var, i).toString());
+                // System.out.println("envia: "+id_Busq+" -> "+(i-1));
+                totSum = controlInserts.calcAsignAPed(id_Busq, Integer.toString(i - 1), "id_pedidoCli");
+                if (totSum != null && !totSum.toString().isEmpty()) {
+                    difer = Integer.parseInt(val2.toString()) - Integer.parseInt(totSum.toString());
+                    jTabDetailAsignTotales.setValueAt(difer, i - 2, 1);
+                    jTabDetailAsignTotales.setValueAt(totSum, i - 2, 0);
+                } else {
+                    jTabDetailAsignTotales.setValueAt(val2, i - 2, 1);
+                    jTabDetailAsignTotales.setValueAt(0, i - 2, 0);
+                }
+            }//if null
+        }
+       }else{
+           
+       }
+    }//GEN-LAST:event_jTabVistaPedidosDia1FocusGained
+
+    private void jTabVistaComprasDia3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabVistaComprasDia3FocusGained
+         int var = jTabVistaComprasDia3.getSelectedRow(),
+                col = jTabVistaComprasDia3.getColumnCount(),
+                var2 = jTabVistaPedidosDia1.getSelectedRow(),
+                col2 = jTabVistaPedidosDia1.getSelectedColumnCount(),
+                difer = 0;
+        boolean bandera = false;
+        String concid = "";
+        Object val = null, val2 = null, totSum = null;
+        //VERIFICAR SI LA MERCANCIA ES DEL MISMO TIPO DEL PEDIDO       
+        for (int i = 0; i < 7; i++) {//limpia la tabla de totales asignados
+            for (int j = 0; j < 2; j++) {
+                jTabDetailAsignTotales1.setValueAt("", i, j);
+            }
+        }
+        for (int i = 2; i < col - 2; i++) {
+            if(var2 > -1 && var > -1){
+                val2 = jTabVistaPedidosDia1.getValueAt(var2, i);
+                val = jTabVistaComprasDia3.getValueAt(var, i);
+            }
+            if (val != null && val2 != null && !val.toString().isEmpty() && !val2.toString().isEmpty()) {
+                bandera = true;
+            }//if null
+        }
+        if (!bandera) {
+            if(var2 > -1){
+                JOptionPane.showMessageDialog(null, "Mercancia no es del mismo tipo del pedido seleccionado; \n Verfique por favor.");
+                jButton18.doClick();//para des seleccionar las filas de todas las tablas
+            }else {
+                
+            }
+            } else {
+            String id_Busq = jTabVistaComprasDia3.getValueAt(var, 0).toString();
+            txtCompraAsign.setText(id_Busq);
+            for (int i = 2; i < col - 2; i++) {
+                val2 = jTabVistaComprasDia3.getValueAt(var, i);
+                if (val2 != null && !val2.toString().isEmpty()) {
+                    totSum = controlInserts.calcAsignAPed(id_Busq, Integer.toString(i - 1), "id_compraProveed");
+                    if (totSum != null && !totSum.toString().isEmpty()) {
+                        difer = Integer.parseInt(val2.toString()) - Integer.parseInt(totSum.toString());
+                        jTabDetailAsignTotales1.setValueAt(difer, i - 2, 1);
+                        jTabDetailAsignTotales1.setValueAt(totSum, i - 2, 0);
+                    } else {
+                        jTabDetailAsignTotales1.setValueAt(val2, i - 2, 1);
+                        jTabDetailAsignTotales1.setValueAt(0, i - 2, 0);
+                    }
+                }//if null
+            }
+        }
+    }//GEN-LAST:event_jTabVistaComprasDia3FocusGained
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        int opc = jTabVistaComprasDia3.getSelectedRow();
+        if (opc > -1) {
+            String val = jTabVistaComprasDia3.getValueAt(opc, 0).toString();
+            if(controlInserts.validaRelCompPed(val, "id_compraProveed")){
+                String param = jTabVistaComprasDia3.getValueAt(opc, 0).toString(), nombre = jTabVistaComprasDia3.getValueAt(opc, 1).toString(),
+                        tot = jTabVistaComprasDia3.getValueAt(opc, 9).toString(),falt = jTabVistaComprasDia3.getValueAt(opc, 10).toString();
+                int difer = Integer.parseInt(tot) - Integer.parseInt(falt);
+                jDialDetailCompraProov.setLocationRelativeTo(null);
+        jDialDetailCompraProov.setVisible(true);
+        jDialDetailCompraProov.setTitle("C-Proveedor");
+        jDialDetailCompraProov.setEnabled(true);
+        jLabId.setText(param);
+        jLabNomProov.setText(nombre);
+        jLabNumAsogna.setText(Integer.toString(difer));
+        jLabFaltant.setText(falt);
+        jLabel108.setText(tot);
+                       String[][] mati = controlInserts.matPedidosEst(param,1);
+                jTabDetProvView.setModel(new TModel(mati, cabDetcompra));
+                jLabContad.setText(Integer.toString(mati.length));
+        jTabDetProvView.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTabDetProvView.getColumnModel().getColumn(0).setMinWidth(0);
+        jTabDetProvView.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        jTabDetProvView.getColumnModel().getColumn(1).setMaxWidth(100);
+        jTabDetProvView.getColumnModel().getColumn(1).setMinWidth(0);
+        jTabDetProvView.getColumnModel().getColumn(1).setPreferredWidth(75);
+            }else{
+                JOptionPane.showMessageDialog(null, "Aun no hay asignaciones para la compra No: "+val);
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "<html> <h2>Debe elegir alguna fila de la tabla</h2> </html>");
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        int opc = jTabFletesDia1.getSelectedRow();
+        if (opc > -1) {
+            String val = jTabFletesDia1.getValueAt(opc, 0).toString();
+         if(controlInserts.validaRelCompPed(val, "id_fleteP")){
+                String param = jTabFletesDia1.getValueAt(opc, 0).toString(), nombre = jTabFletesDia1.getValueAt(opc, 1).toString(),
+                        tot = jTabFletesDia1.getValueAt(opc, 4).toString(),falt = jTabFletesDia1.getValueAt(opc, 6).toString(),
+                        difer = jTabFletesDia1.getValueAt(opc, 5).toString(),unid = jTabFletesDia1.getValueAt(opc, 2).toString();
+                jDialDetailFlete1.setLocationRelativeTo(null);
+                jDialDetailFlete1.setVisible(true);
+                jDialDetailFlete1.setTitle("Detalle Flete");
+                jDialDetailFlete1.setEnabled(true);
+                jLabel147.setText(unid);
+                jLabel136.setText(param);
+                jLabel139.setText(nombre);
+                jLabel143.setText(difer);
+                jLabel145.setText(falt);
+                jLabel141.setText(tot);
+                        String[][] mati = controlInserts.matPedidosEst(param,2);
+                        jTable3.setModel(new TModel(mati, cabDetFlet));
+                        jLabel124.setText(Integer.toString(mati.length));
+                jTable3.getColumnModel().getColumn(0).setMaxWidth(0);
+                jTable3.getColumnModel().getColumn(0).setMinWidth(0);
+                jTable3.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+                jTable3.getColumnModel().getColumn(1).setMaxWidth(100);
+                jTable3.getColumnModel().getColumn(1).setMinWidth(0);
+                jTable3.getColumnModel().getColumn(1).setPreferredWidth(75);
+        }else{
+                JOptionPane.showMessageDialog(null, "Aun no hay asignaciones para el Flete Folio: "+val);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "<html> <h2>Debe elegir alguna fila de la tabla</h2> </html>");
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jTabFletesDiaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTabFletesDiaKeyReleased
+          int var = evt.getKeyCode();
+                if (var == KeyEvent.VK_F5) {
+                    jMItPayFlete.doClick();
+                }
+    }//GEN-LAST:event_jTabFletesDiaKeyReleased
+
+    private void jTablefiltrosBusqfleteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTablefiltrosBusqfleteKeyReleased
+           int var = evt.getKeyCode();
+                if (var == KeyEvent.VK_F5) {
+                    jMitPayfilterFletes.doClick();
+                }
+    }//GEN-LAST:event_jTablefiltrosBusqfleteKeyReleased
 
     public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("image/icons8_customer_32px_1.png"));
@@ -7807,7 +8097,6 @@ public class interno1 extends javax.swing.JFrame {
                     if (x == 3) {//valor,fila,columna
                         jTabVistaComprasDia3.setValueAt(rs.getInt(x + 1), fila, rs.getInt(x) + 1);//se le suma 1 por las columnas id,nombre de la jTable
                         if (controlInserts.validaIsMasDeUnProducto(opc, rs.getInt(x)) > 1) {//si existe mas de una vez ese producto en la compra a mayorista, => hacemos la sumatoria y reescribimos eso
-                            //   System.out.println("\tExiste+de 1 vex: "+rs.getInt(x));
                             jTabVistaComprasDia3.setValueAt(controlInserts.sumaIsMasDeUnProducto(opc, rs.getInt(x)), fila, rs.getInt(x) + 1);
                         }
                     }//System.out.print("["+x+"]"+" -> "+rs.getString(x));                   
@@ -7819,17 +8108,16 @@ public class interno1 extends javax.swing.JFrame {
             st = cn.createStatement();
             rs = st.executeQuery(sql2);
             while (rs.next()) {
-
                 jTabVistaComprasDia3.setValueAt(rs.getInt(1), fila, 0);
                 if (controlInserts.validaRelCompPed(Integer.toString(rs.getInt(1)), "id_compraProveed")) {
-                    temporal = controlInserts.sumaRelCompPed(Integer.toString(rs.getInt(1)), "id_compraProveed");
-                    if(temporal == rs.getInt(3)){
+                   temporal = controlInserts.sumaRelCompPed(Integer.toString(rs.getInt(1)), "id_compraProveed");
+                    //if(temporal == rs.getInt(3)){
                         coloreA.add(fila);    
-                    }
+                   // }
                 }
-                // jTabVistaComprasDia3.setValueAt("ASIGNADO", fila,0);
                 jTabVistaComprasDia3.setValueAt(rs.getString(2), fila, 1);
-                jTabVistaComprasDia3.setValueAt(rs.getString(3), fila, 9);
+                jTabVistaComprasDia3.setValueAt(rs.getInt(3), fila, 9);
+                jTabVistaComprasDia3.setValueAt(rs.getInt(3) - temporal, fila,10);
             }
         } catch (SQLException ex) {
             Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
@@ -7873,10 +8161,10 @@ public class interno1 extends javax.swing.JFrame {
             c1.arrIntRowsIluminados = controlInserts.fnToArray(coloreB);
             jTabVistaPedidosDia1.setDefaultRenderer(Object.class, c1);
 
-            ListIterator<Integer> itr = coloreB.listIterator();
-            while (itr.hasNext()) {
-                System.out.println("ColoreB -> " + itr.next());
-            }
+          //  ListIterator<Integer> itr = coloreB.listIterator();
+        //    while (itr.hasNext()) {
+       //         System.out.println("ColoreB -> " + itr.next());
+         //   }
             coloreB.clear();
         } else {
             jLabPed.setVisible(true);
@@ -7888,7 +8176,7 @@ public class interno1 extends javax.swing.JFrame {
 
     public void consultDetailPedidosAsign(int opc, int fila) {
         Connection cn = con2.conexion();
-        int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0;
+        int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0,asignadosC = 0;
         String sql = "", sql2 = "";
         sql = "SELECT * FROM detailpedidio WHERE id_pedidioD = '" + opc + "'";
         sql2 = "SELECT\n"
@@ -7923,11 +8211,14 @@ public class interno1 extends javax.swing.JFrame {
             while (rs.next()) {
                 jTabVistaPedidosDia1.setValueAt(rs.getInt(1), fila, 0);
                 if (controlInserts.validaRelCompPed(Integer.toString(rs.getInt(1)), "id_pedidoCli")) {
+                    asignadosC = controlInserts.sumaRelCompPed(Integer.toString(rs.getInt(1)),"id_pedidoCliSum");
                     coloreB.add(fila);
                 }
 
                 jTabVistaPedidosDia1.setValueAt(rs.getString(2), fila, 1);
-                jTabVistaPedidosDia1.setValueAt(rs.getString(3), fila, 9);
+                jTabVistaPedidosDia1.setValueAt(rs.getInt(3), fila, 9);
+                jTabVistaPedidosDia1.setValueAt(rs.getInt(3) - asignadosC, fila, 10);
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
@@ -8458,7 +8749,6 @@ public class interno1 extends javax.swing.JFrame {
     /// CARGA LA SUMA DE CAJAS, IMPORTE TOTAL DE COMPRAS Y SUMA DE TIPO DE MERCANCIA EN EL DIA
     protected void cargaTotPedidoDay(JTable tabon, String fech) {
         Connection cn = con2.conexion();
-        System.out.println("tabonN: "+tabon.getName());
         int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0;
         String sql = "", sql2 = "";
         sql = "SELECT productocal.codigo,\n"
@@ -8540,17 +8830,6 @@ public class interno1 extends javax.swing.JFrame {
             jPanSubastaOption.setVisible(false);
             jCombProductProv.requestFocus(true);
         }
-        /* 
-        estaba en actionPErformed
-        int tam = jCElijaProovedor.getItemCount();
-        //validamos si se ha seleccionado checkMayoristas y si existe algun elemnto en el MenuItem
-        if (jCheckBox1.isSelected() && tam > 0) {
-            String datePed = fn.getFecha(jDateFechCompraProv);
-            int opc = jCElijaProovedor.getSelectedIndex();
-            String id_cli = idProoved.get(opc);
-            jTextField1.setText(controlInserts.sumMayorista(id_cli, datePed));
-        }
-         */
     }
 
     private String totalon(JTable tablon,int colsum){
@@ -8560,9 +8839,7 @@ public class interno1 extends javax.swing.JFrame {
             p = Double.parseDouble(tablon.getValueAt(i,colsum).toString());
             t += p;
         }
- 
         sumon = Double.toString(t);
-        
         return sumon;
     }
     
@@ -8648,13 +8925,19 @@ public class interno1 extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser jDateChoBVent1;
     private com.toedter.calendar.JDateChooser jDateFechCompraProv;
     private com.toedter.calendar.JDateChooser jDatebusqVenta2;
-    private javax.swing.JDialog jDialDetailFlete;
+    private javax.swing.JDialog jDialDetailCompraProov;
+    private javax.swing.JDialog jDialDetailFlete1;
     private javax.swing.JFrame jFramElijeAsignCompras;
     private javax.swing.JLabel jLaComp;
     private javax.swing.JLabel jLabAdeudaProoved;
     private javax.swing.JLabel jLabBNumerador;
+    private javax.swing.JLabel jLabContad;
+    private javax.swing.JLabel jLabFaltant;
     private javax.swing.JLabel jLabFlet;
+    private javax.swing.JLabel jLabId;
     private javax.swing.JLabel jLabLetreroFletes;
+    private javax.swing.JLabel jLabNomProov;
+    private javax.swing.JLabel jLabNumAsogna;
     private javax.swing.JLabel jLabNumcompra;
     private javax.swing.JLabel jLabNumcompra1;
     private javax.swing.JLabel jLabNumcompra2;
@@ -8696,16 +8979,24 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel124;
     private javax.swing.JLabel jLabel125;
     private javax.swing.JLabel jLabel126;
-    private javax.swing.JLabel jLabel127;
-    private javax.swing.JLabel jLabel128;
     private javax.swing.JLabel jLabel129;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel130;
     private javax.swing.JLabel jLabel131;
-    private javax.swing.JLabel jLabel132;
-    private javax.swing.JLabel jLabel133;
-    private javax.swing.JLabel jLabel134;
+    private javax.swing.JLabel jLabel135;
+    private javax.swing.JLabel jLabel136;
+    private javax.swing.JLabel jLabel137;
+    private javax.swing.JLabel jLabel138;
+    private javax.swing.JLabel jLabel139;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel140;
+    private javax.swing.JLabel jLabel141;
+    private javax.swing.JLabel jLabel142;
+    private javax.swing.JLabel jLabel143;
+    private javax.swing.JLabel jLabel144;
+    private javax.swing.JLabel jLabel145;
+    private javax.swing.JLabel jLabel146;
+    private javax.swing.JLabel jLabel147;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -8814,6 +9105,8 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMPAYFILTRO;
     private javax.swing.JMenuItem jMenPago;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMitPayfilterFletes;
     private javax.swing.JMenuItem jMnDetailVentaP;
     private javax.swing.JMenuItem jMnPayVentaP;
@@ -8848,13 +9141,17 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPopupMenu jPopCompraProveedor;
     private javax.swing.JPopupMenu jPopFILTROCOMPRAS;
     private javax.swing.JPopupMenu jPopMFiltrosBusqFletes;
+    private javax.swing.JPopupMenu jPopMnDetailCompAsign;
     private javax.swing.JPopupMenu jPopPedidosDia;
     private javax.swing.JPopupMenu jPopVentaPisoBusq;
     private javax.swing.JPopupMenu jPopupMenActualizaCompra;
     private javax.swing.JPopupMenu jPopupPrestaProov;
+    private javax.swing.JPopupMenu jPpMnDetFletes;
     private javax.swing.JPopupMenu jPpMnPagoFletes;
     private javax.swing.JRadioButton jRHistorFletes;
     private javax.swing.JRadioButton jRPagadopFlete;
@@ -8874,6 +9171,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRdCreaFletes;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane13;
     private javax.swing.JScrollPane jScrollPane14;
@@ -8924,6 +9222,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JTable jTabBusqCompraProv1;
     private javax.swing.JTable jTabBusqPrestProv;
     private javax.swing.JTable jTabDescVentaP;
+    private javax.swing.JTable jTabDetProvView;
     private javax.swing.JTable jTabDetailAsignTotales;
     private javax.swing.JTable jTabDetailAsignTotales1;
     private javax.swing.JTable jTabDetallecompraAll;
@@ -8944,7 +9243,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTabdetPrestamoProv;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTableAltasCli;
     private javax.swing.JTable jTableCreaPedidos;
     private javax.swing.JTable jTablefiltrosBusq;

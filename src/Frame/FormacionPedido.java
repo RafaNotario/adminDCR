@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import renderTable.TModel;
 
 public class FormacionPedido extends javax.swing.JFrame {
@@ -38,6 +39,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         txtidPed.setText(Integer.toString(idPed));
         txtClieny.setText(name);
         cargaDetail(Integer.toString(idPed));
+        jTextField1.requestFocus(true);
     }
 
     /**
@@ -68,11 +70,28 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jLabel1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
         txtClieny = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtidPed = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Detalle Pedido");
@@ -95,14 +114,14 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jTabDetailFletDet.setRowHeight(25);
         jScrollPane1.setViewportView(jTabDetailFletDet);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, 470, 200));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 470, 200));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("FLETES:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 120, 30));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 120, 30));
 
         txtTotMoneyMerca.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPanel1.add(txtTotMoneyMerca, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 430, 100, 40));
+        jPanel1.add(txtTotMoneyMerca, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 130, 40));
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/price_refresh.png"))); // NOI18N
         jButton2.setToolTipText("GUARDAR COSTO DE PEDIDO");
@@ -111,7 +130,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 480, -1, 60));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 630, -1, 70));
 
         jTabDetailPedDet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTabDetailPedDet.setModel(new javax.swing.table.DefaultTableModel(
@@ -125,41 +144,44 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
 
             }
         ));
+        jTabDetailPedDet.setColumnSelectionAllowed(true);
         jTabDetailPedDet.setRowHeight(25);
         jScrollPane2.setViewportView(jTabDetailPedDet);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 730, 420));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, 460, 10));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 730, 380));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 460, 10));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setText("TOTAL CAJAS:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 110, 40));
+        jLabel4.setText("Total cajas:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, 80, 40));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel5.setText("COSTO FLETES $ : ");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 710, 120, 40));
+        jLabel5.setText("Importe fletes $ : ");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 660, 110, 40));
 
         txtCostFletes.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPanel1.add(txtCostFletes, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 710, 140, 40));
+        jPanel1.add(txtCostFletes, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 660, 140, 40));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("TOTAL PEDIDO $");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 600, 140, 30));
+        jLabel6.setText("Ingrese utilidad*caja");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 520, 170, 30));
 
         txtGranTot.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jPanel1.add(txtGranTot, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 530, 120, 70));
+        txtGranTot.setToolTipText("Costo mercancia + fletes");
+        jPanel1.add(txtGranTot, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 390, 120, 40));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel7.setText("COSTO MERCANCIA: $ : ");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 430, 160, 40));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel7.setText("Importe mercancia: $ : ");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 390, 180, 30));
 
         txtTotCajas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPanel1.add(txtTotCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 430, 80, 40));
+        jPanel1.add(txtTotCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 390, 100, 40));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("NOTA:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 650, 50, 60));
+        jLabel1.setText("Agregar nota:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 600, 120, 30));
 
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -168,9 +190,105 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jTextArea1.setWrapStyleWord(true);
         jScrollPane3.setViewportView(jTextArea1);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(556, 640, 170, 70));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 630, 290, 70));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 51, 750, 770));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Pedido", "Asign.", "Faltan"
+            }
+        ));
+        jTable1.setRowHeight(25);
+        jScrollPane4.setViewportView(jTable1);
+
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 30, 200, 210));
+
+        jLabel9.setText("PRIM");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 60, 40, -1));
+
+        jLabel10.setText("SEG");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 80, 50, 20));
+
+        jLabel11.setText("PRIM_R");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(748, 110, 50, 20));
+
+        jLabel12.setText("SEG_R");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 130, 50, 20));
+
+        jLabel13.setText("BOLA_P");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(748, 160, 50, -1));
+
+        jLabel14.setText("3_RA");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 210, 50, 20));
+
+        jLabel15.setText("BOLA_S");
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(748, 180, 50, 20));
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/delete32px.png"))); // NOI18N
+        jButton1.setToolTipText("<html>\n\t<h2>Seleccione una fila de la tabla  <br>\ny oprima este boton para eliminar.</h2> \n</html>");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 250, 50, 50));
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("TOTAL PEDIDO $");
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 360, 140, 30));
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel17.setToolTipText("Promedio total pedido / total de cajas");
+        jLabel17.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 480, 120, 40));
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("Costo pedido + utilidad");
+        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 530, 210, 30));
+
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField1FocusGained(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 550, 120, 40));
+
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setText("Costo promedio de caja $");
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 170, 30));
+
+        jLabel20.setFont(new java.awt.Font("Tahoma", 2, 16)); // NOI18N
+        jLabel20.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 480, 140, 40));
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel21.setText("Costo promedio caja + utilidad $");
+        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 450, 210, 30));
+
+        jLabel22.setFont(new java.awt.Font("Tahoma", 3, 16)); // NOI18N
+        jLabel22.setToolTipText("Costo final calculado + utilidad");
+        jLabel22.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 560, 170, 50));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 51, 1010, 710));
 
         txtClieny.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         getContentPane().add(txtClieny, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, 160, 40));
@@ -186,22 +304,18 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jLabel8.setText("CLIENTE:");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, 80, 40));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/delete32px.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 0, 50, 50));
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String id = txtidPed.getText(),
-                gT = txtGranTot.getText(),
-                not = jTextArea1.getText();
-        actualizaCostoPedido(id,gT,not);
+        String[] arr = new String[4];
+        
+            String idP = txtidPed.getText();
+             arr[0] = jLabel22.getText();
+             arr[1] = jTextArea1.getText();
+             arr[2] = jTextField1.getText();
+             arr[3] = txtTotCajas.getText();
+        actualizaCostoPedido(idP,arr);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -217,6 +331,34 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+       String prec1 = jLabel17.getText(),
+               util = jTextField1.getText();
+       if(util.isEmpty()){
+           util = "0";
+       }
+       BigDecimal pr = new BigDecimal(prec1);
+       BigDecimal ut = new BigDecimal(util);
+       jLabel20.setText(fn.getSum(pr, ut).toString());
+       BigDecimal cajUtil = new BigDecimal(jLabel20.getText());
+       BigDecimal numCaj = new BigDecimal(txtTotCajas.getText());
+       jLabel22.setText(fn.multiplicaAmount(cajUtil, numCaj).toString());
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
+             String prec1 = jLabel17.getText(),
+               util = jTextField1.getText();
+       if(util.isEmpty()){
+           util = "0";
+       }
+       BigDecimal pr = new BigDecimal(prec1);
+       BigDecimal ut = new BigDecimal(util);
+       jLabel20.setText(fn.getSum(pr, ut).toString());
+       BigDecimal cajUtil = new BigDecimal(jLabel20.getText());
+       BigDecimal numCaj = new BigDecimal(txtTotCajas.getText());
+       jLabel22.setText(fn.multiplicaAmount(cajUtil, numCaj).toString());
+    }//GEN-LAST:event_jTextField1FocusGained
 
     /**
      * @param args the command line arguments
@@ -254,8 +396,9 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
     }
 
     private void cargaDetail(String idD){       
-        String[][] mat = controlInserts.matPedidosEst(idD);
-        String[] arr = calcAsignAPed(idD);
+        String[][] mat = controlInserts.matPedidosEst(idD,0);
+        String[] arr = calcAsignAPed(idD),util = getDatsPedido(idD);//regresa suma de cjas y monto total
+        
         txtTotCajas.setText(arr[0]);
         txtTotMoneyMerca.setText(arr[1]);
        jTabDetailPedDet.setModel(new TModel(mat, cabEdoPed));
@@ -265,13 +408,22 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         
         String[][] matFlet = matFletes(idD);
         jTabDetailFletDet.setModel(new TModel(matFlet,cabFlet));
-        txtCostFletes.setText(calcPrecFlet(idD));
         
-       // JOptionPane.showMessageDialog(null, "costo flete : "+calcPrecFlet(idD));
+        txtCostFletes.setText(calcPrecFlet(jTabDetailFletDet,4));
         
         BigDecimal amountOne = new BigDecimal(txtCostFletes.getText());//monto a cobrar
             BigDecimal amountTwo = new BigDecimal(txtTotMoneyMerca.getText());//cantidad recivida
             txtGranTot.setText(fn.getSum(amountOne, amountTwo).toString());
+            
+          BigDecimal coastT = new BigDecimal(txtGranTot.getText());//monto a cobrar
+            BigDecimal numCaj = new BigDecimal(txtTotCajas.getText());//cantidad recivida  
+            
+            jLabel17.setText(fn.divideAmount(coastT, numCaj).toString());
+            
+            jTextField1.setText(util[0]);
+            jTextArea1.setText(util[1]);
+            cargaTotCompDayProveedor(idD);
+            totalon();
     } 
     
     public String[] calcAsignAPed(String idPed){
@@ -284,13 +436,6 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         try {
             st = cn.createStatement();
             rs = st.executeQuery(sql);
-  /*          while(rs.next())
-            {
-                prod[0] = rs.getString(1);
-                prod[1] = rs.getString(2);
-            }
- */
-
             if(rs.next())
             {
                     if(rs.getRow() > 0){
@@ -301,8 +446,6 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                             prod[1] = "0.00"; 
                     }
             }
-            
-            
         } catch (SQLException ex) {
             Logger.getLogger(FormacionPedido.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
@@ -347,18 +490,14 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                //aqui iria crear matriz
                 while(rs.next())
                 {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
-                 
                       for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
-                           // System.out.print("| "+rs.getString(x)+" |");
                              mat[i][x-1]=rs.getString(x);
-                      //System.out.print(x+" -> "+rs.getString(x));                   
                       }//for
                        i++;
                 }//whilE
             } catch (SQLException ex) {
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
             }finally{               
-//             System.out.println("cierra conexion a la base de datos");    
              try {        
                  if(st != null) st.close();                
                  if(cn !=null) cn.close();
@@ -377,58 +516,34 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
 return mat;            
 }
      
-      public String calcPrecFlet(String idPed){
-        Connection cn = con2.conexion();
-        Object prod = "";
-        String prod2 ="0";
-        String sql = "SELECT\n" +
-                "	SUM(DISTINCT(fleteenviado.costoFlete)) AS mercan\n" +
-                "FROM\n" +
-                "	fleteenviado\n" +
-                "INNER JOIN\n" +
-                "	relcomprapedido\n" +
-                "ON\n" +
-                " 	relcomprapedido.id_fleteP = fleteenviado.id_fleteE AND relCompraPedido.id_pedidoCli='"+idPed+"';";
-        Statement st = null;
-        ResultSet rs= null;
-        try {
-            st = cn.createStatement();
-            rs = st.executeQuery(sql);
-            while(rs.next())
-            {
-                prod = rs.getString(1);
+      public String calcPrecFlet(JTable tablon,int colsum){
+            String sumon ="",dat;
+            double t = 0, p = 0;
+            for (int i = 0; i < tablon.getRowCount(); i++) {
+                p = Double.parseDouble(tablon.getValueAt(i,colsum).toString());
+                t += p;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(FormacionPedido.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-                    try {
-                        if(cn != null) cn.close();
-                    } catch (SQLException ex) {
-                       JOptionPane.showMessageDialog(null,ex.getMessage() );    
-                    }
-                }
-        
-        if(prod != null && !prod.toString().isEmpty())
-            prod2 = prod.toString();
-        
-        return prod2;
+            sumon = Double.toString(t);
+        return sumon;
     }
       
-    public void actualizaCostoPedido(String id,String coast,String nota){
+    public void actualizaCostoPedido(String idPed,String[] arre){
              Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";        
-                SQL="UPDATE pedidocliente SET totalPrecio =?, notaPed =? WHERE id_pedido = '"+id+"' ";                           
+                SQL="UPDATE pedidocliente SET totalPrecio =?, notaPed =?,utilidad=?,cajAsign=? WHERE id_pedido = '"+idPed+"' ";                           
             try {
                 pps = cn.prepareStatement(SQL);
-                pps.setString(1, coast);
-                pps.setString(2, nota);
+                pps.setString(1, arre[0]);
+                pps.setString(2, arre[1]);
+                pps.setString(3, arre[2]);
+                pps.setString(4, arre[3]);
                 
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Pedido actualizado correctamente.");
             } catch (SQLException ex) {
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+                JOptionPane.showMessageDialog(null, "Error durante la transaccio "+ex);
             }finally{
  //               System.out.println( "cierra conexion a la base de datos" );    
                 try {
@@ -440,25 +555,155 @@ return mat;
             }//finally catch
         }
            
+    //regresa duma de pedidos asignados a mayoristas
+        public String[] getDatsPedido(String idP){
+            Connection cn = con2.conexion();
+            String[] suma = new String[2];
+            int num=0,i=1;
+            String sql = "";
+            sql = "SELECT utilidad,notaPed FROM pedidocliente WHERE id_pedido = '"+idP+"';";//id_ProveedorMay
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                rs.beforeFirst();
+                while(rs.next())
+                {
+                    suma[0] = rs.getString(1);
+                    suma[1] = rs.getString(2);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FormacionPedido.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error getDatsPedido"+ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return suma;
+    }//validaProveedorMayorista
+        
+        /// CARGA LA SUMA DE CAJAS, IMPORTE TOTAL DE COMPRAS Y SUMA DE TIPO DE MERCANCIA EN EL DIA
+    protected void cargaTotCompDayProveedor(String idPedidon) {
+        Connection cn = con2.conexion();
+        int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0;
+        String sql = "", sql2 = "",sql3 ="",sql4="",sql5="";
+        sql = "SELECT productocal.codigo,SUM(detailpedidio.cantidadCajas) AS sumaType\n" +
+                "FROM detailpedidio\n" +
+                "INNER JOIN pedidocliente\n" +
+                "ON detailpedidio.id_PedidioD = pedidocliente.id_pedido\n" +
+                "AND pedidocliente.id_pedido = '"+idPedidon+"'\n" +
+                "INNER JOIN productocal\n" +
+                "ON productocal.codigo = detailpedidio.codigoProdP\n" +
+                "GROUP BY productocal.codigo;";
+
+//Obtenemos la sumatoria de lo que fue asignado y destinado a los pedidos        
+ sql3 = "SELECT productocal.codigo,SUM(relcomprapedido.cantidadCajasRel) AS sumaType\n" +
+            "FROM relcomprapedido\n" +
+            "INNER JOIN productocal\n" +
+            "ON productocal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_pedidoCli = '"+idPedidon+"'\n" +
+            "GROUP BY productocal.codigo;";
+ Statement st = null;
+        ResultSet rs = null;
+        try {
+            st = cn.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
+                    if (x == 1) {
+                        jTable1.setValueAt(rs.getInt(x + 1),rs.getInt(x) - 1, 0);//se le suma 1 por las columnas id,nombre de la jTable
+                    }
+                }//for
+            }//while
+            
+            st = null;
+            rs = null;
+            st = cn.createStatement();
+            rs = st.executeQuery(sql3);
+            rs.beforeFirst();
+           while (rs.next()) {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
+                    if (x == 1) {
+                        jTable1.setValueAt(rs.getInt(x + 1), rs.getInt(x) - 1,1);//se le suma 1 por las columnas id,nombre de la jTable
+                    }
+                }//for
+            }//while
+        } catch (SQLException ex) {
+            Logger.getLogger(FormacionPedido.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        }//finally  
+    }
+    
+    public void totalon(){
+                 Object val1,val2,result;
+        int vak1,vak2,resuk;
+            for (int j = 0; j < jTable1.getRowCount(); j++) {
+                val1 = jTable1.getValueAt(j,0);
+                val2 = jTable1.getValueAt(j,1);
+                if (val1 == null || val1.toString().isEmpty())
+                    vak1 = 0;
+                else{
+                    vak1 = Integer.parseInt(val1.toString());
+                }
+                if (val2 == null || val2.toString().isEmpty())
+                    vak2 = 0;
+                else{
+                    vak2 = Integer.parseInt(val2.toString());
+                }
+                resuk=vak1-vak2;
+               jTable1.setValueAt(resuk,j,2);
+            }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTabDetailFletDet;
     private javax.swing.JTable jTabDetailPedDet;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField txtClieny;
     private javax.swing.JTextField txtCostFletes;
     private javax.swing.JTextField txtGranTot;

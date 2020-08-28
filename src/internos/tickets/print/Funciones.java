@@ -30,6 +30,8 @@ public class Funciones {
   private static int ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
   private BigDecimal fAmountOne;
   private BigDecimal fAmountTwo;
+  public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
+
  
 public void setBorder(JPanel name, String title) {
            name.setBorder(javax.swing.BorderFactory.createTitledBorder(null, title, javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 18))); // NOI18N
@@ -141,6 +143,19 @@ public Date stringDateTime(String fecha){//tenia: java.util.Date
             fAmountTwo = rounded(aAmountTwo);
           return fAmountOne.add(fAmountTwo);
       }
+      
+     public BigDecimal percentage(BigDecimal base, BigDecimal pct){
+         fAmountOne = rounded(base);
+            fAmountTwo = rounded(pct);
+       return fAmountOne.multiply(fAmountTwo).divide(ONE_HUNDRED);
+    }
+     
+    public BigDecimal divideAmount(BigDecimal aAmountOne, BigDecimal aAmountTwo){
+            fAmountOne = rounded(aAmountOne);
+            fAmountTwo = rounded(aAmountTwo);
+        //    System.out.println(fAmountOne+" -> "+fAmountTwo);
+        return fAmountOne.divide(fAmountTwo,1,ROUNDING_MODE);
+    }
         
 public String getHour(){
     Calendar calendario = Calendar.getInstance();    

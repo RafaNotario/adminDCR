@@ -2293,6 +2293,9 @@ return mat;
                 case "compramayoreo":
                     sql = "SELECT '1' FROM compramayoreo WHERE id_compraProveMin = '"+idBusq+"';";
                 break;
+                case "id_pedidoCliSum":
+                    sql = "SELECT SUM(cantidadCajasRel) FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"';";
+                break;
             };
             Statement st = null;
             ResultSet rs= null;
@@ -2417,16 +2420,17 @@ return mat;
   }
   
   //filtros de detalle pedido en asignacion
-  public String[][] matPedidosEst(String id){
+  public String[][] matPedidosEst(String id,int opc){
         Connection cn = con2.conexion();
           String sql ="",aux;
-              sql = "SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_fleteP,relcomprapedido.id_compraProveed,\n" +
+          if(opc == 0){//opcion vista detalle Pedido cliente
+          sql = "SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_fleteP,relcomprapedido.id_compraProveed,\n" +
                 "	IF(proveedor.nombreP = 'SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) AS condic,\n" +
                 "	productocal.nombreP,relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,\n" +
                 "	(relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT\n" +
                 "FROM\n" +
                 "	relcomprapedido\n" +
-                "INNER JOIN\n" +
+                " INNER JOIN\n" +
                 "	productoCal\n" +
                 "ON\n" +
                 "	productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_pedidoCli = '"+id+"'\n" +
@@ -2434,11 +2438,36 @@ return mat;
                 "	compraprooved\n" +
                 "ON \n" +
                 "	relcomprapedido.id_compraProveed = compraprooved.id_compraProve\n" +
-                "INNER JOIN \n" +
+                " INNER JOIN \n" +
                 "	proveedor\n" +
                 "ON \n" +
                 "	compraprooved.id_ProveedorC = proveedor.id_Proveedor;";      
-             int i =0,cantFilas=0, cont=1,cantColumnas=0;
+          }
+          if(opc == 1){
+              sql = "SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_fleteP,relcomprapedido.id_pedidoCli,\n" +
+                "clientepedidos.nombre,\n" +
+                "productocal.nombreP,relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,\n" +
+                "(relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT\n" +
+                "FROM relcomprapedido\n" +
+                "INNER JOIN productoCal\n" +
+                "ON productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_compraProveed = '"+id+"'\n" +
+                "INNER JOIN pedidocliente -- compraprooved\n" +
+                "ON relcomprapedido.id_pedidoCli = pedidocliente.id_pedido\n" +
+                "INNER JOIN clientepedidos\n" +
+                "ON pedidocliente.id_clienteP = clientepedidos.id_cliente;";
+          }
+          if(opc == 2){
+              sql = "SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_pedidoCli,relcomprapedido.id_compraProveed,\n" +
+            "IF(proveedor.nombreP = 'SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) AS alia,productocal.nombreP,relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,\n" +
+            "(relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT\n" +
+            "FROM relcomprapedido\n" +
+            "INNER JOIN productoCal\n" +
+            "ON productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_fleteP = '"+id+"'\n" +
+            "INNER JOIN compraprooved ON relcomprapedido.id_compraProveed = compraprooved.id_compraProve\n" +
+            "INNER JOIN proveedor ON compraprooved.id_ProveedorC = proveedor.id_Proveedor;";
+          }
+          
+          int i =0,cantFilas=0, cont=1,cantColumnas=0;
              String[][] mat=null;
               int[] arrIdPedido = null;//int para usar hashMap
             Statement st = null;

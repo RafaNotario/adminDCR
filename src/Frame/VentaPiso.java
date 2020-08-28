@@ -591,6 +591,9 @@ if(jPanContadoPay.isVisible()){
        if (evt.getKeyCode() == evt.VK_ENTER) {
             jButton2.doClick();
         }
+       if (evt.getKeyCode() == evt.VK_ESCAPE) {
+            jButton1.doClick();
+        }
     }//GEN-LAST:event_txtnotaPayKeyReleased
 
     private void txtContadoRecibeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContadoRecibeKeyReleased
