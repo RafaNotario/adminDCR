@@ -153,6 +153,7 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
 
         txtContadoRecibe.setFont(new java.awt.Font("Tahoma", 1, 17)); // NOI18N
         txtContadoRecibe.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtContadoRecibe.setNextFocusableComponent(txtnotaPay);
         txtContadoRecibe.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtContadoRecibeFocusLost(evt);
@@ -404,7 +405,7 @@ if(jPanContadoPay.isVisible()){
                    dataList.add(var_metod);
                    dataList.add(fn.getHour());
                    dataList.add(jLabTurno.getText());
-                    guardaPayCompra(dataList,tipe);
+             guardaPayCompra(dataList,tipe);
                     if(tipe.equals("pagarcompraprovee"))//nombre de la tabla a la q se le aplicara el pago
                         actualizaData(var_id,"compraprooved");
                     else if(tipe.equals("pagoventapiso"))
@@ -458,7 +459,7 @@ if(jPanContadoPay.isVisible()){
             jLabPagaOMonto.setText("Monto maximo a abonar: ");
             jLaBRecomen.setText("<-Debe ser menor que el total");
             limpiaCampos();
-            
+            txtContadoRecibe.requestFocus(true);
     }//GEN-LAST:event_jRadParcialActionPerformed
 
     private void jRadContadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadContadoActionPerformed
@@ -600,11 +601,17 @@ if(jPanContadoPay.isVisible()){
        if (evt.getKeyCode() == evt.VK_ENTER) {
             jButton2.doClick();
         }
+        if (evt.getKeyCode() == evt.VK_ESCAPE) {
+            jButton1.doClick();
+        }
     }//GEN-LAST:event_txtContadoRecibeKeyReleased
 
     private void txtCambioPAgoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCambioPAgoKeyReleased
        if (evt.getKeyCode() == evt.VK_ENTER) {
             jButton2.doClick();
+        }
+        if (evt.getKeyCode() == evt.VK_ESCAPE) {
+            jButton1.doClick();
         }
     }//GEN-LAST:event_txtCambioPAgoKeyReleased
 

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="226" pageHeight="2267" whenNoDataType="NoDataSection" columnWidth="218" leftMargin="4" rightMargin="4" topMargin="0" bottomMargin="10" whenResourceMissingType="Key" uuid="58e557e0-99df-49d8-80e3-5b579b6a767b">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fechCorte" class="java.lang.String"/>
+	<parameter name="namCajero" class="java.lang.String"/>
+	<parameter name="fechApert" class="java.lang.String"/>
+	<parameter name="fechCierre" class="java.lang.String"/>
+	<parameter name="saldInicial" class="java.lang.String"/>
+	<parameter name="totCobros" class="java.lang.String"/>
+	<parameter name="totGastos" class="java.lang.String"/>
+	<parameter name="totCajaAll" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[(SELECT count(pagopedidocli.id_payPedCli) AS numera,'Pago pedido cliente' AS descrip,sum(pagopedidocli.montoPayCliente) AS totl
+FROM pagopedidocli
+WHERE pagopedidocli.idCancelacion = 0 AND (pagopedidocli.idTurno = $P{fechCorte} OR date_format(pagopedidocli.fechapayCliente,'%Y-%m-%d') = $P{fechCorte} ))
+union
+(SELECT count(pagocreditprooved.id_pay) AS numera,'Pago credito proveedor',sum(pagocreditprooved.montoPayProoved) AS totl
+FROM pagocreditprooved
+WHERE pagocreditprooved.idCancelacion = 0 AND (pagocreditprooved.idTurno = $P{fechCorte} OR date_format(pagocreditprooved.fechapayProoved,'%Y-%m-%d') = $P{fechCorte})) 
+-- qwery para mostrar pagos de cargadores
+UNION
+(SELECT count(pagoventapiso.id_payVentaP) AS numera,'Pago venta de piso',sum(pagoventapiso.montoVP) AS totl
+FROM pagoventapiso
+WHERE pagoventapiso.idCancelacion = 0 AND (pagoventapiso.idTurno = $P{fechCorte} OR date_format(pagoventapiso.fechaPayVP,'%Y-%m-%d') = $P{fechCorte}))
+UNION 
+
+(SELECT 0,'----- Salidas $------',0)
+UNION 
+(SELECT count(pagoflete.id_pagoFlete) AS numera,'Pago de fletes',sum(pagoflete.montoPayFl) AS totl
+FROM pagoflete
+WHERE pagoflete.idCancelacion = 0 AND (pagoflete.idTurno = $P{fechCorte} OR date_format(pagoflete.fechaPayFlete,'%Y-%m-%d') = $P{fechCorte}))
+UNION
+-- qwery para mostrar cobros diarios
+(SELECT count(pagarcompraprovee.id_paycompra) AS numera,'Pago a proveedor',sum(pagarcompraprovee.montoPayProveed) AS totl
+FROM pagarcompraprovee
+WHERE pagarcompraprovee.idCancelacion = 0 AND (pagarcompraprovee.idTurno = $P{fechCorte} OR date_format(pagarcompraprovee.fechpayProveed,'%Y-%m-%d') = $P{fechCorte}))
+UNION
+(SELECT 0,'----- Gastos de caja-----',0)
+UNION
+(SELECT 1,gastos_caja.concepto,gastos_caja.monto
+FROM gastos_caja
+WHERE idTurno = $P{fechCorte} OR date_format(fecha,'%Y-%m-%d') = $P{fechCorte})
+;]]>
+	</queryString>
+	<field name="numera" class="java.lang.Long"/>
+	<field name="descrip" class="java.lang.String"/>
+	<field name="totl" class="java.math.BigDecimal"/>
+	<title>
+		<band height="226">
+			<staticText>
+				<reportElement x="43" y="148" width="131" height="12" forecolor="#3333FF" uuid="2b292a92-0302-46b2-bfec-0232a67d2289"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CORTE DE CAJA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="159" width="195" height="1" uuid="c1e4c872-16ba-4809-939e-9cfa42c4d990"/>
+				<graphicElement>
+					<pen lineStyle="Double" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="114" width="195" height="12" forecolor="#3333FF" uuid="043412af-7cce-479d-97ba-f9fe63b9a121"/>
+				<textElement textAlignment="Left">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Central de Abastos Unión Benito Juárez]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="124" width="195" height="12" forecolor="#3333FF" uuid="a644653d-ad8e-4342-b08b-86092823e498"/>
+				<textElement textAlignment="Left">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Bodega No. 23, área de Tomate y Calabaza]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="134" width="195" height="12" forecolor="#3333FF" uuid="62e851df-b93f-430a-8212-ce05a3f27e0c"/>
+				<textElement textAlignment="Left">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Huixcolotla, Puebla]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="59" y="197" width="145" height="12" uuid="b9ef2908-5e7c-4680-8253-06d8a49b3968"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fechCierre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="173" width="57" height="12" uuid="bdd09513-1e40-45dd-8fda-1b2e597e366d"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Cajero(a):]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="58" y="161" width="137" height="12" uuid="12f63db3-4442-46ce-b06d-ce3867a383e9"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fechCorte}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="185" width="57" height="12" uuid="ddfb8062-8f97-44ca-8bd4-77daaf371fed"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Apertura:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="58" y="185" width="146" height="12" uuid="758c0285-8618-4d80-b6f9-c84b79468836"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fechApert}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="197" width="57" height="12" uuid="0511f8d0-344a-4620-abea-9b096d7b7370"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Cierre:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="209" width="195" height="1" uuid="5982a3a7-ceb5-439f-8f08-f06aa0da8003"/>
+				<graphicElement>
+					<pen lineStyle="Dotted" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="15" y="211" width="160" height="12" uuid="1ba00aff-f078-48b5-afdc-43db1ed31cf9"/>
+				<textElement textAlignment="Left">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[---- Entradas----]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="59" y="173" width="145" height="12" uuid="58821c5f-bd35-4361-8eb5-1547b04fc9e4"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namCajero}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="161" width="57" height="12" uuid="6877f7c5-93c4-4fe1-9ffa-31dd25ce4217"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Corte:]]></text>
+			</staticText>
+			<image scaleImage="RetainShape">
+				<reportElement x="15" y="6" width="185" height="92" uuid="e498a506-dac7-40d0-b191-55f6fcef035a"/>
+				<imageExpression><![CDATA["C:\\adminDCR\\src\\image\\logojpgSLet.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="20" y="100" width="174" height="15" forecolor="#3333FF" uuid="7ca9b3b8-8ba8-4b17-851e-c608d56059ba"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="11" isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Distribuidor de Calabazítas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="15" splitType="Immediate">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="154" y="0" width="64" height="14" uuid="44867bc4-218f-466c-bdc1-03811223a379">
+					<printWhenExpression><![CDATA[!$F{totl}.toString().equals("0.00")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totl}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToTallestObject" x="20" y="0" width="129" height="15" isPrintWhenDetailOverflows="true" uuid="9697b157-efd2-4c20-bcfa-5d4de5461361"/>
+				<textElement>
+					<font size="9"/>
+					<paragraph tabStopWidth="100"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descrip}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="20" height="14" uuid="db402ed8-12b7-4553-b5fc-45f3ad1ecd11">
+					<printWhenExpression><![CDATA[!$F{numera}.toString().equals("0")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numera}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="148" y="0" width="6" height="14" uuid="819ee09c-8f78-4fbe-a9a5-90ab963e9186">
+					<printWhenExpression><![CDATA[!$F{numera}.toString().equals("0")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="61">
+			<staticText>
+				<reportElement x="0" y="42" width="95" height="13" isPrintWhenDetailOverflows="true" uuid="e3b2f72e-59cf-47ae-9a2f-3a23d09fd129"/>
+				<text><![CDATA[TOTAL CAJA       $:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="29" width="95" height="13" uuid="a4cfc605-abec-40cc-910e-fa1f50bb1e1e"/>
+				<text><![CDATA[TOTAL GASTOS $:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="16" width="95" height="13" uuid="2e0c5541-f7c2-452c-8115-9880ca48c9fa"/>
+				<text><![CDATA[TOTAL COBROS $:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="3" width="95" height="13" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="6f823241-66f1-4350-9af2-9853181fa4a7"/>
+				<text><![CDATA[SALDO INICIAL   $:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="11" y="0" width="195" height="1" uuid="ba8fa49b-b347-43bd-8f11-7226ab7c7332"/>
+				<graphicElement>
+					<pen lineStyle="Dotted" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="95" y="4" width="100" height="13" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="7db951b1-a96b-44e5-9140-a97db921b585"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldInicial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="95" y="17" width="100" height="13" uuid="b84a543a-43e8-4455-a635-e0df05b50164"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totCobros}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="95" y="29" width="100" height="13" uuid="9c4ecc95-1aeb-4a1d-b561-ba035e406cd5"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totGastos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="95" y="42" width="100" height="13" isPrintWhenDetailOverflows="true" uuid="7dec30f2-ad3f-4373-a597-0572fea18246"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totCajaAll}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

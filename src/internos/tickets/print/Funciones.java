@@ -24,7 +24,7 @@ public class Funciones {
 
  SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");//HACE PRUEBAS PARA DATETIME HH:MM:SS
   SimpleDateFormat formatoPrueba = new SimpleDateFormat("dd-MM-yyyy");
-  
+      SimpleDateFormat formato2 = new SimpleDateFormat("yyyy/MM/dd");
   //VARIABLES PARA CALCULO DE DINERO  
   private static int DECIMALS = 1;
   private static int ROUNDING_MODE = BigDecimal.ROUND_HALF_EVEN;
@@ -41,6 +41,13 @@ public void setBorder(JPanel name, String title) {
      */
     
  //****USO DE FECHAS
+    public String setDateActual(){
+    //        DateFormat df = DateFormat.getDateInstance();
+        Date fechaAct = new Date();   
+    //        jDateChooser1.setDate(fechaAct);
+            return formato2.format(fechaAct);
+    }
+
     public String setDateActualGuion(){
     //        DateFormat df = DateFormat.getDateInstance();
         Date fechaAct = new Date();    
@@ -120,6 +127,16 @@ public Date stringDateTime(String fecha){//tenia: java.util.Date
             newFech=p3+"/"+p2+"/"+p1;
             return newFech;
         }//volteaFecha
+        
+public String getSumFechDay(String fech, int nDays){
+        Date prox = null;
+        Calendar cal = Calendar.getInstance(); 
+//obtenemos la fecha actual y la convertmos a date
+        cal.setTime(StringDate(fech));
+        cal.add(Calendar.DAY_OF_YEAR, nDays);
+        prox=cal.getTime();
+        return formato.format(prox);
+    }
 
              //CALCULO DE DINERO $$ ***
      private BigDecimal rounded(BigDecimal aNumber){
@@ -168,8 +185,9 @@ public String getHour(){
 }
 
     public static void main(String[] args) {
-
+                 Funciones dC = new Funciones();
+//        System.out.println("Semana del año es: "+dC.semanYear("2020/04/13",0)+"\t dia de la semana: "+dC.semanYear("2020/04/13",1));
+     System.out.println(dC.getSumFechDay("01/04/2020",-1));
     }
-    
     
 }
