@@ -101,42 +101,34 @@ void imprim() throws JRException{
 }//@imprim80MM
 
  /*Generar ticket de pago semanal de Ambulantes */
-  public void imprim80MMAmbus(String param,String[] datas, boolean print){
+  public void imprim80MMAsignacioncompraProv(String param,String numC,boolean print){
         Connection cn = con2.conexion();
-        String  var = "C:/central/src/tickets/Jasper/ticket80MM_Ambu.jasper";
+        String  var = "C:/adminDCR/src/internos/tickets/print/vistaDiaProveedores.jasper";
+                //"C:/central/src/tickets/Jasper/ticket80MM_Ambu.jasper";
         JasperReport reporte = null;
             try {
                  Map parametro = new HashMap();
-                parametro.put("numTicket",param);
-                parametro.put("paramTotal",datas[0]);
-                parametro.put("paramEfectiv",datas[1]);
-                parametro.put("paramCambio",datas[2]);
-                parametro.put("nombAmbu",datas[5]);
-                parametro.put("nombAtendio",datas[3]);
-                parametro.put("fechHorTicAmb",datas[6]);
-                parametro.put("numAmbu",datas[4]);
+                parametro.put("parameter1",param);
+                parametro.put("numComp",numC);
                 
                 reporte = (JasperReport) JRLoader.loadObjectFromFile(var);
                 JasperPrint jp = JasperFillManager.fillReport(reporte, parametro, cn);
-
                 //linea para mandar a imprimir
                 if(print){
-                    JasperPrintManager.printReport(jp, false);
+                    JasperPrintManager.printReport(jp, false);//imprime sin mostrar cuadro de dialogo
                 }else{
                     JasperViewer jv = new JasperViewer(jp,false);
-                    jv.setZoomRatio(new Float(1.5));
+                    jv.setZoomRatio(new Float(1));
                    jv.setVisible(true);
-                   jv.setTitle("Central Huixcolotla \t Pago ambulantes.");
+                   jv.setTitle("Compras a proveedor \t Asignacion de mercancia.");
                 }
-            
             }  catch (JRException ex) {
             Logger.getLogger(Reportes.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-                 //   System.out.println( "cierra conexion a la base de datos" );    
                     try {
                         if(cn != null) cn.close();
                     } catch (SQLException ex) {
-                        System.err.println( ex.getMessage() );    
+                        JOptionPane.showMessageDialog(null,ex.getMessage());    
                     }
                 }
 }//@imprim80MM

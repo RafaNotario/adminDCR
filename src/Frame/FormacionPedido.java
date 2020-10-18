@@ -30,7 +30,7 @@ Funciones fn = new Funciones();
 ConexionDBOriginal con2 = new ConexionDBOriginal();
 
 String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cantidad","Costo","Total"},
-        cabFlet = {"Folio", "Carga", "Chofer", "Camioneta","Costo","Status"};
+        cabFlet = {"Folio", "En carga", "Carga Tot","Chofer", "Camioneta","$ Costo","Status","$ Prom.","$ Total"};
 
     public FormacionPedido(int id, String nam) {
         initComponents();
@@ -88,6 +88,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
         txtClieny = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtidPed = new javax.swing.JTextField();
@@ -95,9 +96,8 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Detalle Pedido");
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
 
         jTabDetailFletDet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTabDetailFletDet.setModel(new javax.swing.table.DefaultTableModel(
@@ -114,14 +114,10 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jTabDetailFletDet.setRowHeight(25);
         jScrollPane1.setViewportView(jTabDetailFletDet);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, 470, 200));
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("FLETES:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 120, 30));
 
         txtTotMoneyMerca.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPanel1.add(txtTotMoneyMerca, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 130, 40));
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/price_refresh.png"))); // NOI18N
         jButton2.setToolTipText("GUARDAR COSTO DE PEDIDO");
@@ -130,7 +126,6 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 630, -1, 70));
 
         jTabDetailPedDet.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTabDetailPedDet.setModel(new javax.swing.table.DefaultTableModel(
@@ -148,40 +143,29 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jTabDetailPedDet.setRowHeight(25);
         jScrollPane2.setViewportView(jTabDetailPedDet);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 730, 380));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 460, 10));
-
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Total cajas:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, 80, 40));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Importe fletes $ : ");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 660, 110, 40));
 
         txtCostFletes.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPanel1.add(txtCostFletes, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 660, 140, 40));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Ingrese utilidad*caja");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 520, 170, 30));
 
         txtGranTot.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         txtGranTot.setToolTipText("Costo mercancia + fletes");
-        jPanel1.add(txtGranTot, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 390, 120, 40));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText("Importe mercancia: $ : ");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 390, 180, 30));
 
         txtTotCajas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jPanel1.add(txtTotCajas, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 390, 100, 40));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Agregar nota:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 600, 120, 30));
 
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -190,47 +174,55 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jTextArea1.setWrapStyleWord(true);
         jScrollPane3.setViewportView(jTextArea1);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 630, 290, 70));
-
+        jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Pedido", "Asign.", "Faltan"
+                "Pedido", "Asign.", "Faltan", "Import.", "Promed.", "Utilidad unit.$", "Utilidad tot.$"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.setRowHeight(25);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTable1KeyReleased(evt);
+            }
+        });
         jScrollPane4.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 30, 200, 210));
-
         jLabel9.setText("PRIM");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 60, 40, -1));
 
         jLabel10.setText("SEG");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 80, 50, 20));
 
         jLabel11.setText("PRIM_R");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(748, 110, 50, 20));
 
         jLabel12.setText("SEG_R");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 130, 50, 20));
 
         jLabel13.setText("BOLA_P");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(748, 160, 50, -1));
 
         jLabel14.setText("3_RA");
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 210, 50, 20));
 
         jLabel15.setText("BOLA_S");
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(748, 180, 50, 20));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/delete32px.png"))); // NOI18N
         jButton1.setToolTipText("<html>\n\t<h2>Seleccione una fila de la tabla  <br>\ny oprima este boton para eliminar.</h2> \n</html>");
@@ -239,22 +231,19 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 250, 50, 50));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("TOTAL PEDIDO $");
-        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 360, 140, 30));
+        jLabel16.setText("TOTAL DE PEDIDO  $");
+        jLabel16.setToolTipText("Importe de la mercancia + fletes");
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel17.setToolTipText("Promedio total pedido / total de cajas");
         jLabel17.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 480, 120, 40));
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel18.setText("Costo pedido + utilidad");
-        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 530, 210, 30));
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -267,42 +256,239 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                 jTextField1KeyReleased(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 550, 120, 40));
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel19.setText("Costo promedio de caja $");
-        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 450, 170, 30));
 
         jLabel20.setFont(new java.awt.Font("Tahoma", 2, 16)); // NOI18N
         jLabel20.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 480, 140, 40));
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setText("Costo promedio caja + utilidad $");
-        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 450, 210, 30));
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 3, 16)); // NOI18N
         jLabel22.setToolTipText("Costo final calculado + utilidad");
         jLabel22.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 560, 170, 50));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 51, 1010, 710));
+        jLabel23.setText("jLabel23");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(146, 146, 146)
+                                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(2, 2, 2)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addGap(10, 10, 10))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtGranTot, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(230, 230, 230)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(txtTotCajas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(txtTotMoneyMerca, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(220, 220, 220)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtCostFletes, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 70, 70)
+                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGap(10, 10, 10)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGap(30, 30, 30)
+                                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGap(10, 10, 10))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(40, 40, 40)
+                                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(18, 18, 18))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(jLabel9)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel13)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGranTot, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotCajas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotMoneyMerca, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCostFletes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(10, 10, 10))
+        );
 
         txtClieny.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        getContentPane().add(txtClieny, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, 160, 40));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("ID PEDIDO:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 120, 40));
 
         txtidPed.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        getContentPane().add(txtidPed, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 160, 40));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setText("CLIENTE:");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, 80, 40));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtidPed, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtClieny, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtidPed, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtClieny, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(1, 1, 1)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(1, 1, 1))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -347,8 +533,8 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
-             String prec1 = jLabel17.getText(),
-               util = jTextField1.getText();
+       String prec1 = jLabel17.getText(),//costo primedio 1
+       util = jTextField1.getText();//utilidad ingresada por el usuario
        if(util.isEmpty()){
            util = "0";
        }
@@ -359,6 +545,49 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
        BigDecimal numCaj = new BigDecimal(txtTotCajas.getText());
        jLabel22.setText(fn.multiplicaAmount(cajUtil, numCaj).toString());
     }//GEN-LAST:event_jTextField1FocusGained
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int elig = jTable1.getSelectedRow();
+        Object var = jTable1.getValueAt(elig, 1);
+//        System.err.println("Valor sin check on = "+var);
+        if (var != null && !var.toString().isEmpty()) {// || !var.toString().isEmpty()
+            jTable1.editCellAt(elig, 5);
+            jTable1.setSurrendersFocusOnKeystroke(true);
+            jTable1.getEditorComponent().requestFocus();
+        } else {
+            jTable1.setValueAt(null, elig, 5);
+            jTable1.revalidate();
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
+          int oprime = evt.getKeyCode(),
+                elig = jTable1.getSelectedRow();
+        Object var1 = null,disponib =null;
+   String gTot = txtGranTot.getText();
+        if (oprime == 27) {
+            this.dispose();
+        }
+        if (oprime == evt.VK_ENTER)//KeyEvent.VK_ENTER
+        {
+            var1 = jTable1.getValueAt(elig, 1).toString();
+
+            if (var1 != null && !var1.toString().isEmpty()) {
+                disponib = jTable1.getValueAt(elig, 5);
+                if(disponib != null && !disponib.toString().isEmpty()){
+                    BigDecimal pr = new BigDecimal(disponib.toString());
+                    BigDecimal ut = new BigDecimal(var1.toString());
+                    jTable1.setValueAt(fn.multiplicaAmount(pr, ut).toString(), elig, 6);
+                   jLabel23.setText(calcPrecNull(jTable1,6));
+                }else{
+                    jTable1.setValueAt("0", elig, 5);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "No existe producto de este tipo asignado a pedido \n Verifique porfavor.");
+                
+            }
+        }
+    }//GEN-LAST:event_jTable1KeyReleased
 
     /**
      * @param args the command line arguments
@@ -402,28 +631,29 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         txtTotCajas.setText(arr[0]);
         txtTotMoneyMerca.setText(arr[1]);
        jTabDetailPedDet.setModel(new TModel(mat, cabEdoPed));
-       jTabDetailPedDet.getColumnModel().getColumn(0).setMaxWidth(0);
-        jTabDetailPedDet.getColumnModel().getColumn(0).setMinWidth(0);
-        jTabDetailPedDet.getColumnModel().getColumn(0).setPreferredWidth(0);
-        
+
+/** ------
+Para cargar la descripcion de los fletes enviados a este pedido
+------- */
         String[][] matFlet = matFletes(idD);
-        jTabDetailFletDet.setModel(new TModel(matFlet,cabFlet));
-        
-        txtCostFletes.setText(calcPrecFlet(jTabDetailFletDet,4));
+        jTabDetailFletDet.setModel(new TModel(matFlet,cabFlet));        
+        txtCostFletes.setText(calcPrecFlet(jTabDetailFletDet,8));//suma costos de fletes
         
         BigDecimal amountOne = new BigDecimal(txtCostFletes.getText());//monto a cobrar
-            BigDecimal amountTwo = new BigDecimal(txtTotMoneyMerca.getText());//cantidad recivida
-            txtGranTot.setText(fn.getSum(amountOne, amountTwo).toString());
+        BigDecimal amountTwo = new BigDecimal(txtTotMoneyMerca.getText());//cantidad recivida
+        txtGranTot.setText(fn.getSum(amountOne, amountTwo).toString());
             
-          BigDecimal coastT = new BigDecimal(txtGranTot.getText());//monto a cobrar
-            BigDecimal numCaj = new BigDecimal(txtTotCajas.getText());//cantidad recivida  
+        BigDecimal coastT = new BigDecimal(txtGranTot.getText());//monto a cobrar
+        BigDecimal numCaj = new BigDecimal(txtTotCajas.getText());//cantidad recivida  
             
-            jLabel17.setText(fn.divideAmount(coastT, numCaj).toString());
+        jLabel17.setText(fn.divideAmount(coastT, numCaj).toString());
             
             jTextField1.setText(util[0]);
             jTextArea1.setText(util[1]);
             cargaTotCompDayProveedor(idD);
             totalon();
+            
+            redimensionaColumns();
     } 
     
     public String[] calcAsignAPed(String idPed){
@@ -462,23 +692,25 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         Connection cn = con2.conexion();
           String sql ="",aux;
               sql = "SELECT\n" +
-                "	relCompraPedido.id_fleteP,SUM(relCompraPedido.cantidadCajasRel) AS mercan,fleteenviado.choferFlete,\n" +
-                "	fleteenviado.trocaFlete,fleteenviado.costoFlete,\n" +
-                "	IF(fleteenviado.status = 0,\"PENDIENTE\",\"PAGADO\") AS condic\n" +
+                " relCompraPedido.id_fleteP,SUM(relCompraPedido.cantidadCajasRel) AS mercan,fleteenviado.cargaParcial,fleteenviado.choferFlete,\n" +
+                " fleteenviado.trocaFlete,fleteenviado.costoFlete,\n" +
+                " IF(fleteenviado.status = 0,\"PENDIENTE\",\"PAGADO\") AS condic,\n" +
+                " CAST( ( fleteenviado.costoFlete / fleteenviado.cargaParcial ) AS DECIMAL(8,2) ), \n"+      
+                " CAST( ( (fleteenviado.costoFlete / fleteenviado.cargaParcial) * SUM(relCompraPedido.cantidadCajasRel) ) AS DECIMAL(8,2) ) \n"+
                 "FROM\n" +
                 "	relcomprapedido\n" +
                 "INNER JOIN\n" +
                 "	fleteenviado\n" +
                 "ON\n" +
-                " 	relcomprapedido.id_fleteP = fleteenviado.id_fleteE AND relCompraPedido.id_pedidoCli='"+fech+"'\n" +
+                " relcomprapedido.id_fleteP = fleteenviado.id_fleteE AND relCompraPedido.id_pedidoCli='"+fech+"'\n" +
                 "GROUP BY\n" +
                 "relcomprapedido.id_fleteP;";      
              int i =0,cantFilas=0, cont=1,cantColumnas=0;
              String[][] mat=null;
-              int[] arrIdPedido = null;//int para usar hashMap
-            Statement st = null;
-            ResultSet rs = null;            
-            try {
+             int[] arrIdPedido = null;//int para usar hashMap
+             Statement st = null;
+             ResultSet rs = null;            
+             try {
                 st = cn.createStatement();
                 rs = st.executeQuery(sql);
                 cantColumnas = rs.getMetaData().getColumnCount();
@@ -522,6 +754,23 @@ return mat;
             for (int i = 0; i < tablon.getRowCount(); i++) {
                 p = Double.parseDouble(tablon.getValueAt(i,colsum).toString());
                 t += p;
+            }
+            sumon = Double.toString(t);
+        return sumon;
+    }
+      
+      public String calcPrecNull(JTable tablon,int colsum){
+            String sumon ="",dat;
+            double t = 0, p = 0;
+            Object var = null;
+            for (int i = 0; i < tablon.getRowCount(); i++) {
+                var = tablon.getValueAt(i,colsum);
+                if( var != null && !var.toString().isEmpty()){
+                    p = Double.parseDouble(tablon.getValueAt(i,colsum).toString());
+                }else{
+                    p = 0;
+                }     
+                    t += p;
             }
             sumon = Double.toString(t);
         return sumon;
@@ -591,6 +840,8 @@ return mat;
         Connection cn = con2.conexion();
         int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0;
         String sql = "", sql2 = "",sql3 ="",sql4="",sql5="";
+        
+//Muestra la cantidad de cajas que se registraron en el pedido
         sql = "SELECT productocal.codigo,SUM(detailpedidio.cantidadCajas) AS sumaType\n" +
                 "FROM detailpedidio\n" +
                 "INNER JOIN pedidocliente\n" +
@@ -601,11 +852,13 @@ return mat;
                 "GROUP BY productocal.codigo;";
 
 //Obtenemos la sumatoria de lo que fue asignado y destinado a los pedidos        
- sql3 = "SELECT productocal.codigo,SUM(relcomprapedido.cantidadCajasRel) AS sumaType\n" +
-            "FROM relcomprapedido\n" +
-            "INNER JOIN productocal\n" +
-            "ON productocal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_pedidoCli = '"+idPedidon+"'\n" +
-            "GROUP BY productocal.codigo;";
+ sql3 = " SELECT productocal.codigo,SUM(relcomprapedido.cantidadCajasRel) AS sumaType,\n" +
+            " SUM(relcomprapedido.cantidadCajasRel * relcomprapedido.precioAjust) ,\n" +
+            " CAST( (SUM( relcomprapedido.cantidadCajasRel * relcomprapedido.precioAjust)  / SUM( relcomprapedido.cantidadCajasRel)) AS DECIMAL(8,2) ) "+
+            " FROM relcomprapedido\n" +
+            " INNER JOIN productocal\n" +
+            " ON productocal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_pedidoCli = '"+idPedidon+"'\n" +
+            " GROUP BY productocal.codigo;";
  Statement st = null;
         ResultSet rs = null;
         try {
@@ -628,6 +881,9 @@ return mat;
                 for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
                     if (x == 1) {
                         jTable1.setValueAt(rs.getInt(x + 1), rs.getInt(x) - 1,1);//se le suma 1 por las columnas id,nombre de la jTable
+                        jTable1.setValueAt(rs.getInt(x + 2),rs.getInt(x) - 1, 3);//se le suma 1 por las columnas id,nombre de la jTable
+                        jTable1.setValueAt(rs.getString(x + 3),rs.getInt(x) - 1, 4);//se le suma 1 por las columnas id,nombre de la jTable
+                        jTable1.setValueAt("0",rs.getInt(x) - 1, 5);//se le suma 1 por las columnas id,nombre de la jTable
                     }
                 }//for
             }//while
@@ -668,6 +924,54 @@ return mat;
             }
     }
     
+    protected void redimensionaColumns(){
+        //Matriz principal, descripcion de formacion del pedido
+        jTabDetailPedDet.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTabDetailPedDet.getColumnModel().getColumn(0).setMinWidth(0);
+        jTabDetailPedDet.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        jTabDetailPedDet.getColumnModel().getColumn(1).setMaxWidth(150);
+        jTabDetailPedDet.getColumnModel().getColumn(1).setMinWidth(80);
+        jTabDetailPedDet.getColumnModel().getColumn(1).setPreferredWidth(80);
+        
+        jTabDetailPedDet.getColumnModel().getColumn(2).setMaxWidth(150);
+        jTabDetailPedDet.getColumnModel().getColumn(2).setMinWidth(80);
+        jTabDetailPedDet.getColumnModel().getColumn(2).setPreferredWidth(80);
+
+        jTabDetailPedDet.getColumnModel().getColumn(4).setMaxWidth(150);
+        jTabDetailPedDet.getColumnModel().getColumn(4).setMinWidth(80);
+        jTabDetailPedDet.getColumnModel().getColumn(4).setPreferredWidth(80);
+
+        jTabDetailPedDet.getColumnModel().getColumn(5).setMaxWidth(150);
+        jTabDetailPedDet.getColumnModel().getColumn(5).setMinWidth(80);
+        jTabDetailPedDet.getColumnModel().getColumn(5).setPreferredWidth(80);
+
+        jTabDetailPedDet.getColumnModel().getColumn(6).setMaxWidth(150);
+        jTabDetailPedDet.getColumnModel().getColumn(6).setMinWidth(80);
+        jTabDetailPedDet.getColumnModel().getColumn(6).setPreferredWidth(80);
+
+        //matriz de detalles de fletes asignados
+        jTabDetailFletDet.getColumnModel().getColumn(0).setMaxWidth(150);
+        jTabDetailFletDet.getColumnModel().getColumn(0).setMinWidth(80);
+        jTabDetailFletDet.getColumnModel().getColumn(0).setPreferredWidth(80);
+        
+        jTabDetailFletDet.getColumnModel().getColumn(1).setMaxWidth(150);
+        jTabDetailFletDet.getColumnModel().getColumn(1).setMinWidth(80);
+        jTabDetailFletDet.getColumnModel().getColumn(1).setPreferredWidth(80);
+        
+        jTabDetailFletDet.getColumnModel().getColumn(2).setMaxWidth(150);
+        jTabDetailFletDet.getColumnModel().getColumn(2).setMinWidth(80);
+        jTabDetailFletDet.getColumnModel().getColumn(2).setPreferredWidth(80);
+        
+        jTabDetailFletDet.getColumnModel().getColumn(5).setMaxWidth(150);
+        jTabDetailFletDet.getColumnModel().getColumn(5).setMinWidth(80);
+        jTabDetailFletDet.getColumnModel().getColumn(5).setPreferredWidth(80);
+        
+        jTabDetailFletDet.getColumnModel().getColumn(7).setMaxWidth(150);
+        jTabDetailFletDet.getColumnModel().getColumn(7).setMinWidth(80);
+        jTabDetailFletDet.getColumnModel().getColumn(7).setPreferredWidth(80);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -686,6 +990,7 @@ return mat;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

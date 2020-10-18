@@ -21,7 +21,6 @@ public class Login extends javax.swing.JFrame {
     Funciones func = new Funciones();
     controladorCFP controlInserts = new controladorCFP();
     usuarios u = new usuarios();
-    
      int idReturn = 5000;//Variable para obtener id de usuario del sistema
      String[] datosUserSys = null;//arreglo para obtener todos los datos de usuario del sistema
     
@@ -495,7 +494,6 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
@@ -516,7 +514,6 @@ public class Login extends javax.swing.JFrame {
         
         AnimationClass musica = new AnimationClass();
         musica.jLabelXLeft(10, -40, 10, 5, jlabelMusica);
-        
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel20MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel20MouseClicked

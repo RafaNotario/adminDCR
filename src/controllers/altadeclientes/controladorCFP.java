@@ -2576,7 +2576,7 @@ return mat;
         Connection cn = con2.conexion();
           String sql ="",aux;
               sql = "SELECT\n" +
-                "	relCompraPedido.id_fleteP,COUNT(DISTINCT(relCompraPedido.id_compraProveed)) AS 'CompCont',\n" +
+                "	relCompraPedido.id_fleteP,COUNT(DISTINCT(relCompraPedido.id_compraProveed)) AS CompCont,\n" +
                 "	COUNT(DISTINCT(relCompraPedido.id_pedidoCli)) AS 'llEVAPED',\n" +
                 "	SUM(relCompraPedido.cantidadCajasRel)\n" +
                 "FROM\n" +
@@ -2691,7 +2691,8 @@ return mat;
                 " INNER JOIN \n" +
                 "	proveedor\n" +
                 "ON \n" +
-                "	compraprooved.id_ProveedorC = proveedor.id_Proveedor;";      
+                "	compraprooved.id_ProveedorC = proveedor.id_Proveedor"
+                  + " ORDER BY relcomprapedido.tipoMercanRel;";      
           }
           if(opc == 1){
               sql = "SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_fleteP,relcomprapedido.id_pedidoCli,\n" +
@@ -2875,23 +2876,41 @@ return mat;
           String sql ="",aux;
           if(tipe.equals("pagopedidocli")){//OPCION pago de pedididoscli
               if(idT.isEmpty()){
-                sql = "SELECT pagopedidocli.id_payPedCli,pagopedidocli.idClientePay,pagopedidocli.fechapayCliente,pagopedidocli.montoPayCliente,\n" +
-                  "	pagopedidocli.notaPayCliente,modopago.nombrePay\n" +
-                  "FROM \n" +
-                  "	pagopedidocli\n" +
-                  "INNER JOIN \n" +
-                  "	modopago\n" +
-                  "ON\n" +
-                  "	pagopedidocli.modoPayCliente = modopago.cod_pago AND pagopedidocli.idCancelacion = 0 AND pagopedidocli.fechapayCliente = '"+fech+"';";      
+                sql = "(SELECT pagopedidocli.id_payPedCli,pagopedidocli.idClientePay,clientepedidos.nombre,CONCAT(pagopedidocli.fechapayCliente,', ',if(pagopedidocli.horaPayPedido IS NULL,'--',pagopedidocli.horaPayPedido)) as ori,\n" +
+                    " pagopedidocli.montoPayCliente,'Pago de pedido'\n" +
+                    "FROM pagopedidocli\n" +
+                    "INNER JOIN pedidocliente\n" +
+                    "ON pagopedidocli.idClientePay = pedidocliente.id_pedido AND pagopedidocli.idCancelacion = 0 AND pagopedidocli.fechapayCliente = '"+fech+"'\n" +
+                    "INNER JOIN clientepedidos\n" +
+                    "ON pedidocliente.id_clienteP = clientepedidos.id_cliente)\n" +
+                    "UNION\n" +
+                    "(SELECT gastos_caja.id,gastos_caja.concepto,usersdcr.nickName,CONCAT(gastos_caja.fecha,', ',gastos_caja.hora),gastos_caja.monto,\n" +
+                    " 'Ingreso'\n" +
+                    "FROM gastos_caja\n" +
+                    "INNER JOIN rubroscaja\n" +
+                    "ON gastos_caja.idRubrocaja = rubroscaja.id AND rubroscaja.tipo = 'I'\n" +
+                    "INNER JOIN turnos\n" +
+                    "ON gastos_caja.idTurno = turnos.id AND  gastos_caja.fecha = '"+fech+"'\n" +
+                    "INNER JOIN usersdcr\n" +
+                    "ON usersdcr.id_user = turnos.idusuario);";      
             }else{
-                sql = "SELECT pagopedidocli.id_payPedCli,pagopedidocli.idClientePay,pagopedidocli.fechapayCliente,pagopedidocli.montoPayCliente,\n" +
-                  "	pagopedidocli.notaPayCliente,modopago.nombrePay\n" +
-                  "FROM \n" +
-                  "	pagopedidocli\n" +
-                  "INNER JOIN \n" +
-                  "	modopago\n" +
-                  "ON\n" +
-                  "	pagopedidocli.modoPayCliente = modopago.cod_pago AND pagopedidocli.idCancelacion = 0 AND pagopedidocli.idTurno = '"+idT+"';";
+                sql = "(SELECT pagopedidocli.id_payPedCli,pagopedidocli.idClientePay,clientepedidos.nombre,CONCAT(pagopedidocli.fechapayCliente,', ',if(pagopedidocli.horaPayPedido IS NULL,'--',pagopedidocli.horaPayPedido)) as ori,\n" +
+                    " pagopedidocli.montoPayCliente,'Pago de pedido'\n" +
+                    "FROM pagopedidocli\n" +
+                    "INNER JOIN pedidocliente\n" +
+                    "ON pagopedidocli.idClientePay = pedidocliente.id_pedido AND pagopedidocli.idCancelacion = 0 AND pagopedidocli.idTurno = '"+idT+"'\n" +
+                    "INNER JOIN clientepedidos\n" +
+                    "ON pedidocliente.id_clienteP = clientepedidos.id_cliente)\n" +
+                    "UNION\n" +
+                    "(SELECT gastos_caja.id,gastos_caja.concepto,usersdcr.nickName,CONCAT(gastos_caja.fecha,', ',gastos_caja.hora),gastos_caja.monto,\n" +
+                    " 'Ingreso'\n" +
+                    "FROM gastos_caja\n" +
+                    "INNER JOIN rubroscaja\n" +
+                    "ON gastos_caja.idRubrocaja = rubroscaja.id AND rubroscaja.tipo = 'I'\n" +
+                    "INNER JOIN turnos\n" +
+                    "ON gastos_caja.idTurno = turnos.id AND  gastos_caja.idTurno = '"+idT+"'\n" +
+                    "INNER JOIN usersdcr\n" +
+                    "ON usersdcr.id_user = turnos.idusuario);";
             }
           }
           if(tipe.equals("pagoventapiso")){//OPCION pago de ventaspiso
@@ -2940,63 +2959,89 @@ return mat;
           
           if(tipe.equals("pagoflete")){//OPCION pago de fletes
               if(idT.isEmpty()){
-                sql = "SELECT pagoflete.id_pagoFlete,pagoflete.id_fleteEnv,pagoflete.fechaPayFlete,pagoflete.montoPayFl,\n" +
-                  "	pagoflete.notaPayFlete,modopago.nombrePay\n" +
-                  "FROM \n" +
-                  "	pagoflete\n" +
-                  "INNER JOIN \n" +
-                  "	modopago\n" +
-                  "ON\n" +
-                  "	pagoflete.modPay = modopago.cod_pago AND pagoflete.idCancelacion = 0 AND pagoflete.fechaPayFlete = '"+fech+"';";      
+                sql = "SELECT pagoflete.id_pagoFlete,pagoflete.id_fleteEnv,fletero.nombreF,\n" +
+                    "CONCAT(pagoflete.fechaPayFlete,', ',IF(pagoflete.horaPayFlete IS NULL,' --',pagoflete.horaPayFlete )) AS fec ,\n" +
+                    "pagoflete.montoPayFl, pagoflete.notaPayFlete\n" +
+                    "FROM pagoflete\n" +
+                    "INNER JOIN fleteenviado\n" +
+                    "ON pagoflete.id_fleteEnv = fleteenviado.id_fleteE AND pagoflete.idCancelacion = 0 AND pagoflete.fechaPayFlete = '"+fech+"'\n" +
+                    "INNER JOIN fletero\n" +
+                    "ON fleteenviado.id_FleteroE = fletero.id_Fletero;";      
             }else{
-              sql = "SELECT pagoflete.id_pagoFlete,pagoflete.id_fleteEnv,pagoflete.fechaPayFlete,pagoflete.montoPayFl,\n" +
-                "	pagoflete.notaPayFlete,modopago.nombrePay\n" +
-                "FROM \n" +
-                "	pagoflete\n" +
-                "INNER JOIN \n" +
-                "	modopago\n" +
-                "ON\n" +
-                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.idCancelacion = 0 AND pagoflete.idTurno = '"+idT+"';";      
+              sql = "SELECT pagoflete.id_pagoFlete,pagoflete.id_fleteEnv,fletero.nombreF,\n" +
+                    "CONCAT(pagoflete.fechaPayFlete,', ',IF(pagoflete.horaPayFlete IS NULL,' --',pagoflete.horaPayFlete )) AS fec ,\n" +
+                    "pagoflete.montoPayFl, pagoflete.notaPayFlete\n" +
+                    "FROM pagoflete\n" +
+                    "INNER JOIN fleteenviado\n" +
+                    "ON pagoflete.id_fleteEnv = fleteenviado.id_fleteE AND pagoflete.idCancelacion = 0 AND pagoflete.idTurno = '"+idT+"'\n" +
+                    "INNER JOIN fletero\n" +
+                    "ON fleteenviado.id_FleteroE = fletero.id_Fletero;";      
               }
           }
-          
+          //Apache Mahout, Apache Zookeeper, Apache Thrift, Apache Avro
           if(tipe.equals("pagarcompraprovee")){//OPCION pago de compra a proveedor
               if(idT.isEmpty()){
-                sql = "SELECT pagarcompraprovee.id_paycompra,pagarcompraprovee.num_compraProveed,pagarcompraprovee.fechpayProveed,pagarcompraprovee.montoPayProveed,\n" +
-                  "	pagarcompraprovee.notaPayProveed,modopago.nombrePay\n" +
-                  "FROM \n" +
-                  "	pagarcompraprovee\n" +
-                  "INNER JOIN \n" +
-                  "	modopago\n" +
-                  "ON\n" +
-                  "	pagarcompraprovee.modoPayProveed = modopago.cod_pago AND pagarcompraprovee.idCancelacion = 0 AND pagarcompraprovee.fechpayProveed = '"+fech+"';";      
+                sql = "SELECT pagarcompraprovee.id_paycompra,pagarcompraprovee.num_compraProveed,IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) AS won,\n" +
+                    " CONCAT(pagarcompraprovee.fechpayProveed,', ',IF(pagarcompraprovee.horaPayCompProov IS NULL,'--',pagarcompraprovee.horaPayCompProov)) AS fec,\n" +
+                    " pagarcompraprovee.montoPayProveed,\n" +
+                    " pagarcompraprovee.notaPayProveed\n" +
+                    "FROM pagarcompraprovee\n" +
+                    "INNER JOIN compraprooved\n" +
+                    "ON pagarcompraprovee.num_compraProveed = compraprooved.id_compraProve AND pagarcompraprovee.idCancelacion = 0\n" +
+                    " AND pagarcompraprovee.fechpayProveed = '"+fech+"'\n" +
+                    "INNER JOIN proveedor\n" +
+                    "ON compraprooved.id_ProveedorC = proveedor.id_Proveedor;";      
             }else{
-              sql = "SELECT pagarcompraprovee.id_paycompra,pagarcompraprovee.num_compraProveed,pagarcompraprovee.fechpayProveed,pagarcompraprovee.montoPayProveed,\n" +
-                "	pagarcompraprovee.notaPayProveed,modopago.nombrePay\n" +
-                "FROM \n" +
-                "	pagarcompraprovee\n" +
-                "INNER JOIN \n" +
-                "	modopago\n" +
-                "ON\n" +
-                "	pagarcompraprovee.modoPayProveed = modopago.cod_pago AND pagarcompraprovee.idCancelacion = 0 AND pagarcompraprovee.idTurno = '"+idT+"';";      
+              sql = "SELECT pagarcompraprovee.id_paycompra,pagarcompraprovee.num_compraProveed,IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) AS won,\n" +
+                    " CONCAT(pagarcompraprovee.fechpayProveed,', ',IF(pagarcompraprovee.horaPayCompProov IS NULL,'--',pagarcompraprovee.horaPayCompProov)) AS fec,\n" +
+                    " pagarcompraprovee.montoPayProveed,\n" +
+                    " pagarcompraprovee.notaPayProveed\n" +
+                    "FROM pagarcompraprovee\n" +
+                    "INNER JOIN compraprooved\n" +
+                    "ON pagarcompraprovee.num_compraProveed = compraprooved.id_compraProve AND pagarcompraprovee.idCancelacion = 0\n" +
+                    " AND pagarcompraprovee.idTurno = '"+idT+"'\n" +
+                    "INNER JOIN proveedor\n" +
+                    "ON compraprooved.id_ProveedorC = proveedor.id_Proveedor;";      
               }
           }
           
           if(tipe.equals("gastos_caja")){//OPCION gastos del dia
               if(idT.isEmpty()){
-                sql = "SELECT gastos_caja.id,CONCAT(gastos_caja.fecha,', ',gastos_caja.hora),gastos_caja.monto,\n" +
-                  "	gastos_caja.concepto,gastos_caja.idTurno\n" +
-                  "FROM \n" +
-                  "	gastos_caja\n" +
-                  " where\n" +
-                  "	gastos_caja.fecha = '"+fech+"';";      
+                sql = "(SELECT gastos_caja.id,CONCAT(gastos_caja.fecha,', ',gastos_caja.hora),gastos_caja.monto,\n" +
+                    " gastos_caja.concepto,usersdcr.nickName,'Gasto de caja'\n" +
+                    "FROM gastos_caja\n" +
+                    "INNER JOIN rubroscaja \n "+
+                    "ON gastos_caja.idRubrocaja = rubroscaja.id AND rubroscaja.tipo = 'E' \n"+                        
+                    "INNER JOIN turnos\n" +
+                    "ON gastos_caja.idTurno = turnos.id AND  gastos_caja.fecha = '"+fech+"'\n" +
+                    "INNER JOIN usersdcr\n" +
+                    "ON usersdcr.id_user = turnos.idusuario)\n" +
+                    "UNION\n" +
+                    "(SELECT creditomerca.num_credito,CONCAT(creditomerca.fechaPrestamo,', ',creditomerca.horaCredi),detallecreditproveed.costoCP,\n" +
+                    " creditomerca.notaPrest,proveedor.nombreP,'Prestamo proveedor'\n" +
+                    "FROM creditomerca\n" +
+                    "INNER JOIN detallecreditproveed\n" +
+                    "ON creditomerca.num_credito = detallecreditproveed.num_creditCP AND creditomerca.fechaPrestamo = '"+fech+"'\n" +
+                    "INNER JOIN proveedor \n" +
+                    "ON proveedor.id_Proveedor = creditomerca.id_ProveedorF);";      
             }else{
-                sql = "SELECT gastos_caja.id,CONCAT(gastos_caja.fecha,', ',gastos_caja.hora),gastos_caja.monto,\n" +
-                  "	gastos_caja.concepto,gastos_caja.idTurno\n" +
-                  "FROM \n" +
-                  "	gastos_caja\n" +
-                  " where\n" +
-                  "	gastos_caja.idTurno = '"+idT+"';";      
+                sql = "(SELECT gastos_caja.id,CONCAT(gastos_caja.fecha,', ',gastos_caja.hora),gastos_caja.monto,\n" +
+                    " gastos_caja.concepto,usersdcr.nickName,'Gasto de caja'\n" +
+                    "FROM gastos_caja\n" +
+                    "INNER JOIN rubroscaja \n "+
+                    "ON gastos_caja.idRubrocaja = rubroscaja.id AND rubroscaja.tipo = 'E' \n"+                        
+                    "INNER JOIN turnos\n" +
+                    "ON gastos_caja.idTurno = turnos.id AND  gastos_caja.idTurno = '"+idT+"'\n" +
+                    "INNER JOIN usersdcr\n" +
+                    "ON usersdcr.id_user = turnos.idusuario)\n" +
+                    "UNION\n" +
+                    "(SELECT creditomerca.num_credito,CONCAT(creditomerca.fechaPrestamo,', ',creditomerca.horaCredi),detallecreditproveed.costoCP,\n" +
+                    " creditomerca.notaPrest,proveedor.nombreP,'Prestamo proveedor'\n" +
+                    "FROM creditomerca\n" +
+                    "INNER JOIN detallecreditproveed\n" +
+                    "ON creditomerca.num_credito = detallecreditproveed.num_creditCP AND creditomerca.idTurno = '"+idT+"'\n" +
+                    "INNER JOIN proveedor \n" +
+                    "ON proveedor.id_Proveedor = creditomerca.id_ProveedorF);";      
               }          
           }
              int i =0,cantFilas=0, cont=1;

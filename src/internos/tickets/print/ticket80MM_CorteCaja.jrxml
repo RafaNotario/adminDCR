@@ -41,7 +41,21 @@ UNION
 UNION
 (SELECT 1,gastos_caja.concepto,gastos_caja.monto
 FROM gastos_caja
-WHERE idTurno = $P{fechCorte} OR date_format(fecha,'%Y-%m-%d') = $P{fechCorte})
+INNER JOIN rubroscaja
+ON gastos_caja.idRubrocaja = rubroscaja.id AND rubroscaja.tipo = 'E'
+AND (idTurno = $P{fechCorte} OR date_format(fecha,'%Y-%m-%d') = $P{fechCorte})
+)
+UNION
+(SELECT 0,'---Prestamo a proveedor---',0)
+UNION
+(SELECT 1, proveedor.nombreP,detallecreditproveed.costoCP
+FROM creditomerca
+INNER JOIN detallecreditproveed
+ON creditomerca.num_credito = detallecreditproveed.num_creditCP AND (creditomerca.idTurno = $P{fechCorte} 
+OR date_format(creditomerca.fechaPrestamo,'%Y-%m-%d') = $P{fechCorte})
+INNER JOIN proveedor
+ON creditomerca.id_ProveedorF = proveedor.id_Proveedor
+)
 ;]]>
 	</queryString>
 	<field name="numera" class="java.lang.Long"/>

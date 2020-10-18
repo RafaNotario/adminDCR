@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="16fb8db5-6789-4349-8d77-e37262af59c6">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="parameter1" class="java.lang.String"/>
+	<parameter name="numComp" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\adminDCR\\src\\internos\\tickets\\print\\"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[SELECT IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) as prov,productocal.nombreP as merca,
+		<![CDATA[(SELECT IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) as prov,productocal.nombreP as merca,
 relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,clientepedidos.nombre as cliente,
 (relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT,IF(compraprooved.statusCompra = 0,'Pendiente','Pagado') as pay
 FROM proveedor
 INNER JOIN compraprooved
 ON proveedor.id_Proveedor = compraprooved.id_ProveedorC
 INNER JOIN detailcompraprooved
-ON compraprooved.id_compraProve= detailcompraprooved.id_compraP AND compraprooved.fechaCompra = '2020-09-01'
+ON compraprooved.id_compraProve= detailcompraprooved.id_compraP AND compraprooved.fechaCompra = $P{parameter1}
 INNER JOIN relcomprapedido
 ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed
 INNER JOIN pedidocliente
@@ -20,16 +25,34 @@ INNER JOIN clientepedidos
 ON clientepedidos.id_cliente = pedidocliente.id_clienteP
 INNER JOIN productocal
 ON relcomprapedido.tipoMercanRel = productocal.codigo
-group by relcomprapedido.id_relacionCP;]]>
+group by relcomprapedido.id_relacionCP)
+UNION
+(select '---------------','----------',0,0.0,'----------',0.0,'-------------')
+UNION
+(SELECT IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) as prov,productocal.nombreP as merca,
+relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,clientepedidos.nombre as cliente,
+(relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT,IF(compraprooved.statusCompra = 0,'Pendiente','Pagado') as pay
+FROM proveedor
+INNER JOIN compraprooved
+ON proveedor.id_Proveedor = compraprooved.id_ProveedorC
+INNER JOIN detailcompraprooved
+ON compraprooved.id_compraProve= detailcompraprooved.id_compraP AND compraprooved.statAsign <> 0 AND
+	compraprooved.fechaCompra = DATE_SUB(STR_TO_DATE($P{parameter1},'%Y-%m-%d'),interval 1 day)
+INNER JOIN relcomprapedido
+ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed
+INNER JOIN pedidocliente
+ON pedidocliente.id_pedido = relcomprapedido.id_pedidoCli AND pedidocliente.fechaPedidio = $P{parameter1}
+INNER JOIN clientepedidos
+ON clientepedidos.id_cliente = pedidocliente.id_clienteP
+INNER JOIN productocal
+ON relcomprapedido.tipoMercanRel = productocal.codigo
+group by relcomprapedido.id_relacionCP);
+]]>
 	</queryString>
 	<field name="prov" class="java.lang.String"/>
 	<field name="merca" class="java.lang.String"/>
-	<field name="cantidadCajasRel" class="java.lang.Long">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="precioAjust" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="cantidadCajasRel" class="java.lang.Long"/>
+	<field name="precioAjust" class="java.math.BigDecimal"/>
 	<field name="cliente" class="java.lang.String"/>
 	<field name="TOT" class="java.math.BigDecimal"/>
 	<field name="pay" class="java.lang.String"/>
@@ -49,13 +72,13 @@ group by relcomprapedido.id_relacionCP;]]>
 				</staticText>
 				<staticText>
 					<reportElement x="160" y="44" width="218" height="20" forecolor="#000000" uuid="2c827455-74e8-48bb-88dd-b23cf4530ff0"/>
-					<textElement textAlignment="Center">
+					<textElement textAlignment="Left">
 						<font fontName="Arial Black" size="14"/>
 					</textElement>
 					<text><![CDATA[COMPRA A PROVEEDORES]]></text>
 				</staticText>
 				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement x="450" y="18" width="140" height="20" uuid="1a90da9f-9093-49df-b38b-ba63d5214f01"/>
+					<reportElement x="450" y="18" width="140" height="13" uuid="1a90da9f-9093-49df-b38b-ba63d5214f01"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 				</textField>
@@ -64,10 +87,38 @@ group by relcomprapedido.id_relacionCP;]]>
 					<imageExpression><![CDATA["C:\\adminDCR\\src\\image\\logojpgSLet.jpg"]]></imageExpression>
 				</image>
 				<staticText>
-					<reportElement x="490" y="38" width="100" height="20" uuid="29ba69e8-6b0a-4b89-8d45-853155f203b4"/>
+					<reportElement x="490" y="31" width="100" height="13" uuid="29ba69e8-6b0a-4b89-8d45-853155f203b4"/>
 					<textElement textAlignment="Right"/>
 					<text><![CDATA[Fecha de impresion]]></text>
 				</staticText>
+				<staticText>
+					<reportElement x="164" y="64" width="115" height="17" forecolor="#000000" uuid="fbbe0b07-dbf5-4b85-8ad7-ab8880a111fd"/>
+					<textElement textAlignment="Left">
+						<font fontName="Arial" size="14"/>
+					</textElement>
+					<text><![CDATA[Fecha de compra:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="164" y="80" width="115" height="17" forecolor="#000000" uuid="8941eccd-fd78-467a-a323-665823c7021b"/>
+					<textElement textAlignment="Left">
+						<font fontName="Arial" size="14"/>
+					</textElement>
+					<text><![CDATA[# de compras:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="279" y="64" width="100" height="17" uuid="9350ccd4-6b21-4ef5-9a2e-196c3ac8c204"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{parameter1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="279" y="81" width="100" height="17" uuid="4885f805-aaef-4eb7-b73c-b7af6240983a"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{numComp}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
@@ -192,10 +243,14 @@ group by relcomprapedido.id_relacionCP;]]>
 	</pageFooter>
 	<summary>
 		<band height="71" splitType="Stretch">
-			<staticText>
-				<reportElement x="238" y="32" width="100" height="20" uuid="d502c180-612b-40f3-84da-13589b636f07"/>
-				<text><![CDATA[PRUEBA ADMINDCR]]></text>
-			</staticText>
+			<subreport>
+				<reportElement x="1" y="0" width="571" height="71" uuid="02c99997-ac11-4335-b3c6-5fe5677c8395"/>
+				<subreportParameter name="paraminterno">
+					<subreportParameterExpression><![CDATA[$P{parameter1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "inerno_proveedores.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</summary>
 </jasperReport>

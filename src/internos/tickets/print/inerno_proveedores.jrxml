@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8e7b2054-0e4f-4d68-b453-816f24b7a3f3">
+	<parameter name="paraminterno" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT creditomerca.num_credito,CONCAT(creditomerca.fechaPrestamo,', ',creditomerca.horaCredi) AS fechan ,CONCAT(detallecreditproveed.cantidadCP,' x ',detallecreditproveed.costoCP) AS drog,
+		productocal.nombreP as prod,detallecreditproveed.costoCP*detallecreditproveed.cantidadCP AS mult,
+		creditomerca.notaPrest,proveedor.nombreP as prov
+FROM creditomerca
+INNER JOIN detallecreditproveed
+ON creditomerca.num_credito = detallecreditproveed.num_creditCP AND creditomerca.fechaPrestamo = $P{paraminterno}
+INNER JOIN proveedor 
+ON proveedor.id_Proveedor = creditomerca.id_ProveedorF
+INNER JOIN productocal
+ON detallecreditproveed.codigoProdCP = productocal.codigo;]]>
+	</queryString>
+	<field name="num_credito" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fechan" class="java.lang.String"/>
+	<field name="drog" class="java.lang.String"/>
+	<field name="prod" class="java.lang.String"/>
+	<field name="mult" class="java.math.BigDecimal"/>
+	<field name="notaPrest" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prov" class="java.lang.String"/>
+	<pageHeader>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="263" height="20" uuid="cdf43696-e9f5-4bfe-a50f-3ea0a9079dd3"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Prestamos realizados a proveedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="56" height="20" backcolor="#999999" uuid="8d062f4c-134c-4008-98d9-f469af03cdd3"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="56" y="20" width="125" height="20" backcolor="#999999" uuid="dcdf5489-b163-450f-9325-af7a64696edd"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="181" y="20" width="82" height="20" backcolor="#999999" uuid="4c6c0a7f-a5fa-4c9b-8d74-9f87160c64e5"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cant.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="263" y="20" width="106" height="20" backcolor="#999999" uuid="bc45b561-8eaf-47e1-9b5d-1168a8f97b36"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Prod.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="369" y="20" width="63" height="20" backcolor="#999999" uuid="aebf25e3-221b-4721-b233-7516bebbd0d6"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="432" y="20" width="85" height="20" backcolor="#999999" uuid="8cb0f906-72f6-41fc-b7cc-254226cd873d"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="56" height="20" uuid="5f8f9a7f-f330-418f-8b67-1c36432a71cf"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_credito}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="56" y="0" width="125" height="20" uuid="5aabae6a-c4fc-4156-befe-a52e7b83bc50"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fechan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="263" y="0" width="106" height="20" uuid="39c82a75-4d4b-4a41-b5d0-2a957d67aae3"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prod}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="181" y="0" width="82" height="20" uuid="25b2863c-eab8-471c-9f7a-6b9e2a03e1cc"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{drog}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="369" y="0" width="63" height="20" uuid="18184f4c-ec64-4445-9a9b-6b822396a305"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mult}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="432" y="0" width="100" height="20" uuid="3c29c937-b554-49b7-bdf5-ee4f834be7e5"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prov}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
