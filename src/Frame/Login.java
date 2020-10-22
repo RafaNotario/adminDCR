@@ -111,13 +111,13 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(238, 112, 82));
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(5, 72, 99));
-        jLabel1.setText("PASSWORD");
-        jpIngreso.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 110, 30));
+        jLabel1.setText("CONTRASEÑA");
+        jpIngreso.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 140, 30));
 
         jLabel3.setBackground(new java.awt.Color(238, 112, 82));
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(5, 72, 99));
-        jLabel3.setText("USER");
+        jLabel3.setText("USUARIO");
         jpIngreso.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 110, 30));
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N

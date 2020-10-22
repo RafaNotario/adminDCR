@@ -554,7 +554,7 @@ public class controladorCFP {
                     }
             }//finally catch
                 break;//case :proveedor
-            case "clientepedidos":  
+            case "clientepedidos":
                 SQL="UPDATE clientepedidos SET nombre=?,apellidos=?,localidad=?,status=?,fechaAlta=?,telefono=?,rfc=? WHERE id_cliente = '"+id+"' ";            
             try {
                 pps = cn.prepareStatement(SQL);
@@ -3742,7 +3742,7 @@ return mat;
             String SQL="",SQL2="";     
             switch(table){
                 case "pagarcompraprovee":
-                    SQL="INSERT INTO pagarcompraprovee (num_compraProveed,fechpayProveed,montoPayProveed,notaPayProveed,modoPayProveed) VALUES (?,?,?,?,?)";                    
+                    SQL="INSERT INTO pagarcompraprovee (num_compraProveed,fechpayProveed,montoPayProveed,notaPayProveed,modoPayProveed,horaPayCompProov,idTurno) VALUES (?,?,?,?,?,?,?)";                    
                 break;
                 case "pagoventapiso":
                     SQL ="INSERT INTO pagoventapiso (num_notaVP,fechaPayVP,montoVP,notaPayVP,method_payVP) VALUES(?,?,?,?,?)";
@@ -3764,6 +3764,9 @@ return mat;
                 pps.setString(3,datas.get(2));
                 pps.setString(4,datas.get(3));
                 pps.setString(5,datas.get(4));
+                pps.setString(6,datas.get(5));
+                pps.setString(7,datas.get(6));
+
                 pps.executeUpdate();
                 //JOptionPane.showMessageDialog(null, "Pago realizado correctamente");
             } catch (SQLException ex) {
@@ -4331,7 +4334,6 @@ pps = cn.prepareStatement(SQL);
                 Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
             }finally{
- //               System.out.println( "cierra conexion a la base de datos" );    
                 try {
                     if(pps != null) pps.close();                
                     if(cn !=null) cn.close();
@@ -4341,10 +4343,64 @@ pps = cn.prepareStatement(SQL);
             }//finally catch
 } //@end guardInCancelaciones
 
+     ///CODIGO PARA GUARDAR PEDIDO
+public void guardaUtilidades(List<String> param, int opc){
+     Connection cn = con2.conexion();
+            PreparedStatement pps=null;
+            String SQL="";        
+           if(opc == 0){////actualiza utilidad = 1 y guarda las  
+                SQL="INSERT INTO utilidadped (idPedidon,tipoMercan,utilidad,importon) VALUES (?,?,?,?)";                           
+            try {
+                pps = cn.prepareStatement(SQL);
+                pps.setString(1, param.get(0));//idPedido
+                pps.setString(2,param.get(1));//tipoMErcan
+                pps.setString(3,param.get(2));//Utilidad
+                pps.setString(4,param.get(3));//Importe utilidad
+                pps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "utilidad guardado correctamente.");
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+            }finally{
+                try {
+                    if(pps != null) pps.close();                
+                    if(cn !=null) cn.close();
+                    } catch (SQLException ex) {
+                     JOptionPane.showMessageDialog(null,ex.getMessage() );    
+                    }
+                }//finally catch
+           }
+           
+           if(opc == 1){
+           SQL="UPDATE utilidadped SET utilidad=?,importon=? WHERE idPedidon = '"+param.get(0)+"' AND tipoMercan = '"+param.get(1)+"'";            
+            try {
+                pps = cn.prepareStatement(SQL);
+                pps.setString(1, param.get(2));
+                pps.setString(2, param.get(3));
+                pps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "utilidad actualizada correctamente.");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+                
+            }finally{
+ //               System.out.println( "cierra conexion a la base de datos" );    
+                try {
+                    if(pps != null) pps.close();                
+                    if(cn !=null) cn.close();
+                    } catch (SQLException ex) {
+                      JOptionPane.showMessageDialog(null, ex.getMessage() );    
+                    }                
+            }//finally catch                
+               
+               
+           }
+} //guardaUtilidades
+     
 //Obtener el ultimo id de cancelaciones     
         public int getUltimCancelaciones(){
             Connection cn = con2.conexion();
-            int idTurno = -1;
+            int idTurno = 0;
             String sql = "";
             sql = "SELECT id FROM cancelaciones ORDER BY id DESC LIMIT 1; ";
             Statement st = null;
@@ -4358,7 +4414,7 @@ pps = cn.prepareStatement(SQL);
                     if(rs.getRow() > 0){
                         idTurno = rs.getInt(1);
                     }else{
-                         idTurno = -1;
+                         idTurno = 0;
                     }
                 }
             } catch (SQLException ex) {
@@ -4370,6 +4426,8 @@ pps = cn.prepareStatement(SQL);
                             System.err.println( ex.getMessage() );    
                         }
                     }
+            
+            
            return idTurno;
     }//@endgetUltimPagoarea
           

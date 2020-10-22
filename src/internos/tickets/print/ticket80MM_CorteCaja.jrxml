@@ -24,8 +24,16 @@ UNION
 (SELECT count(pagoventapiso.id_payVentaP) AS numera,'Pago venta de piso',sum(pagoventapiso.montoVP) AS totl
 FROM pagoventapiso
 WHERE pagoventapiso.idCancelacion = 0 AND (pagoventapiso.idTurno = $P{fechCorte} OR date_format(pagoventapiso.fechaPayVP,'%Y-%m-%d') = $P{fechCorte}))
-UNION 
-
+UNION
+(SELECT 0,'---- Ingreso de efectivo ----',0)
+UNION
+(SELECT 1,gastos_caja.concepto,gastos_caja.monto
+FROM gastos_caja
+INNER JOIN rubroscaja
+ON gastos_caja.idRubrocaja = rubroscaja.id AND rubroscaja.tipo = 'I'
+AND (idTurno = $P{fechCorte} OR date_format(fecha,'%Y-%m-%d') = $P{fechCorte})
+)
+UNION
 (SELECT 0,'----- Salidas $------',0)
 UNION 
 (SELECT count(pagoflete.id_pagoFlete) AS numera,'Pago de fletes',sum(pagoflete.montoPayFl) AS totl

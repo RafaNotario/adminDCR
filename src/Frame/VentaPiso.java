@@ -380,7 +380,9 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String var_id = txtidComp.getText(),//txtContadoRecibe,
+
+if(jPanContadoPay.isVisible()){
+            String var_id = txtidComp.getText(),//txtContadoRecibe,
                 var_fech = fn.getFecha(jDatePayFech),
                 var_cant = txtCantCobrar.getText(),
                 var_paga = txtContadoRecibe.getText(),//monto a abonar
@@ -391,8 +393,6 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
             BigDecimal amountOne = new BigDecimal(var_paga);//monto a cobrar
             BigDecimal amountTwo = new BigDecimal(var_abonos);//cantidad recivida
             BigDecimal amountThree = new BigDecimal(var_cant);
-if(jPanContadoPay.isVisible()){
-       //     JOptionPane.showMessageDialog(null,"Pago al contado");
        if(amountThree.compareTo(fn.getSum(amountOne, amountTwo)) >= 0){
             if(jRadContado.isSelected()){
                 if(var_paga.isEmpty()){
