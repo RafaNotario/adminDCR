@@ -27,6 +27,7 @@ import internos.tickets.print.Reportes;
 
 import controllers.altadeclientes.controladorCFP;
 import conexiones.db.ConexionDBOriginal;
+import controllers.altadeclientes.datesControl;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
@@ -63,13 +64,17 @@ public class interno1 extends javax.swing.JFrame {
     controladorCFP controlInserts = new controladorCFP();
     ConexionDBOriginal con2 = new ConexionDBOriginal();
     Reportes rP = new Reportes();
+    datesControl datCtrl = new datesControl();
 
     //** variables globales     ->netflix oss microservices
     String atribAltaCli = "";//variable para asignar el nombre de la tabla llenar de la base de datos
+    String buscarTurn ="0"; //BUSCAtURNO EN  REPORTES
+    
     List<String> conten = new ArrayList<String>();//lista para guardar el id de cada cleinte en crea pedido y en ventas piso
     List<String> idProducts = new ArrayList<String>();//lista para id de produvtod
     List<String> idProductsVent = new ArrayList<String>();//lista para id de productos venta
-
+    List<String> idCajeros = new ArrayList<String>();//lista para id de cajeros reportes
+            
     List<String> idProdPrest = new ArrayList<String>();//para productos prestamo
     List<String> idProoved = new ArrayList<String>();//para id_proveedores
     List<String> importes = new ArrayList<String>();//para importes de prestamo
@@ -98,16 +103,18 @@ public class interno1 extends javax.swing.JFrame {
     String[] cabEdoPed = {"FOLIO", "Compras Asignadas", "Pedidos Destinados", "Total de carga"};
 
     //cabeceras de tables del dia
-    String[] cabPaysDay = {"idR","#Pago", "Fecha", "Monto", "Nota", "Metodo"};
+    String[] cabPaysDay = {"idR","#Operacion", "Nombre", "Fecha", "Monto", "Nota"};
     String[] cabSalidDay = {"id", "Fecha", "Monto", "Nota", "Nombre","Concepto"};
     String[] cabMayAsignados = {"IdR", "Mayorista", "idC", "Fech"};
     String[] cabMayView = {"#Compra", "id", "Tipo", "Cantidad", "Costo", "Importe"};
     String[] cabMayViewcHECK = {"#Compra", "id", "idtype", "Tipo", "Cantidad", "Costo", "Importe", "Select", "A Asignar", "Asignados", "Disponibles"};
     String[] cabDetcompra = {"#IdRel", "Flete", "#Pedido", "Cliente", "Tipo", "Cantidad","$Unitario","Importe$"};
     String[] cabDetFlet = {"#IdRel", "Id_Pedido", "Id_Compra", "Proveedor", "Tipo", "Cantidad","$Unitario","Importe$"};
+    String[] cabAreasPays = {"# Ticket", "Hora", "Concepto", "Nombre", "Monto"};
     
     String[][] matLlenaPed = null;
     String[] inTurno = null;
+    String[] semanaAct = null;
     
     AgregaFlete aF;
     VentaPiso vP;
@@ -156,6 +163,7 @@ public class interno1 extends javax.swing.JFrame {
         //jBCancelVentaP.setMnemonic(KeyEvent.VK_F10);
         jPaNVentaPiso.setVisible(false);
         jPanBusqVentasPiso.setVisible(false);
+        
 //pane fletes;
         jLabLetreroFletes.setVisible(false);
         jPanCreaFletes.setVisible(false);
@@ -169,7 +177,9 @@ public class interno1 extends javax.swing.JFrame {
         AutoCompleteDecorator.decorate(jComboBox1);
 //panel pagos vista
         jDFechPays.setDate(cargafecha());
-
+//panel reportes
+        llenacombCajeros();
+        
         jCElijaProovedor.getEditor().getEditorComponent().addKeyListener(
                 new KeyAdapter() {
             @Override
@@ -305,6 +315,7 @@ public class interno1 extends javax.swing.JFrame {
         jButton33 = new javax.swing.JButton();
         jLabel154 = new javax.swing.JLabel();
         jLabIdCancel = new javax.swing.JLabel();
+        jLabParam2 = new javax.swing.JLabel();
         jDiaViewSobrinas = new javax.swing.JDialog();
         jLabel160 = new javax.swing.JLabel();
         jScrollPane24 = new javax.swing.JScrollPane();
@@ -314,6 +325,9 @@ public class interno1 extends javax.swing.JFrame {
         jLabel170 = new javax.swing.JLabel();
         jScrollPane36 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        jDialCalendarMantenim = new javax.swing.JDialog();
+        jCalendar1 = new com.toedter.calendar.JCalendar();
+        jButton42 = new javax.swing.JButton();
         jPanCabezera = new javax.swing.JPanel();
         jLabel52 = new javax.swing.JLabel();
         jTextField17 = new javax.swing.JTextField();
@@ -549,6 +563,7 @@ public class interno1 extends javax.swing.JFrame {
         jTabFletesDia = new javax.swing.JTable();
         jLabel93 = new javax.swing.JLabel();
         jButton20 = new javax.swing.JButton();
+        jLabContaFletes = new javax.swing.JLabel();
         jPanHistorFletes = new javax.swing.JPanel();
         jScrollPane20 = new javax.swing.JScrollPane();
         jTablefiltrosBusqflete = new javax.swing.JTable();
@@ -730,6 +745,19 @@ public class interno1 extends javax.swing.JFrame {
         jLabel168 = new javax.swing.JLabel();
         jCheckBox2 = new javax.swing.JCheckBox();
         jPanel7 = new javax.swing.JPanel();
+        jSplitPane2 = new javax.swing.JSplitPane();
+        jPanel10 = new javax.swing.JPanel();
+        jScrollPane37 = new javax.swing.JScrollPane();
+        jTable4 = new javax.swing.JTable();
+        jPanel11 = new javax.swing.JPanel();
+        jScrollPane38 = new javax.swing.JScrollPane();
+        jTable5 = new javax.swing.JTable();
+        jLabel178 = new javax.swing.JLabel();
+        jCmBoxIdCancel = new javax.swing.JComboBox<>();
+        jButton38 = new javax.swing.JButton();
+        jButton40 = new javax.swing.JButton();
+        jLabel179 = new javax.swing.JLabel();
+        jLabTurnCancel = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
 
@@ -1502,6 +1530,9 @@ public class interno1 extends javax.swing.JFrame {
         jLabIdCancel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabIdCancel.setText("--");
 
+        jLabParam2.setText("--");
+        jLabParam2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
         javax.swing.GroupLayout jDialCancelacionesLayout = new javax.swing.GroupLayout(jDialCancelaciones.getContentPane());
         jDialCancelaciones.getContentPane().setLayout(jDialCancelacionesLayout);
         jDialCancelacionesLayout.setHorizontalGroup(
@@ -1524,6 +1555,8 @@ public class interno1 extends javax.swing.JFrame {
                                 .addComponent(jButton32, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                                 .addGap(23, 23, 23))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialCancelacionesLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabParam2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel154)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1537,7 +1570,8 @@ public class interno1 extends javax.swing.JFrame {
                 .addGroup(jDialCancelacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel152, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
                     .addComponent(jLabel154, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabIdCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabIdCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabParam2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(15, 15, 15)
                 .addComponent(txtCancelTick, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -1711,6 +1745,48 @@ public class interno1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton35, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(25, 25, 25))
+        );
+
+        jDialCalendarMantenim.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jDialCalendarMantenim.setTitle("Elija semana");
+        jDialCalendarMantenim.setResizable(false);
+        jDialCalendarMantenim.setSize(new java.awt.Dimension(450, 300));
+        jDialCalendarMantenim.setType(java.awt.Window.Type.UTILITY);
+
+        jCalendar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jCalendar1.setDecorationBordersVisible(true);
+        jCalendar1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+
+        jButton42.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton42.setText("Seleccionar");
+        jButton42.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton42ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jDialCalendarMantenimLayout = new javax.swing.GroupLayout(jDialCalendarMantenim.getContentPane());
+        jDialCalendarMantenim.getContentPane().setLayout(jDialCalendarMantenimLayout);
+        jDialCalendarMantenimLayout.setHorizontalGroup(
+            jDialCalendarMantenimLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialCalendarMantenimLayout.createSequentialGroup()
+                .addGroup(jDialCalendarMantenimLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDialCalendarMantenimLayout.createSequentialGroup()
+                        .addGap(144, 144, 144)
+                        .addComponent(jButton42, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jDialCalendarMantenimLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+        jDialCalendarMantenimLayout.setVerticalGroup(
+            jDialCalendarMantenimLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialCalendarMantenimLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jCalendar1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(jButton42, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -3859,7 +3935,7 @@ public class interno1 extends javax.swing.JFrame {
             }
         });
 
-        jLayerFletes.setBackground(new java.awt.Color(153, 255, 153));
+        jLayerFletes.setBackground(new java.awt.Color(240, 240, 240));
         jLayerFletes.setOpaque(true);
         jLayerFletes.setPreferredSize(new java.awt.Dimension(1600, 800));
 
@@ -4049,42 +4125,38 @@ public class interno1 extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel89, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtFolioFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabLetreroFletes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel92, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jRPagadopFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jRPendFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jRPendFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFolioFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanAdminist1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel90, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtChoferFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel101, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButAltasActualiza1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanAdminist1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCargaFlet, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel102, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jLabel90, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtChoferFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel101, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButAltasActualiza1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtCargaFlet, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel102, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel91, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNotaFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNotaFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanAdminist1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jButAltasElimina1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanAdminist1Layout.createSequentialGroup()
                         .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel87, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtUnidFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtUnidFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, 0)
                         .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanAdminist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtCostoFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtCostoFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel88, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jScrollPane19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -4123,6 +4195,12 @@ public class interno1 extends javax.swing.JFrame {
             }
         });
 
+        jLabContaFletes.setFont(new java.awt.Font("Tahoma", 3, 16)); // NOI18N
+        jLabContaFletes.setForeground(new java.awt.Color(0, 0, 204));
+        jLabContaFletes.setText("0");
+        jLabContaFletes.setToolTipText("Muestra el numero de fletes en la tabla");
+        jLabContaFletes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
         javax.swing.GroupLayout jPanCreaFletesLayout = new javax.swing.GroupLayout(jPanCreaFletes);
         jPanCreaFletes.setLayout(jPanCreaFletesLayout);
         jPanCreaFletesLayout.setHorizontalGroup(
@@ -4131,6 +4209,10 @@ public class interno1 extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addComponent(jPanAdminist1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(200, 200, 200))
+            .addGroup(jPanCreaFletesLayout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(jScrollPane19)
+                .addGap(100, 100, 100))
             .addGroup(jPanCreaFletesLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(jPanCreaFletesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4146,15 +4228,11 @@ public class interno1 extends javax.swing.JFrame {
                 .addComponent(jButton20)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanCreaFletesLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(jPanCreaFletesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanCreaFletesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane19))
-                    .addGroup(jPanCreaFletesLayout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(300, 300, 300)))
-                .addGap(100, 100, 100))
+                .addGap(31, 31, 31)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabContaFletes, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanCreaFletesLayout.setVerticalGroup(
             jPanCreaFletesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4162,16 +4240,18 @@ public class interno1 extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(jPanCreaFletesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel93, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jCBAltasFletes)
+                    .addComponent(jCBAltasFletes, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel86, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jDFechCreaFlete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jDFechCreaFlete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanAdminist1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanCreaFletesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabContaFletes))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane19, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                .addComponent(jScrollPane19, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
                 .addGap(50, 50, 50))
         );
 
@@ -4324,7 +4404,7 @@ public class interno1 extends javax.swing.JFrame {
                                 .addComponent(jLabel28)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel103, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 158, Short.MAX_VALUE)))
+                        .addGap(0, 387, Short.MAX_VALUE)))
                 .addGap(54, 54, 54))
         );
         jPanHistorFletesLayout.setVerticalGroup(
@@ -5676,7 +5756,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jLabTotPC)
                         .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabPed3))
-                .addComponent(jScrollPane28, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .addComponent(jScrollPane28, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabPed5)
@@ -5686,7 +5766,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jLabTotPP)
                         .addComponent(jButton27, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane30, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addComponent(jScrollPane30, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -5696,7 +5776,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jLabel149)
                         .addComponent(jLabTotVP)
                         .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addComponent(jScrollPane21, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .addComponent(jScrollPane21, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                 .addGap(15, 15, 15))
         );
 
@@ -5836,7 +5916,6 @@ public class interno1 extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane31, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabPed7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -5849,30 +5928,33 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jButton30)
                         .addGap(0, 0, 0)
                         .addComponent(jButton24))
-                    .addComponent(jScrollPane22, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabPed6)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jLabCountCP)
-                            .addGap(29, 29, 29)
-                            .addComponent(jLabel156)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabTotCP, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jButton31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabPed1)
-                            .addGap(18, 18, 18)
-                            .addComponent(jLabcountPF)
-                            .addGap(113, 113, 113)
-                            .addComponent(jLabel153)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabTotPF, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(jScrollPane29, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabPed6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabCountCP)
+                                .addGap(29, 29, 29)
+                                .addComponent(jLabel156)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabTotCP, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton31))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabPed1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabcountPF)
+                                .addGap(113, 113, 113)
+                                .addComponent(jLabel153)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabTotPF, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton29))
+                            .addComponent(jScrollPane29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(4, 4, 4)))
+                .addGap(22, 22, 22))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5885,7 +5967,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jLabTotPF)
                         .addComponent(jButton29, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane29, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(jScrollPane29, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabPed6, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -5893,7 +5975,7 @@ public class interno1 extends javax.swing.JFrame {
                     .addComponent(jLabel156)
                     .addComponent(jLabTotCP)
                     .addComponent(jButton31, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addComponent(jScrollPane31, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(jScrollPane31, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabPed7, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -5902,7 +5984,7 @@ public class interno1 extends javax.swing.JFrame {
                     .addComponent(jLabTotGast)
                     .addComponent(jButton24, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton30, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addComponent(jScrollPane22, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                .addComponent(jScrollPane22, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
                 .addGap(15, 15, 15))
         );
 
@@ -6015,15 +6097,151 @@ public class interno1 extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Corte del día", new javax.swing.ImageIcon(getClass().getResource("/image/caja-registradora.png")), ReportDay); // NOI18N
 
+        jSplitPane2.setDividerLocation(650);
+        jSplitPane2.setResizeWeight(0.5);
+
+        jTable4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable4.setRowHeight(25);
+        jTable4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable4MouseClicked(evt);
+            }
+        });
+        jScrollPane37.setViewportView(jTable4);
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane37, javax.swing.GroupLayout.DEFAULT_SIZE, 635, Short.MAX_VALUE)
+                .addGap(4, 4, 4))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane37, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                .addGap(127, 127, 127))
+        );
+
+        jSplitPane2.setLeftComponent(jPanel10);
+
+        jTable5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable5.setRowHeight(25);
+        jScrollPane38.setViewportView(jTable5);
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane38, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane38, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                .addGap(130, 130, 130))
+        );
+
+        jSplitPane2.setRightComponent(jPanel11);
+
+        jLabel178.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel178.setText("Cuenta:");
+
+        jCmBoxIdCancel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jCmBoxIdCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCmBoxIdCancelActionPerformed(evt);
+            }
+        });
+
+        jButton38.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
+        jButton38.setText("Esta Semana");
+        jButton38.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton38ActionPerformed(evt);
+            }
+        });
+
+        jButton40.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
+        jButton40.setText("Otra Semana");
+        jButton40.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton40ActionPerformed(evt);
+            }
+        });
+
+        jLabel179.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel179.setText("Turno:");
+
+        jLabTurnCancel.setFont(new java.awt.Font("Tahoma", 3, 16)); // NOI18N
+        jLabTurnCancel.setText("--");
+        jLabTurnCancel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1590, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel178, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCmBoxIdCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton38, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton40, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66)
+                        .addComponent(jLabel179, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabTurnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(282, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 760, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel178, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCmBoxIdCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton38, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addComponent(jButton40, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addComponent(jLabel179, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabTurnCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(158, 158, 158))
         );
 
         jTabbedPane1.addTab("Cancelaciones", new javax.swing.ImageIcon(getClass().getResource("/image/exit.png")), jPanel7); // NOI18N
@@ -6036,7 +6254,7 @@ public class interno1 extends javax.swing.JFrame {
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 760, Short.MAX_VALUE)
+            .addGap(0, 809, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Ingresos", new javax.swing.ImageIcon(getClass().getResource("/image/nomina.png")), jPanel8); // NOI18N
@@ -6049,7 +6267,7 @@ public class interno1 extends javax.swing.JFrame {
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 760, Short.MAX_VALUE)
+            .addGap(0, 809, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Egresos", new javax.swing.ImageIcon(getClass().getResource("/image/pays.png")), jPanel9); // NOI18N
@@ -7147,7 +7365,7 @@ public class interno1 extends javax.swing.JFrame {
                 dataLsi.add(jLabTurno.getText());
                 
                 controlInserts.guardaPayCompraContrl(dataLsi, "pagarcompraprovee");
-                controlInserts.actualizaDataC(numC, "compraprooved");
+                controlInserts.actualizaDataC(numC, "compraprooved",1);
             }
 
         } else {
@@ -7394,7 +7612,6 @@ public class interno1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jTabDescVentaPMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabDescVentaPMousePressed
-
         String total = txtTotalVentaPiso.getText(),
                 restar = jTabDescVentaP.getValueAt(jTabDescVentaP.getSelectedRow(), 4).toString();
         BigDecimal amountOne = new BigDecimal(total);//monto a cobrar
@@ -7402,7 +7619,6 @@ public class interno1 extends javax.swing.JFrame {
         txtTotalVentaPiso.setText(fn.getDifference(amountOne, amountTwo).toString());
         DefaultTableModel dtmDel = (DefaultTableModel) jTabDescVentaP.getModel(); //TableProducto es el nombre de mi tabla ;)
         dtmDel.removeRow(jTabDescVentaP.getSelectedRow());
-
     }//GEN-LAST:event_jTabDescVentaPMousePressed
 
     private void jCombOpcBusqVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCombOpcBusqVentaActionPerformed
@@ -8867,7 +9083,8 @@ public class interno1 extends javax.swing.JFrame {
                String[] arregCan = new String[6];
                 String fech = fn.setDateActual(),
                 ora = fn.getHour(),
-                mostTic = jLabIdCancel.getText();
+                mostTic = jLabIdCancel.getText(),
+                 paramPaynum = jLabParam2.getText();//numero de pago
                 int ultCanc = controlInserts.getUltimCancelaciones();
                 
                 arregCan[0] = Integer.toString((ultCanc+1));
@@ -8881,10 +9098,15 @@ public class interno1 extends javax.swing.JFrame {
                 case "Cancelar pago de pedido de cliente":
                     controlInserts.guardInCancelaciones(arregCan);
                     controlInserts.f5CancelTypesAll("pagopedidocli","idCancelacion",mostTic,arregCan[0]);
+// Si se cancela un pago se da poor hecho que siempre va a actualizar a pendiente = 0
+
+                    controlInserts.actualizaDataC(paramPaynum,"pedidocliente",0);
                 break;
                 case "Cancelar pago de prestamo a proveedor":
                     controlInserts.guardInCancelaciones(arregCan);
                     controlInserts.f5CancelTypesAll("pagocreditprooved","idCancelacion",mostTic,arregCan[0]);
+                    
+                    controlInserts.actualizaDataC(paramPaynum,"creditomerca",0);
                 break;
                 case "Cancelar pago de venta de piso":
                     controlInserts.guardInCancelaciones(arregCan);
@@ -8893,10 +9115,15 @@ public class interno1 extends javax.swing.JFrame {
                 case "Cancelar pago flete":
                     controlInserts.guardInCancelaciones(arregCan);
                     controlInserts.f5CancelTypesAll("pagoflete","idCancelacion",mostTic,arregCan[0]);
+                    
+                    controlInserts.actualizaDataC(paramPaynum,"fleteenviado",0);
+                    
                 break;
                 case "Cancelar pago de  compra a proveedor":
                     controlInserts.guardInCancelaciones(arregCan);
                     controlInserts.f5CancelTypesAll("pagarcompraprovee","idCancelacion",mostTic,arregCan[0]);
+                    
+                    controlInserts.actualizaDataC(paramPaynum,"compraprooved",0);
                 break;
                case "Cancelar ingreso de efectivo":
                     controlInserts.guardInCancelaciones(arregCan);
@@ -8948,9 +9175,14 @@ public class interno1 extends javax.swing.JFrame {
     private void jButton30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton30ActionPerformed
          int fila = jTabGastosDias.getSelectedRow();
                 if(fila >= 0){
-                    String mostTic = jTabGastosDias.getValueAt(fila, 0).toString();
+                    String mostTic = jTabGastosDias.getValueAt(fila, 0).toString(), quees = "";
                     if(!mostTic.equals("NO DATA") ){
-                        controlInserts.elimaRow("gastos_caja","id",mostTic); 
+                        quees = jTabGastosDias.getValueAt(fila, 5).toString();
+                        if(quees.equals("Gasto de caja")){
+                            controlInserts.elimaRow("gastos_caja","id",mostTic); 
+                        }else{
+                            controlInserts.elimaRow("creditomerca","num_credito",mostTic); 
+                        }
                         jButFleteGuardar1.doClick();
                     }else{
                         JOptionPane.showMessageDialog(null, "No existe gasto de turno");                        
@@ -9117,6 +9349,195 @@ public class interno1 extends javax.swing.JFrame {
     private void jCheckbpAGADOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckbpAGADOActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckbpAGADOActionPerformed
+
+    private void jTable4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable4MouseClicked
+        if(evt.getClickCount() > 1){
+            int numTurn = jTable4.getSelectedRow();
+            if(numTurn > -1){
+                buscarTurn = jTable4.getValueAt(numTurn, 0).toString();
+                jLabTurnCancel.setText(buscarTurn);
+                String[][] mat = controlInserts.matrizgetTicketsDiaCancel("",buscarTurn);
+                jTable5.setModel(new TModel(mat, cabAreasPays));
+            }else{
+                JOptionPane.showMessageDialog(null, "Debe elegir un Turno");
+            }
+        }
+
+    }//GEN-LAST:event_jTable4MouseClicked
+
+    private void jButton38ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton38ActionPerformed
+        int getElig = jCmBoxIdCancel.getSelectedIndex();
+        String idUser = "";
+        semanaAct = controlInserts.getSemanTableAct(fn.setDateActual());
+
+        if(getElig > -1){
+            if(getElig == 0){
+                getIntervalTurns2(1,"",semanaAct[3],semanaAct[4]);//opc,idUser,fech1,fech2
+            }
+            if(getElig > 0){
+                idUser = idCajeros.get(getElig - 1);
+                           System.err.println("Eligio user turno cancel : "+ idUser);
+                getIntervalTurns2(1,idUser,semanaAct[3],semanaAct[4]);//opc,idUser,fech1,fech2
+            }
+        }
+    }//GEN-LAST:event_jButton38ActionPerformed
+
+    private void jButton40ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton40ActionPerformed
+        jDialCalendarMantenim.setLocationRelativeTo(this);
+        jDialCalendarMantenim.setVisible(true);
+        jDialCalendarMantenim.setEnabled(true);
+        jDialCalendarMantenim.setTitle("Cancelaciones");
+    }//GEN-LAST:event_jButton40ActionPerformed
+
+    private void jCmBoxIdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmBoxIdCancelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCmBoxIdCancelActionPerformed
+
+    private void jButton42ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton42ActionPerformed
+        String var = datCtrl.getFechaCal(jCalendar1),
+        tittol = jDialCalendarMantenim.getTitle()
+        ;
+        int subRbro = -1;
+        semanaAct = controlInserts.getSemanTableAct(var);
+ /*       if(tittol.equals("Corte de caja")){
+            int getElig = jCmbBCajeros.getSelectedIndex();
+            String idUser = "";
+            if(getElig > -1){
+                if(getElig == 0){
+                    getIntervalTurns(1,"",semanaAct[3],semanaAct[4]);//opc,idUser,fech1,fech2
+                }
+                if(getElig > 0){
+                    idUser = idCajeros.get(getElig - 1);
+                    System.err.println("Eligio user turno : "+ idUser);
+                    getIntervalTurns(1,idUser,semanaAct[3],semanaAct[4]);//opc,idUser,fech1,fech2
+                }
+            }
+        }   */
+
+        if(tittol.equals("Cancelaciones")){
+            int getElig = jCmBoxIdCancel.getSelectedIndex();
+            String idUser ="";
+            if(getElig > -1){
+                if(getElig == 0){
+                    getIntervalTurns2(1,"",semanaAct[3],semanaAct[4]);//opc,idUser,fech1,fech2
+                }
+                if(getElig > 0){
+                    idUser = idCajeros.get(getElig - 1);
+                    System.err.println("Eligio user turno Cancel : "+ idUser);
+                    getIntervalTurns2(1,idUser,semanaAct[3],semanaAct[4]);//opc,idUser,fech1,fech2
+                }
+            }
+        }
+
+        /*
+        if(tittol.equals("Ingresos")){
+            int opc = jCBoxEsIngreso.getSelectedIndex();
+            jLabLetrero.setText("Semana "+semanaAct[2]+" : del "+semanaAct[3]+" al "+semanaAct[4]);
+
+            switch(opc){
+                case 0 ://Ingreso ver todos
+                getIntervalIngresos(opc,"",semanaAct[3],semanaAct[4]);//envia opcion,subopcion,lapso de semanas
+                jLabel18.setText(sumCorteCajFechonas(semanaAct[3],semanaAct[4]));
+                break;
+                case 1 ://areas
+                subRbro = jCBoxEsRubroDet.getSelectedIndex();
+                if(subRbro == 0){
+                    getIntervalIngresos(opc,"",semanaAct[3],semanaAct[4]);
+                    BigDecimal totAreas = new BigDecimal(func.totalLapsoFechas(0,"",semanaAct[3],semanaAct[4]));
+                    jLabel18.setText(totAreas.toString());
+                }else{
+                    getIntervalIngresos(opc,Integer.toString((subRbro + 1)),semanaAct[3],semanaAct[4]);
+                    BigDecimal totAreas = new BigDecimal(func.totalLapsoFechas(0,Integer.toString((subRbro + 1)),semanaAct[3],semanaAct[4]));
+                    jLabel18.setText(totAreas.toString());
+                }
+                break;
+                case 2 ://ambulantes
+                subRbro = jCBoxEsRubroDet.getSelectedIndex();
+                if(subRbro == 0){
+                    getIntervalIngresos(opc,"",semanaAct[3],semanaAct[4]);
+                    BigDecimal totambs = new BigDecimal(func.totalLapsoFechas(1,"",semanaAct[3],semanaAct[4]));
+                    jLabel18.setText(totambs.toString());
+                }else{
+                    if(subRbro == 1)
+                    subRbro=6;//semana ambulantes
+                    if(subRbro == 2)
+                    subRbro=7;//Resguardo ambulantes
+                    if(subRbro == 3)
+                    subRbro=8;//Inscripciones ambulantes
+                    getIntervalIngresos(opc,Integer.toString(subRbro),semanaAct[3],semanaAct[4]);
+                    BigDecimal totambs = new BigDecimal(func.totalLapsoFechas(1,Integer.toString(subRbro),semanaAct[3],semanaAct[4]));
+                    jLabel18.setText(totambs.toString());
+                }
+                break;
+                case 3 :// cargadores
+                subRbro = jCBoxEsRubroDet.getSelectedIndex();
+                if(subRbro == 0){
+                    getIntervalIngresos(opc,"",semanaAct[3],semanaAct[4]);
+                    BigDecimal totcarg = new BigDecimal(func.totalLapsoFechas(2,"",semanaAct[3],semanaAct[4]));
+                    BigDecimal totcarg2 = new BigDecimal(func.totalLapsoFechas(3,"",semanaAct[3],semanaAct[4]));
+                    BigDecimal totcargAll = func.getSum(totcarg2, totcarg);
+                    jLabel18.setText(totcargAll.toString());
+                }else{
+                    if(subRbro == 1){
+                        subRbro=11;//semana cargadores
+                        BigDecimal totcarg = new BigDecimal(func.totalLapsoFechas(2,Integer.toString(subRbro),semanaAct[3],semanaAct[4]));
+                        jLabel18.setText(totcarg.toString());
+                    }
+                    if(subRbro == 2){
+                        subRbro=8;//8,9,10 -> inscripcion cargadores
+                        BigDecimal totcarg = new BigDecimal(func.totalLapsoFechas(2,Integer.toString(subRbro),semanaAct[3],semanaAct[4]));
+                        jLabel18.setText(totcarg.toString());
+                    }
+                    if(subRbro == 3){
+                        subRbro=12;//Renta  cargadores
+                        BigDecimal totcarg2 = new BigDecimal(func.totalLapsoFechas(3,"",semanaAct[3],semanaAct[4]));
+                        jLabel18.setText(totcarg2.toString());
+                    }
+                    getIntervalIngresos(opc,Integer.toString(subRbro),semanaAct[3],semanaAct[4]);
+                }
+                break;
+                case 4 ://infracciones
+                getIntervalIngresos(opc,"",semanaAct[3],semanaAct[4]);
+                BigDecimal totInfrac = new BigDecimal(func.totalLapsoFechas(4,"",semanaAct[3],semanaAct[4]));
+                jLabel18.setText(totInfrac.toString());
+                break;
+                case 5 ://otros_venta
+                subRbro = jCBoxEsRubroDet.getSelectedIndex();
+                if(subRbro == 0){
+                    getIntervalIngresos(opc,"",semanaAct[3],semanaAct[4]);
+                    BigDecimal totIOthers = new BigDecimal(func.totalLapsoFechas(5,"",semanaAct[3],semanaAct[4]));
+                    jLabel18.setText(totIOthers.toString());
+                }else{
+                    getIntervalIngresos(opc,Integer.toString(subRbro),semanaAct[3],semanaAct[4]);
+                    BigDecimal totIOthers = new BigDecimal(func.totalLapsoFechas(5,Integer.toString(subRbro),semanaAct[3],semanaAct[4]));
+                    jLabel18.setText(totIOthers.toString());
+                }
+                break;
+            };
+            jLabel17.setText(Integer.toString(jTabViewIngresosAll.getRowCount()));
+        } */ //****INGRESOSO
+
+    /*    
+        if(tittol.equals("Egresos")){
+            int opc = jCmBoxEgresos.getSelectedIndex();
+            int idRibro = -1;
+            jLabel8.setText("Semana "+semanaAct[2]+" : del "+semanaAct[3]+" al "+semanaAct[4]);
+
+            if(opc == 0){
+                getIntervalEgresos(opc,semanaAct[3],semanaAct[4]);
+                jLabTOTEGRESOS.setText(getTOTALEGRESOS(opc,semanaAct[3],semanaAct[4]));
+            }
+            if(opc > 0){
+                idRibro =Integer.parseInt(idGastosEg.get(opc-1));
+
+                getIntervalEgresos(idRibro,semanaAct[3],semanaAct[4]);
+                jLabTOTEGRESOS.setText(getTOTALEGRESOS(idRibro,semanaAct[3],semanaAct[4]));
+            }
+            jLabel10.setText(Integer.toString(jTable6.getRowCount()));
+        }
+        */
+        jDialCalendarMantenim.dispose();
+    }//GEN-LAST:event_jButton42ActionPerformed
 
     public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("image/icons8_customer_32px_1.png"));
@@ -10130,6 +10551,8 @@ public class interno1 extends javax.swing.JFrame {
                 System.err.println(ex.getMessage());
             }
         }
+        
+        jLabContaFletes.setText(Integer.toString(jTabFletesDia.getRowCount()));
     }//termina mostrartablaFletes
 //´MOSTRAR TABLA DE FLETES ASIGN DEL DIA
 
@@ -10287,9 +10710,9 @@ public class interno1 extends javax.swing.JFrame {
             jTabGastosDias.setModel(new TModel(mat3, cabSalidDay));            
         }
         
-        jTabGastosDias.getColumnModel().getColumn(0).setMaxWidth(0);
-        jTabGastosDias.getColumnModel().getColumn(0).setMinWidth(0);
-        jTabGastosDias.getColumnModel().getColumn(0).setPreferredWidth(0);
+        jTabGastosDias.getColumnModel().getColumn(0).setMaxWidth(75);
+        jTabGastosDias.getColumnModel().getColumn(0).setMinWidth(50);
+        jTabGastosDias.getColumnModel().getColumn(0).setPreferredWidth(150);
     }
     
     private void rellenaInformDay(){
@@ -10312,7 +10735,7 @@ public class interno1 extends javax.swing.JFrame {
        if(pedidoC.equals("NO DATA")){
             jLabTotPP.setText("0.0");
         }else{
-            jLabTotPP.setText(totalon(jTabPayPrestamosProv, 3));            
+            jLabTotPP.setText(totalon(jTabPayPrestamosProv, 4));            
         }
               //tablapago ventas de piso
         pedidoC = jTabVentPisoPays.getValueAt(0, 0).toString();
@@ -10530,7 +10953,6 @@ public class interno1 extends javax.swing.JFrame {
 
             coloreB.clear();//limpia ArrayList de filas que cumplaen condicion
         } else {
-
             jLabPed.setText("No hay pedidos del día");
         }
     }//Fin cargaPedidosDia
@@ -10762,14 +11184,124 @@ public class interno1 extends javax.swing.JFrame {
                     jDialCancelaciones.setTitle(param);
                     txtCancelTick.setText("");
                     jLabIdCancel.setText(tab.getValueAt(var, 0).toString());
+//parametro de # de pago
+                    jLabParam2.setText(tab.getValueAt(var, 1).toString());
                 }else{
                     JOptionPane.showMessageDialog(null,"Debe elegir una fila de la tabla");
                 }
           }
  
-          private void cancelPays(){
-              
-          }
+/****CODIGO PARA Reportes Turnos*/
+    private void llenacombCajeros(){
+            Connection cn = con2.conexion();
+            idCajeros.clear();
+            jCmBoxIdCancel.removeAllItems();
+            jCmBoxIdCancel.addItem("Todos"); 
+            
+            String consul = "SELECT id_user, nombreUser from usersdcr  ORDER BY nombreUser";
+            Statement st = null;
+            ResultSet rs = null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(consul);
+                while (rs.next()) {
+                    idCajeros.add(rs.getString(1));
+                    jCmBoxIdCancel.addItem(rs.getString(2));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    if (st != null) {
+                        st.close();
+                    }
+                    if (cn != null) {
+                        cn.close();
+                    }
+                } catch (SQLException ex) {
+                    System.err.println(ex.getMessage());
+                }
+            }
+    }
+    
+              //funcion para busqueda automatica de otros conceptos
+        void getIntervalTurns2(int opc, String idUsers,String fech1,String fech2){
+                Connection cn = con2.conexion();
+                DefaultTableModel modelo = new DefaultTableModel()
+                { 
+                    @Override
+                    public boolean isCellEditable (int fila, int columna) {
+                        return false;
+                    }
+                };
+                String consul="";
+                if(opc == 0){
+                    consul ="SELECT  turnos.id,usersdcr.nombreUser,turnos.finicial,turnos.ffinal\n" +
+                            "FROM turnos\n" +
+                            "INNER JOIN usersdcr\n" +
+                            "ON turnos.idusuario = usersdcr.id_user AND turnos.finicial BETWEEN (SELECT semanas.finicial FROM semanas WHERE CURDATE() BETWEEN date(finicial) AND date(ffinal) )\n" +
+                            "AND (SELECT semanas.ffinal FROM semanas WHERE CURDATE() BETWEEN date(finicial) AND date(ffinal) )\n" +
+                            "ORDER BY turnos.id DESC;";
+                    }
+
+                if(opc == 1){
+                    if(idUsers.isEmpty()){
+                              consul = "SELECT  turnos.id,usersdcr.nombreUser,turnos.finicial,turnos.ffinal\n" +
+                              "FROM turnos\n" +
+                              "INNER JOIN usersdcr\n" +
+                              "ON turnos.idusuario = usersdcr.id_user AND (date(turnos.finicial) >= '"+fech1+"' AND date(turnos.finicial) <= '"+fech2+"') \n" +
+                              "ORDER BY turnos.id DESC;";
+                    }else{
+                       consul = "SELECT  turnos.id,usersdcr.nombreUser,turnos.finicial,turnos.ffinal\n" +
+                              "FROM turnos\n" +
+                              "INNER JOIN usersdcr\n" +
+                              "ON turnos.idusuario = usersdcr.id_user AND turnos.idusuario = '"+idUsers+"' AND (date(turnos.finicial) >= '"+fech1+"' AND date(turnos.finicial) <= '"+fech2+"') \n" +
+                              "ORDER BY turnos.id DESC;";
+                    }   
+                }
+                 //consul = "SELECT id, nombre from ambulantes WHERE id LIKE '"+var+"%'  OR nombre LIKE '"+var+"%' ORDER BY id";
+                        modelo.addColumn("#Turno");       
+                        modelo.addColumn("Cajero");
+                        modelo.addColumn("Inicio");
+                        modelo.addColumn("Finalizado");
+
+                jTable4.setModel(modelo);
+                TableColumnModel columnModel = jTable4.getColumnModel();
+              jTable4.getColumnModel().getColumn(0).setPreferredWidth(80);
+                jTable4.getColumnModel().getColumn(0).setMaxWidth(150);
+                jTable4.getColumnModel().getColumn(0).setMinWidth(50);
+
+                 jTable4.getColumnModel().getColumn(1).setPreferredWidth(180);
+                jTable4.getColumnModel().getColumn(1).setMaxWidth(250);
+                jTable4.getColumnModel().getColumn(1).setMinWidth(180);
+
+                String datos[] =  new String[4];//tenia 4
+                Statement st = null;
+                ResultSet rs = null;
+                try {
+                    st = cn.createStatement();
+                    rs = st.executeQuery(consul);
+
+                    while(rs.next()){
+                        datos[0] =rs.getString(1);
+                        datos[1] = rs.getString(2);
+                        datos[2] = rs.getString(3);
+                        datos[3] = rs.getString(4);
+                        modelo.addRow(datos);
+                    }
+                    jTable4.setModel(modelo);
+                } catch (SQLException ex) {
+                    Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
+                }finally{
+                     try {
+                            if(rs != null) rs.close();              
+                            if(st != null) st.close();                
+                            if(cn !=null) cn.close();
+                     } catch (SQLException ex) {
+                     }
+                 }
+    }//@endgetProductsOthers
+          
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AgregarMayoreo;
     private javax.swing.JPanel ReportDay;
@@ -10821,8 +11353,11 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JButton jButton35;
     private javax.swing.JButton jButton36;
     private javax.swing.JButton jButton37;
+    private javax.swing.JButton jButton38;
     private javax.swing.JButton jButton39;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton40;
+    private javax.swing.JButton jButton42;
     private javax.swing.JButton jButton43;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -10833,11 +11368,13 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jCBTypeProv;
     private javax.swing.JComboBox<String> jCCliVentaPiso;
     private javax.swing.JComboBox<String> jCElijaProovedor;
+    private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JComboBox<String> jCfleteroOpc;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckbpAGADO;
+    private javax.swing.JComboBox<String> jCmBoxIdCancel;
     private javax.swing.JComboBox<String> jComBPrestamosProv;
     private javax.swing.JComboBox<String> jComBProveedor;
     private javax.swing.JComboBox<String> jComBusCompra;
@@ -10876,6 +11413,7 @@ public class interno1 extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser jDatebusqVenta2;
     private javax.swing.JDialog jDiaViewSobrinas;
     private javax.swing.JDialog jDialAltaGastos;
+    private javax.swing.JDialog jDialCalendarMantenim;
     private javax.swing.JDialog jDialCancelaciones;
     private javax.swing.JDialog jDialDetailCompraProov;
     private javax.swing.JDialog jDialDetailFlete1;
@@ -10884,6 +11422,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLaComp;
     private javax.swing.JLabel jLabAdeudaProoved;
     private javax.swing.JLabel jLabBNumerador;
+    private javax.swing.JLabel jLabContaFletes;
     private javax.swing.JLabel jLabContad;
     private javax.swing.JLabel jLabCountCP;
     private javax.swing.JLabel jLabCountGast;
@@ -10901,6 +11440,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabNumcompra;
     private javax.swing.JLabel jLabNumcompra1;
     private javax.swing.JLabel jLabNumcompra2;
+    private javax.swing.JLabel jLabParam2;
     private javax.swing.JLabel jLabPed;
     private javax.swing.JLabel jLabPed1;
     private javax.swing.JLabel jLabPed3;
@@ -10915,6 +11455,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabTotPF;
     private javax.swing.JLabel jLabTotPP;
     private javax.swing.JLabel jLabTotVP;
+    private javax.swing.JLabel jLabTurnCancel;
     private javax.swing.JLabel jLabTurno;
     private javax.swing.JLabel jLabcountPF;
     private javax.swing.JLabel jLabel1;
@@ -11004,6 +11545,8 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel175;
     private javax.swing.JLabel jLabel176;
     private javax.swing.JLabel jLabel177;
+    private javax.swing.JLabel jLabel178;
+    private javax.swing.JLabel jLabel179;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -11142,6 +11685,8 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JPanel jPanVentasPiso;
     private javax.swing.JPanel jPanVistaAlta;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -11207,6 +11752,8 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane34;
     private javax.swing.JScrollPane jScrollPane35;
     private javax.swing.JScrollPane jScrollPane36;
+    private javax.swing.JScrollPane jScrollPane37;
+    private javax.swing.JScrollPane jScrollPane38;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
@@ -11229,6 +11776,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTable jTDetailAsign;
     private javax.swing.JTable jTVistaVentaPisoDia;
     private javax.swing.JTable jTabAsigaDinamicoCompra;
@@ -11261,6 +11809,8 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTable5;
     private javax.swing.JTable jTableAltasCli;
     private javax.swing.JTable jTableCreaPedidos;
     private javax.swing.JTable jTablefiltrosBusq;

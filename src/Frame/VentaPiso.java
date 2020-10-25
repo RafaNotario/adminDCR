@@ -35,6 +35,7 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
     static String monto;
     static String folio;
     static String tipe; 
+    
     public VentaPiso(String monto, String folio,String typePay) {
         initComponents();
         this.monto = monto;
@@ -488,45 +489,40 @@ if(jPanContadoPay.isVisible()){
         jPanContadoPay.setVisible(false);
         jPanCreditPay.setVisible(true);
         jPanReferenciaPay.setVisible(false);
-        
+        int ros = 0;
         switch (tipe){
             case "pagopedidocli":
                 String[][] matFlet = controlInserts.regresaPays(folio,tipe);
                 jTabHistor.setModel(new TModel(matFlet,cabDet1));
-                jTabHistor.getColumnModel().getColumn(0).setMaxWidth(0);
        //       break;
            case "pagarcompraprovee":
                 String[][] matFlet2 = controlInserts.regresaPays(folio,tipe);
                 jTabHistor.setModel(new TModel(matFlet2,cabDet1));
-                jTabHistor.getColumnModel().getColumn(0).setMaxWidth(0);
-       // jTabHistor.getColumnModel().getColumn(0).setMinWidth(0);
-       // jTabHistor.getColumnModel().getColumn(0).setPreferredWidth(0);
+
                 break;
          case "pagocreditprooved":
                 String[][] matFlet3 = controlInserts.regresaPays(folio,tipe);
                 jTabHistor.setModel(new TModel(matFlet3,cabDet1));
-                jTabHistor.getColumnModel().getColumn(0).setMaxWidth(0);
-       // jTabHistor.getColumnModel().getColumn(0).setMinWidth(0);
-       // jTabHistor.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+
                 break;
          case "pagoflete":
                 String[][] matFlet4 = controlInserts.regresaPays(folio,tipe);
                 jTabHistor.setModel(new TModel(matFlet4,cabDet1));
-                jTabHistor.getColumnModel().getColumn(0).setMaxWidth(0);
-       // jTabHistor.getColumnModel().getColumn(0).setMinWidth(0);
-       // jTabHistor.getColumnModel().getColumn(0).setPreferredWidth(0);
+
                 break;
          case "pagoventapiso":
                 String[][] matFlet5 = controlInserts.regresaPays(folio,tipe);
                 jTabHistor.setModel(new TModel(matFlet5,cabDet1));
-                jTabHistor.getColumnModel().getColumn(0).setMaxWidth(0);
-       // jTabHistor.getColumnModel().getColumn(0).setMinWidth(0);
-       // jTabHistor.getColumnModel().getColumn(0).setPreferredWidth(0);
                 break;
         };
-//        jTabHistor.getColumnModel().getColumn(0).setMinWidth(0);
-  //      jTabHistor.getColumnModel().getColumn(0).setPreferredWidth(0);
-          
+        
+        ros = jTabHistor.getRowCount();
+        if(ros >= 0){
+                jTabHistor.getColumnModel().getColumn(0).setPreferredWidth(0);
+                jTabHistor.getColumnModel().getColumn(0).setMaxWidth(0);
+                jTabHistor.getColumnModel().getColumn(0).setMinWidth(0);
+        }        
     }//GEN-LAST:event_jButTransferActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

@@ -202,7 +202,8 @@ public class controladorCFP {
        public void f5CancelTypesAll(String table,String opcColumn,String id, String val){
              Connection cn = con2.conexion();
             PreparedStatement pps=null;
-            String SQL="";      
+            String SQL="";
+            
                 SQL="UPDATE "+table+" SET "+opcColumn+" =? WHERE id = '"+id+"' ";        
             if(table.equals("usersdcr"))
                 SQL="UPDATE "+table+" SET "+opcColumn+" =? WHERE id_user = '"+id+"' ";                           
@@ -226,8 +227,12 @@ public class controladorCFP {
             if(table.equals("pagarcompraprovee"))
                 SQL="UPDATE "+table+" SET "+opcColumn+" =? WHERE id_paycompra = '"+id+"' ";   
          //actualizar compraprooved.statAsign.statAsign para sobras del dia
-             if(table.equals("sobras_compraprooved"))
+             if(table.equals("sobras_compraprooved"))//solo es una cadena para utilizar esta tabla
                 SQL="UPDATE compraprooved  SET "+opcColumn+" =? WHERE id_compraProve = '"+id+"' ";   
+//***condiciones para  cambiar status de pagado a no pagado en pedido, compra o flete            
+             if(table.equals("pedidocliente"))
+                SQL="UPDATE "+table+"  SET "+opcColumn+" =? WHERE id_pedido = '"+id+"' ";   
+             
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, val);
@@ -1471,7 +1476,6 @@ public void elimaRow(String table,String campo,String id){
         Connection cn = con2.conexion();
         PreparedStatement preparedStmt = null;
         if(!id.isEmpty()){
-
             int dialogButton = JOptionPane.YES_NO_OPTION;
             int dialogResult = JOptionPane.showConfirmDialog (null, "Seguro que desea eliminar el registro con ID: "+id+" ?","Borrar",dialogButton);
             if(dialogResult == JOptionPane.YES_OPTION){
@@ -1493,7 +1497,6 @@ public void elimaRow(String table,String campo,String id){
             } catch (SQLException ex) {
                 System.err.println("RAFA"); 
                 JOptionPane.showMessageDialog(null, ex.getMessage());
-//                System.out.println("Error al cerrar la conexon");
             }//catch
         }//finally 
             } else {
@@ -2777,7 +2780,8 @@ return mat;
                 "INNER JOIN \n" +
                 "	modopago\n" +
                 "ON\n" +
-                "	pagopedidocli.modoPayCliente = modopago.cod_pago AND pagopedidocli.idClientePay = '"+idCli+"';";      
+                "	pagopedidocli.modoPayCliente = modopago.cod_pago AND pagopedidocli.idClientePay = '"+idCli+"' "
+                      + "AND pagopedidocli.idCancelacion = 0;";      
           }
           if(tipe.equals("pagarcompraprovee")){//OPCION pago de pedididoscli
               sql = "SELECT pagarcompraprovee.id_paycompra,pagarcompraprovee.fechpayProveed,pagarcompraprovee.montoPayProveed,\n" +
@@ -2787,7 +2791,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	modopago\n" +
                 "ON\n" +
-                "	pagarcompraprovee.modoPayProveed = modopago.cod_pago AND pagarcompraprovee.num_compraProveed = '"+idCli+"';";      
+                "	pagarcompraprovee.modoPayProveed = modopago.cod_pago AND pagarcompraprovee.idCancelacion = 0 AND pagarcompraprovee.num_compraProveed = '"+idCli+"';";      
           }
          if(tipe.equals("pagocreditprooved")){//OPCION pagoS de cREDIIT PROVEEDOR
               sql = "SELECT pagoCreditProoved.id_pay,pagoCreditProoved.fechapayProoved,pagoCreditProoved.montoPayProoved,\n" +
@@ -2797,7 +2801,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	modopago\n" +
                 "ON\n" +
-                "	pagoCreditProoved.modoPayProoved = modopago.cod_pago AND pagoCreditProoved.idProovedPay = '"+idCli+"';";      
+                "	pagoCreditProoved.modoPayProoved = modopago.cod_pago AND pagoCreditProoved.idCancelacion = 0 AND pagoCreditProoved.idProovedPay = '"+idCli+"';";      
           }
           if(tipe.equals("pagoflete")){//OPCION pagoS de cREDIIT PROVEEDOR
               sql = "SELECT pagoflete.id_pagoFlete,pagoflete.fechaPayFlete,pagoflete.montoPayFl,\n" +
@@ -2807,7 +2811,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	modopago\n" +
                 "ON\n" +
-                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.id_fleteEnv = '"+idCli+"';";      
+                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.idCancelacion = 0 AND pagoflete.id_fleteEnv = '"+idCli+"';";      
           }
            if(tipe.equals("pagoventapiso")){//OPCION pagoS de cREDIIT PROVEEDOR
               sql = "SELECT pagoventapiso.id_payVentaP,pagoventapiso.fechaPayVP,pagoventapiso.montoVP,\n" +
@@ -2817,7 +2821,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	modopago\n" +
                 "ON\n" +
-                "	pagoventapiso.method_payVP = modopago.cod_pago AND pagoventapiso.num_notaVP = '"+idCli+"';";      
+                "	pagoventapiso.method_payVP = modopago.cod_pago AND pagoventapiso.idCancelacion = 0 AND pagoventapiso.num_notaVP = '"+idCli+"';";      
           }
 
              int i =0,cantFilas=0, cont=1;
@@ -2937,16 +2941,16 @@ return mat;
           
           if(tipe.equals("pagocreditprooved")){//OPCION pago de credito a proveedor
               if(idT.isEmpty()){
-                sql = "SELECT pagoCreditProoved.id_pay,pagoCreditProoved.idProovedPay,pagoCreditProoved.fechapayProoved,pagoCreditProoved.montoPayProoved,\n" +
-                  "	pagoCreditProoved.notaPayProoved,modopago.nombrePay\n" +
-                  "FROM \n" +
-                  "	pagoCreditProoved\n" +
-                  "INNER JOIN \n" +
-                  "	modopago\n" +
-                  "ON\n" +
-                  "	pagoCreditProoved.modoPayProoved = modopago.cod_pago AND pagoCreditProoved.idCancelacion = 0 AND pagoCreditProoved.fechapayProoved = '"+fech+"';";      
-            }else{
-                sql = "SELECT pagoCreditProoved.id_pay,pagoCreditProoved.idProovedPay,pagoCreditProoved.fechapayProoved,pagoCreditProoved.montoPayProoved,\n" +
+                sql = "SELECT pagoCreditProoved.id_pay,pagoCreditProoved.idProovedPay,proveedor.nombreP, CONCAT(pagoCreditProoved.fechapayProoved,', ',if(pagoCreditProoved.horaPayCreditProov IS NULL,'--',pagoCreditProoved.horaPayCreditProov)) as ori"
+                        + ",pagoCreditProoved.montoPayProoved,\n" +
+                "	pagoCreditProoved.notaPayProoved\n" +
+                " FROM pagoCreditProoved\n" +
+                " INNER JOIN creditomerca\n" +
+                " ON pagoCreditProoved.idProovedPay = creditomerca.num_credito AND pagoCreditProoved.idCancelacion = 0 AND pagoCreditProoved.fechapayProoved = '"+fech+"' \n" +
+                " INNER JOIN proveedor\n" +
+                " ON proveedor.id_Proveedor = creditomerca.id_ProveedorF;";
+        }else{
+/*                sql = "SELECT pagoCreditProoved.id_pay,pagoCreditProoved.idProovedPay,pagoCreditProoved.fechapayProoved,pagoCreditProoved.montoPayProoved,\n" +
                   "	pagoCreditProoved.notaPayProoved,modopago.nombrePay\n" +
                   "FROM \n" +
                   "	pagoCreditProoved\n" +
@@ -2954,6 +2958,15 @@ return mat;
                   "	modopago\n" +
                   "ON\n" +
                   "	pagoCreditProoved.modoPayProoved = modopago.cod_pago AND pagoCreditProoved.idCancelacion = 0 AND pagoCreditProoved.idTurno = '"+idT+"';";      
+    */
+              sql = "SELECT pagoCreditProoved.id_pay,pagoCreditProoved.idProovedPay,proveedor.nombreP,CONCAT(pagoCreditProoved.fechapayProoved,', ',if(pagoCreditProoved.horaPayCreditProov IS NULL,'--',pagoCreditProoved.horaPayCreditProov)) as ori,"
+                      + "pagoCreditProoved.montoPayProoved,\n" +
+                " pagoCreditProoved.notaPayProoved\n" +
+                " FROM pagoCreditProoved\n" +
+                " INNER JOIN creditomerca\n" +
+                " ON pagoCreditProoved.idProovedPay = creditomerca.num_credito AND pagoCreditProoved.idCancelacion = 0 AND pagoCreditProoved.idTurno = '"+idT+"'\n" +
+                " INNER JOIN proveedor\n" +
+                " ON proveedor.id_Proveedor = creditomerca.id_ProveedorF;";
               }
           }
           
@@ -3062,7 +3075,6 @@ return mat;
                //aqui iria crear matriz
                 while(rs.next())
                 {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
-                 
                       for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
                            // System.out.print("| "+rs.getString(x)+" |");
                              mat[i][x-1]=rs.getString(x);
@@ -3081,12 +3093,10 @@ return mat;
                  JOptionPane.showMessageDialog(null,ex.getMessage()); 
              }
          }//finally 
-            
            // System.out.println("filas: "+cantFilas);
             if (cantFilas == 0){
                 mat=null;
                 mat = new String[1][cantColumnas];
-                
                 for (int j = 0; j < mat[0].length; j++) {
                      mat[0][j]="NO DATA";
                 }
@@ -3130,19 +3140,19 @@ return mat;
            String sql ="";
            switch (param){
                case "pagarcompraprovee":
-                     sql = "SELECT SUM(montoPayProveed) FROM pagarcompraprovee WHERE num_compraProveed = '"+id+"'";           
+                     sql = "SELECT SUM(montoPayProveed) FROM pagarcompraprovee WHERE num_compraProveed = '"+id+"' AND idCancelacion = 0";           
                    break;
                case "pagoventapiso":
-                     sql = "SELECT SUM(montoVP) FROM pagoventapiso WHERE num_notaVP = '"+id+"'";          
+                     sql = "SELECT SUM(montoVP) FROM pagoventapiso WHERE num_notaVP = '"+id+"' AND idCancelacion = 0 ";          
                    break;
                case "pagopedidocli":
-                   sql = "SELECT SUM(montoPayCliente) FROM pagopedidocli WHERE idClientePay = '"+id+"'";    
+                   sql = "SELECT SUM(montoPayCliente) FROM pagopedidocli WHERE idClientePay = '"+id+"' AND idCancelacion = 0";    
                    break;
                case "pagocreditprooved":
-                    sql = "SELECT SUM(montoPayProoved) FROM pagocreditprooved WHERE idProovedPay = '"+id+"'";           
+                    sql = "SELECT SUM(montoPayProoved) FROM pagocreditprooved WHERE idProovedPay = '"+id+"' AND idCancelacion = 0";           
                    break;
                case "pagoflete":
-                   sql = "SELECT SUM(montoPayFl) FROM pagoflete WHERE id_fleteenv = '"+id+"'";
+                   sql = "SELECT SUM(montoPayFl) FROM pagoflete WHERE id_fleteenv = '"+id+"' AND idCancelacion = 0";
                    break;
            };
             Statement st = null;
@@ -3671,7 +3681,7 @@ return mat;
         }//finally  
     }
     
-       public void actualizaDataC(String id,String table){
+       public void actualizaDataC(String id,String table,int val){
              Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";  
@@ -3694,7 +3704,7 @@ return mat;
            };
             try {
                 pps = cn.prepareStatement(SQL);
-                pps.setInt(1, 1);
+                pps.setInt(1, val);
                 pps.executeUpdate();
                 //JOptionPane.showMessageDialog(null, "Pago realizado correctamente a compra No:"+id);
             } catch (SQLException ex) {
@@ -3989,7 +3999,7 @@ return mat;
                 "INNER JOIN \n" +
                 "pedidocliente\n" +
                 "ON\n" +
-                "	pagopedidocli.idClientePay = pedidocliente.id_pedido AND pedidocliente.id_clienteP = '"+idCli+"'"
+                "	pagopedidocli.idClientePay = pedidocliente.id_pedido AND pagopedidocli.idCancelacion = 0 AND pedidocliente.id_clienteP = '"+idCli+"' "
                       + "AND (pedidocliente.fechaPedidio >= '"+fech1+"' AND pedidocliente.fechaPedidio <= '"+fech2+"' );";      
           }
           if(tipe.equals("pagarcompraprovee")){//OPCION pago de pedididoscli
@@ -4000,7 +4010,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	compraprooved\n" +
                 "ON\n" +
-                "	pagarcompraprovee.num_compraProveed = compraprooved.id_compraProve AND (compraprooved.fechaCompra >=  '"+fech1+"' AND  compraprooved.fechaCompra <=  '"+fech2+"'   )"
+                "	pagarcompraprovee.num_compraProveed = compraprooved.id_compraProve AND pagarcompraprovee.idCancelacion = 0 AND (compraprooved.fechaCompra >=  '"+fech1+"' AND  compraprooved.fechaCompra <=  '"+fech2+"'   )"
                       + "AND compraprooved.id_ProveedorC =  '"+idCli+"'";      
           }
          if(tipe.equals("pagocreditprooved")){//OPCION pagoS de cREDIIT PROVEEDOR
@@ -4011,7 +4021,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	creditomerca\n" +
                 "ON\n" +
-                "	pagoCreditProoved.idProovedPay = creditomerca.num_credito AND (creditomerca.fechaPrestamo >=  '"+fech1+"' AND  creditomerca.fechaPrestamo <=  '"+fech2+"')"
+                "	pagoCreditProoved.idProovedPay = creditomerca.num_credito AND pagocreditprooved.idCancelacion = 0 AND (creditomerca.fechaPrestamo >=  '"+fech1+"' AND  creditomerca.fechaPrestamo <=  '"+fech2+"')"
               + "AND creditomerca.id_ProveedorF =  '"+idCli+"'";      ;      
           }
           if(tipe.equals("pagoflete")){//OPCION pagoS de cREDIIT PROVEEDOR
@@ -4022,7 +4032,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	modopago\n" +
                 "ON\n" +
-                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.id_fleteEnv = '"+idCli+"';";      
+                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.idCancelacion = 0 AND pagoflete.id_fleteEnv = '"+idCli+"';";      
           }
            if(tipe.equals("pagoventapiso")){//OPCION pagoS de cREDIIT PROVEEDOR
               sql = "SELECT pagoventapiso.id_payVentaP,pagoventapiso.num_notaVP,CONCAT(pagoventapiso.fechaPayVP,', ',IF(pagoventapiso.horaPayVentaPiso IS NULL,'--',pagoventapiso.horaPayVentaPiso)),pagoventapiso.montoVP,\n" +
@@ -4032,7 +4042,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	notaventapiso\n" +
                 "ON\n" +
-                "	pagoventapiso.num_notaVP = notaventapiso.id_venta AND (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"')"
+                "	pagoventapiso.num_notaVP = notaventapiso.id_venta AND pagoventapiso.idCancelacion = 0 AND (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"')"
                       + " AND notaventapiso.id_clientePiso = '"+idCli+"';";      
           }
 
@@ -4095,7 +4105,7 @@ return mat;
                "INNER JOIN \n" +
                 "pedidocliente\n" +
                 "ON\n" +
-                "	pagopedidocli.idClientePay = pedidocliente.id_pedido AND pedidocliente.id_clienteP = '"+idCli+"'"
+                "	pagopedidocli.idClientePay = pedidocliente.id_pedido AND pagopedidocli.idCancelacion = 0 AND pedidocliente.id_clienteP = '"+idCli+"'"
                       + "AND (pedidocliente.fechaPedidio >= '"+fech1+"' AND pedidocliente.fechaPedidio <= '"+fech2+"' );";
           }
           if(tipe.equals("pagarcompraprovee")){//OPCION pago de pedididoscli
@@ -4105,7 +4115,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	compraprooved\n" +
                 "ON\n" +
-                "	pagarcompraprovee.num_compraProveed = compraprooved.id_compraProve AND (compraprooved.fechaCompra >=  '"+fech1+"' AND  compraprooved.fechaCompra <=  '"+fech2+"'   )"
+                "	pagarcompraprovee.num_compraProveed = compraprooved.id_compraProve AND pagarcompraprovee.idCancelacion = 0 AND (compraprooved.fechaCompra >=  '"+fech1+"' AND  compraprooved.fechaCompra <=  '"+fech2+"'   )"
                       + "AND compraprooved.id_ProveedorC =  '"+idCli+"'";      
           }
          if(tipe.equals("pagocreditprooved")){//OPCION pagoS de cREDIIT PROVEEDOR
@@ -4115,7 +4125,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	creditomerca\n" +
                 "ON\n" +
-                "	pagoCreditProoved.idProovedPay = creditomerca.num_credito AND (creditomerca.fechaPrestamo >=  '"+fech1+"' AND  creditomerca.fechaPrestamo <=  '"+fech2+"')"
+                "	pagoCreditProoved.idProovedPay = creditomerca.num_credito AND pagocreditprooved.idCancelacion = 0 AND (creditomerca.fechaPrestamo >=  '"+fech1+"' AND  creditomerca.fechaPrestamo <=  '"+fech2+"')"
               + "AND creditomerca.id_ProveedorF =  '"+idCli+"'";      ;      
           }
           if(tipe.equals("pagoflete")){//OPCION pagoS de cREDIIT PROVEEDOR
@@ -4126,7 +4136,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	modopago\n" +
                 "ON\n" +
-                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.id_fleteEnv = '"+idCli+"';";      
+                "	pagoflete.modPay = modopago.cod_pago AND pagoflete.idCancelacion = 0 AND pagoflete.id_fleteEnv = '"+idCli+"';";      
           }
            if(tipe.equals("pagoventapiso")){//OPCION pagoS de cREDIIT PROVEEDOR
               sql = "SELECT SUM(pagoventapiso.montoVP)\n" +
@@ -4135,7 +4145,7 @@ return mat;
                 "INNER JOIN \n" +
                 "	notaventapiso\n" +
                 "ON\n" +
-                "	pagoventapiso.num_notaVP = notaventapiso.id_venta AND (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"')"
+                "	pagoventapiso.num_notaVP = notaventapiso.id_venta AND pagoventapiso.idCancelacion = 0 AND (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"')"
                 + " AND notaventapiso.id_clientePiso = '"+idCli+"';";      
           }
          if(tipe.equals("totalcreditSum")){//OPCION pagoS de cREDIIT PROVEEDOR
@@ -4392,8 +4402,6 @@ public void guardaUtilidades(List<String> param, int opc){
                       JOptionPane.showMessageDialog(null, ex.getMessage() );    
                     }                
             }//finally catch                
-               
-               
            }
 } //guardaUtilidades
      
@@ -4426,15 +4434,180 @@ public void guardaUtilidades(List<String> param, int opc){
                             System.err.println( ex.getMessage() );    
                         }
                     }
-            
-            
            return idTurno;
     }//@endgetUltimPagoarea
           
-            public static void main(String[] argv){
-       controladorCFP control = new controladorCFP();
-       List<String> contentL= control.regresaDatos(1,"4");
-       ListIterator<String> itr=contentL.listIterator();
-        control.cargaTotCompDayProveedor();
+          //obtener arr de semana de dia actual
+          public String[] getSemanTableAct(String fech){
+            Connection cn = con2.conexion();
+            String[] idUser = new String[5];
+            String sql = "";
+            sql = "SELECT * FROM semanas WHERE '"+fech+"' BETWEEN finicial AND ffinal; ";
+            Statement st = null;
+            ResultSet rs= null;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                rs.beforeFirst();
+                if(rs.next())
+                {
+                    if(rs.getRow() > 0){
+                        idUser[0]=rs.getString(1);
+                        idUser[1]=rs.getString(2);
+                        idUser[2]=rs.getString(3);
+                        idUser[3]=rs.getString(4);
+                        idUser[4]=rs.getString(5);
+                    }else{
+                        for (int j = 0; j < idUser.length; j++) {
+                            idUser[j] = "NO-DATA";
+                        }
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                        try {
+                            if(cn != null) cn.close();
+                        } catch (SQLException ex) {
+                            System.err.println( ex.getMessage() );    
+                        }
+                    }
+           return idUser;
+    }//@end getSemanTableAct
+          
+           //regresa matrizde vista tickets del dia
+        public String[][] matrizgetTicketsDiaCancel(String fech, String idTurno){
+        Connection cn = con2.conexion();
+          String sql ="",aux;
+          if(idTurno.isEmpty()){
+              sql = "(SELECT  pagos_areas.id,DATE_FORMAT(pagos_areas.hora, \"%H : %i\") AS hor,'Pago Areas',areas.nombre,pagos_areas.total\n" +
+                        "FROM pagos_areas\n" +
+                        "INNER JOIN areas\n" +
+                        "ON areas.id = pagos_areas.idArea AND pagos_areas.fecha = '"+fech+"'\n" +
+                        "ORDER BY pagos_areas.id DESC)\n" +
+                        "UNION\n" +
+                        "(SELECT pagos_amb.id,DATE_FORMAT(pagos_amb.hora, \"%H : %i\") AS hor,'Pago Ambulantes',ambulantes.nombre,pagos_amb.total\n" +
+                        "FROM pagos_amb\n" +
+                        "INNER JOIN ambulantes\n" +
+                        "ON ambulantes.id = pagos_amb.idAmb AND pagos_amb.fecha = '"+fech+"'\n" +
+                        "ORDER BY pagos_amb.id DESC)\n" +
+                        "UNION\n" +
+                        "(SELECT  pagos_carg.id,DATE_FORMAT(pagos_carg.hora, \"%H : %i\") AS hor,'Pago Cargadores',cargadores.nombre,pagos_carg.total\n" +
+                        "FROM pagos_carg\n" +
+                        "INNER JOIN cargadores\n" +
+                        "ON cargadores.id = pagos_carg.idcarg AND pagos_carg.fecha = '"+fech+"'\n" +
+                        "ORDER BY pagos_carg.id DESC)\n" +
+                        "UNION\n" +
+                        "(SELECT  pagos_infrac.folio,DATE_FORMAT(pagos_infrac.horapag, \"%H : %i\") AS hor,'Pago Infraccion',pagos_infrac.quienpaga,pagos_infrac.monto - pagos_infrac.descuento\n" +
+                        "FROM pagos_infrac\n" +
+                        "WHERE pagos_infrac.fechapag = '"+fech+"')\n" +
+                        "UNION\n" +
+                        "(SELECT otros_venta.id,DATE_FORMAT(otros_venta.hora, \"%H : %i\") AS hor,\n" +
+                        "IF(otros_venta.tipoPersona = 0,'Varios Amb.',IF(otros_venta.tipoPersona = 1,'Varios Carg.', IF(otros_venta.tipoPersona = 2,'Varios Cte.','NADON') ) ) AS quees,\n" +
+                        "IF(otros_venta.tipoPersona = 0, (SELECT ambulantes.nombre FROM ambulantes WHERE ambulantes.id = otros_venta.idPersona ) ,IF(otros_venta.tipoPersona = 1,(SELECT cargadores.nombre FROM cargadores WHERE cargadores.id = otros_venta.idPersona ), IF(otros_venta.tipoPersona = 2,(SELECT clientes.nombre from clientes WHERE clientes.id = otros_venta.idPersona),'NADON') ) ) AS namquees,\n" +
+                        "        otros_venta.efectivo\n" +
+                        "FROM otros_venta\n" +
+                        "WHERE otros_venta.fecha = '"+fech+"'\n" +
+                        ")\n" +
+                        "UNION\n" +
+                        "(SELECT  pagos_cargrenta.id,DATE_FORMAT(pagos_cargrenta.hora, \"%H : %i\") AS hor,'Pago Renta Carg',cargadores.nombre,pagos_cargrenta.importe\n" +
+                        "FROM pagos_cargrenta\n" +
+                        "INNER JOIN cargadores\n" +
+                        "ON pagos_cargrenta.idCarg = cargadores.id AND pagos_cargrenta.fecha = '"+fech+"' ORDER BY pagos_cargrenta.id DESC)\n" +
+                        ";";  
+          }
+          if(fech.isEmpty()){
+                      sql = "(SELECT pagos_areas.id,DATE_FORMAT(pagos_areas.hora, \"%H : %i\") AS hor,'Pago Areas',areas.nombre,pagos_areas.total\n" +
+                            "FROM pagos_areas\n" +
+                            "INNER JOIN areas\n" +
+                            "ON areas.id = pagos_areas.idArea AND pagos_areas.idCancelacion <> 0 AND pagos_areas.idTurno = "+idTurno+"\n" +
+                            "ORDER BY pagos_areas.id DESC)\n" +
+                            "UNION\n" +
+                            "(SELECT pagos_amb.id,DATE_FORMAT(pagos_amb.hora, \"%H : %i\") AS hor,'Pago Ambulantes',ambulantes.nombre,pagos_amb.total\n" +
+                            "FROM pagos_amb\n" +
+                            "INNER JOIN ambulantes\n" +
+                            "ON ambulantes.id = pagos_amb.idAmb AND pagos_amb.idCancelacion <> 0 AND pagos_amb.idTurno = "+idTurno+"\n" +
+                            "ORDER BY pagos_amb.id DESC)\n" +
+                            "UNION\n" +
+                            "(SELECT pagos_carg.id,DATE_FORMAT(pagos_carg.hora, \"%H : %i\") AS hor,'Pago Cargadores',cargadores.nombre,pagos_carg.total\n" +
+                            "FROM pagos_carg\n" +
+                            "INNER JOIN cargadores\n" +
+                            "ON cargadores.id = pagos_carg.idcarg AND pagos_carg.idCancelacion <> 0 AND pagos_carg.idTurno = "+idTurno+"\n" +
+                            "ORDER BY pagos_carg.id DESC)\n" +
+                            "UNION\n" +
+                            "(SELECT pagos_infrac.folio,DATE_FORMAT(pagos_infrac.horapag, \"%H : %i\") AS hor,'Pago Infraccion',pagos_infrac.quienpaga,pagos_infrac.monto - pagos_infrac.descuento\n" +
+                            "FROM pagos_infrac LEFT OUTER JOIN pagos_infraccancel ON pagos_infraccancel.idFolio = pagos_infrac.folio\n" +
+                            "WHERE pagos_infraccancel.idFolio IS NOT NULL AND pagos_infrac.idTurno = "+idTurno+")\n" +
+                            "UNION\n" +
+                            "(SELECT otros_venta.id,DATE_FORMAT(otros_venta.hora, \"%H : %i\") AS hor,\n" +
+                            "IF(otros_venta.tipoPersona = 0,'Varios Amb.',IF(otros_venta.tipoPersona = 1,'Varios Carg.', IF(otros_venta.tipoPersona = 2,'Varios Cte.','NADON') ) ) AS quees,\n" +
+                            "IF(otros_venta.tipoPersona = 0, (SELECT ambulantes.nombre FROM ambulantes WHERE ambulantes.id = otros_venta.idPersona ) ,IF(otros_venta.tipoPersona = 1,(SELECT cargadores.nombre FROM cargadores WHERE cargadores.id = otros_venta.idPersona ), IF(otros_venta.tipoPersona = 2,(SELECT clientes.nombre from clientes WHERE clientes.id = otros_venta.idPersona),'NADON') ) ) AS namquees,\n" +
+                            "        otros_venta.efectivo\n" +
+                            "FROM otros_venta\n" +
+                            "WHERE otros_venta.idCancelacion  <> 0 AND otros_venta.idTurno = "+idTurno+"\n" +
+                            ")\n" +
+                            "UNION\n" +
+                            "(SELECT pagos_cargrenta.id,DATE_FORMAT(pagos_cargrenta.hora, \"%H : %i\") AS hor,'Pago Renta Carg',cargadores.nombre,pagos_cargrenta.importe\n" +
+                            "FROM pagos_cargrenta\n" +
+                            "INNER JOIN cargadores\n" +
+                            "ON pagos_cargrenta.idCarg = cargadores.id AND pagos_cargrenta.idCancelacion <> 0 AND pagos_cargrenta.idTurno = "+idTurno+"\n" +
+                            "ORDER BY pagos_cargrenta.id DESC\n" +
+                            ");";
+                      }
+             int i =0,cantFilas=0, cont=1,cantColumnas=0;
+             String[][] mat=null, mat2=null;
+              int[] arrIdPedido = null;//int para usar hashMap
+            Statement st = null;
+            ResultSet rs = null;            
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }
+               mat = new String[cantFilas][cantColumnas];
+               //aqui iria crear matriz
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                 
+                      for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
+                           // System.out.print("| "+rs.getString(x)+" |");
+                             mat[i][x-1]=rs.getString(x);
+                      //System.out.print(x+" -> "+rs.getString(x));                   
+                      }//for
+                       i++;
+                }//whilE
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+//             System.out.println("cierra conexion a la base de datos");    
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally        
+           if (cantFilas == 0){
+                mat=null;
+                mat = new String[1][cantColumnas];
+                for (int j = 0; j < mat[0].length; j++) {
+                     mat[0][j]="NO DATA";
+                }
+           }
+return mat;            
+}//@endmatrizgetTicketsDia
+        
+          public static void main(String[] argv){
+              String[] dats = null;
+                controladorCFP control = new controladorCFP();
+                
+                dats = control.getSemanTableAct("2020-10-12");
+                for (int i = 0; i < dats.length; i++) {
+                  System.out.println("datas -> "+dats[i]);
+              }
     }//main
+          
 }//class
