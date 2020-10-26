@@ -4517,42 +4517,55 @@ public void guardaUtilidades(List<String> param, int opc){
                         ";";  
           }
           if(fech.isEmpty()){
-                      sql = "(SELECT pagos_areas.id,DATE_FORMAT(pagos_areas.hora, \"%H : %i\") AS hor,'Pago Areas',areas.nombre,pagos_areas.total\n" +
-                            "FROM pagos_areas\n" +
-                            "INNER JOIN areas\n" +
-                            "ON areas.id = pagos_areas.idArea AND pagos_areas.idCancelacion <> 0 AND pagos_areas.idTurno = "+idTurno+"\n" +
-                            "ORDER BY pagos_areas.id DESC)\n" +
+                      sql = "(SELECT pedidocliente.id_pedido,CONCAT(pagopedidocli.fechapayCliente,', ',if(pagopedidocli.horaPayPedido IS NULL,'--',pagopedidocli.horaPayPedido)) as ori,\n" +
+"	'Pago pedido cliente I' AS why,clientepedidos.nombre,pagopedidocli.montoPayCliente,cancelaciones.motivo\n" +
+"FROM pagopedidocli\n" +
+"INNER JOIN pedidocliente\n" +
+"ON pagopedidocli.idClientePay = pedidocliente.id_pedido AND pagopedidocli.idCancelacion <> 0 AND pagopedidocli.idTurno = '"+idTurno+"'\n" +
+"INNER JOIN clientepedidos\n" +
+"ON clientepedidos.id_cliente = pedidocliente.id_clienteP\n" +
+"INNER JOIN cancelaciones\n" +
+"ON cancelaciones.id = pagopedidocli.idCancelacion)\n" +
                             "UNION\n" +
-                            "(SELECT pagos_amb.id,DATE_FORMAT(pagos_amb.hora, \"%H : %i\") AS hor,'Pago Ambulantes',ambulantes.nombre,pagos_amb.total\n" +
-                            "FROM pagos_amb\n" +
-                            "INNER JOIN ambulantes\n" +
-                            "ON ambulantes.id = pagos_amb.idAmb AND pagos_amb.idCancelacion <> 0 AND pagos_amb.idTurno = "+idTurno+"\n" +
-                            "ORDER BY pagos_amb.id DESC)\n" +
+                            "(SELECT creditomerca.num_credito,CONCAT(pagocreditprooved.fechapayProoved,', ',if(pagocreditprooved.horaPayCreditProov IS NULL,'--',pagocreditprooved.horaPayCreditProov)) as ori,\n" +
+"	'Pago de prestamo proveedor I' AS why,proveedor.nombreP,pagocreditprooved.montoPayProoved,cancelaciones.motivo\n" +
+"FROM pagocreditprooved\n" +
+"INNER JOIN creditomerca\n" +
+"ON pagocreditprooved.idProovedPay = creditomerca.num_credito AND pagocreditprooved.idCancelacion <> 0 AND pagocreditprooved.idTurno = '"+idTurno+"'\n" +
+"INNER JOIN proveedor\n" +
+"ON proveedor.id_Proveedor = creditomerca.id_ProveedorF\n" +
+"INNER JOIN cancelaciones\n" +
+"ON cancelaciones.id = pagocreditprooved.idCancelacion)\n" +
                             "UNION\n" +
-                            "(SELECT pagos_carg.id,DATE_FORMAT(pagos_carg.hora, \"%H : %i\") AS hor,'Pago Cargadores',cargadores.nombre,pagos_carg.total\n" +
-                            "FROM pagos_carg\n" +
-                            "INNER JOIN cargadores\n" +
-                            "ON cargadores.id = pagos_carg.idcarg AND pagos_carg.idCancelacion <> 0 AND pagos_carg.idTurno = "+idTurno+"\n" +
-                            "ORDER BY pagos_carg.id DESC)\n" +
+                            "(SELECT notaventapiso.id_venta,CONCAT(pagoventapiso.fechaPayVP,', ',if(pagoventapiso.horaPayVentaPiso IS NULL,'--',pagoventapiso.horaPayVentaPiso)) as ori,\n" +
+"	'Pago venta de piso I' AS why,clientepedidos.nombre,pagoventapiso.montoVP,cancelaciones.motivo\n" +
+"FROM pagoventapiso\n" +
+"INNER JOIN notaventapiso\n" +
+"ON pagoventapiso.num_notaVP = notaventapiso.id_venta AND pagoventapiso.idCancelacion <> 0 AND pagoventapiso.idTurno = '"+idTurno+"'\n" +
+"INNER JOIN clientepedidos\n" +
+"ON clientepedidos.id_cliente = notaventapiso.id_clientePiso\n" +
+"INNER JOIN cancelaciones\n" +
+"ON cancelaciones.id = pagoventapiso.idCancelacion)\n" +
                             "UNION\n" +
-                            "(SELECT pagos_infrac.folio,DATE_FORMAT(pagos_infrac.horapag, \"%H : %i\") AS hor,'Pago Infraccion',pagos_infrac.quienpaga,pagos_infrac.monto - pagos_infrac.descuento\n" +
-                            "FROM pagos_infrac LEFT OUTER JOIN pagos_infraccancel ON pagos_infraccancel.idFolio = pagos_infrac.folio\n" +
-                            "WHERE pagos_infraccancel.idFolio IS NOT NULL AND pagos_infrac.idTurno = "+idTurno+")\n" +
+                            "(SELECT fleteenviado.id_fleteE,CONCAT(pagoflete.fechaPayFlete,', ',if(pagoflete.horaPayFlete IS NULL,'--',pagoflete.horaPayFlete)) as ori,\n" +
+"	'Pago de flete E' AS why,fletero.nombreF,pagoflete.montoPayFl,cancelaciones.motivo\n" +
+"FROM pagoflete\n" +
+"INNER JOIN fleteenviado\n" +
+"ON pagoflete.id_fleteEnv = fleteenviado.id_fleteE AND pagoflete.idCancelacion <> 0 AND pagoflete.idTurno = '"+idTurno+"'\n" +
+"INNER JOIN fletero\n" +
+"ON fletero.id_Fletero = fleteenviado.id_FleteroE\n" +
+"INNER JOIN cancelaciones\n" +
+"ON cancelaciones.id = pagoflete.idCancelacion)\n" +
                             "UNION\n" +
-                            "(SELECT otros_venta.id,DATE_FORMAT(otros_venta.hora, \"%H : %i\") AS hor,\n" +
-                            "IF(otros_venta.tipoPersona = 0,'Varios Amb.',IF(otros_venta.tipoPersona = 1,'Varios Carg.', IF(otros_venta.tipoPersona = 2,'Varios Cte.','NADON') ) ) AS quees,\n" +
-                            "IF(otros_venta.tipoPersona = 0, (SELECT ambulantes.nombre FROM ambulantes WHERE ambulantes.id = otros_venta.idPersona ) ,IF(otros_venta.tipoPersona = 1,(SELECT cargadores.nombre FROM cargadores WHERE cargadores.id = otros_venta.idPersona ), IF(otros_venta.tipoPersona = 2,(SELECT clientes.nombre from clientes WHERE clientes.id = otros_venta.idPersona),'NADON') ) ) AS namquees,\n" +
-                            "        otros_venta.efectivo\n" +
-                            "FROM otros_venta\n" +
-                            "WHERE otros_venta.idCancelacion  <> 0 AND otros_venta.idTurno = "+idTurno+"\n" +
-                            ")\n" +
-                            "UNION\n" +
-                            "(SELECT pagos_cargrenta.id,DATE_FORMAT(pagos_cargrenta.hora, \"%H : %i\") AS hor,'Pago Renta Carg',cargadores.nombre,pagos_cargrenta.importe\n" +
-                            "FROM pagos_cargrenta\n" +
-                            "INNER JOIN cargadores\n" +
-                            "ON pagos_cargrenta.idCarg = cargadores.id AND pagos_cargrenta.idCancelacion <> 0 AND pagos_cargrenta.idTurno = "+idTurno+"\n" +
-                            "ORDER BY pagos_cargrenta.id DESC\n" +
-                            ");";
+                            "(SELECT compraprooved.id_compraProve,CONCAT(pagarcompraprovee.fechpayProveed,', ',if(pagarcompraprovee.horaPayCompProov IS NULL,'--',pagarcompraprovee.horaPayCompProov)) as ori,\n" +
+"	'Pago venta de piso E' AS why,proveedor.nombreP,pagarcompraprovee.montoPayProveed,cancelaciones.motivo\n" +
+"FROM pagarcompraprovee\n" +
+"INNER JOIN compraprooved\n" +
+"ON pagarcompraprovee.num_compraProveed = compraprooved.id_compraProve AND pagarcompraprovee.idCancelacion <> 0 AND pagarcompraprovee.idTurno = '"+idTurno+"'\n" +
+"INNER JOIN proveedor\n" +
+"ON proveedor.id_Proveedor = compraprooved.id_ProveedorC\n" +
+"INNER JOIN cancelaciones\n" +
+"ON cancelaciones.id = pagarcompraprovee.idCancelacion);";
                       }
              int i =0,cantFilas=0, cont=1,cantColumnas=0;
              String[][] mat=null, mat2=null;
