@@ -1146,7 +1146,7 @@ public void guardaDetallePrestamoProv(List<String> param){
         Connection cn = con2.conexion();
           String sql ="",aux;
               sql = "SELECT\n" +
-                    "creditomerca.num_credito,creditomerca.fechaPrestamo,creditomerca.status,\n" +
+                    "creditomerca.num_credito,creditomerca.fechaPrestamo,IF(creditomerca.status = 0,'PENDINETE','PAGADO'),\n" +
                     "proveedor.id_Proveedor,proveedor.nombreP,\n" +
                     "SUM(detallecreditproveed.cantidadCP*detallecreditproveed.costoCP) AS TOTAL,\n" +
                     "creditomerca.notaPrest\n" +
