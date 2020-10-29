@@ -58,6 +58,17 @@ import renderTable.ColorCelda;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import renderTable.colorCeldaComplete;
 
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.awt.Desktop;
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.FileOutputStream;
+
+
 public class interno1 extends javax.swing.JFrame {
 
     Funciones fn = new Funciones();
@@ -4723,7 +4734,7 @@ public class interno1 extends javax.swing.JFrame {
 
         jButton10.setBackground(new java.awt.Color(153, 255, 0));
         jButton10.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jButton10.setText("F12 - COBRAR");
+        jButton10.setText("F5 - COBRAR");
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
@@ -6624,10 +6635,7 @@ public class interno1 extends javax.swing.JFrame {
         jTable6.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jTable6.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Folio", "Fecha", "Hora", "Rubro", "Concepto", "Cajero"
@@ -6636,6 +6644,7 @@ public class interno1 extends javax.swing.JFrame {
         jTable6.setColumnSelectionAllowed(true);
         jTable6.setRowHeight(25);
         jScrollPane40.setViewportView(jTable6);
+        jTable6.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         jSeparator19.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -10021,7 +10030,7 @@ public class interno1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton44ActionPerformed
 
     private void jButton45ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton45ActionPerformed
-  /*      int rows =  jTabViewIngresosAll.getRowCount(),
+      int rows =  jTabViewIngresosAll.getRowCount(),
         opcionAr = jCBoxEsIngreso.getSelectedIndex();
         if(rows >0){
             try{
@@ -10033,24 +10042,14 @@ public class interno1 extends javax.swing.JFrame {
                         XSSFSheet hoja = workbook.createSheet();
 
                         XSSFRow fila = hoja.createRow(0);
+                        
+                            fila.createCell(0).setCellValue("#Ticket");
+                            fila.createCell(1).setCellValue("Fecha");
+                            fila.createCell(2).setCellValue("Rubro");
+                            fila.createCell(3).setCellValue("Nombre");
+                            fila.createCell(4).setCellValue("Importe");
 
-                        if(opcionAr == 1){
-                            fila.createCell(0).setCellValue("#Ticket");
-                            fila.createCell(1).setCellValue("Fecha");
-                            fila.createCell(2).setCellValue("Hora");
-                            fila.createCell(3).setCellValue("Rubro");
-                            fila.createCell(4).setCellValue("Area");
-                            fila.createCell(5).setCellValue("Ult. Semana");
-                            fila.createCell(6).setCellValue("Cajero(a)");
-                            fila.createCell(7).setCellValue("Total");
-                        }else{
-                            fila.createCell(0).setCellValue("#Ticket");
-                            fila.createCell(1).setCellValue("Fecha");
-                            fila.createCell(2).setCellValue("Hora");
-                            fila.createCell(3).setCellValue("Rubro");
-                            fila.createCell(4).setCellValue("Nombre");
-                            fila.createCell(5).setCellValue("Total");
-                        }
+
                         XSSFCellStyle style =workbook.createCellStyle();
                         jProgressBar2.setMaximum(jTabViewIngresosAll.getRowCount());
                         XSSFRow filas = null;
@@ -10065,27 +10064,16 @@ public class interno1 extends javax.swing.JFrame {
                             jProgressBar2.setValue((i+1));
                             filas = hoja.createRow((i+1));//LO CREMAOS A PARTIR DE LA 5TA FILA
 
-                            if(opcionAr == 1){
                                 filas.createCell(0).setCellValue(jTabViewIngresosAll.getValueAt(i, 0).toString());
                                 filas.createCell(1).setCellValue(jTabViewIngresosAll.getValueAt(i, 1).toString());
                                 filas.createCell(2).setCellValue(jTabViewIngresosAll.getValueAt(i, 2).toString());
                                 filas.createCell(3).setCellValue(jTabViewIngresosAll.getValueAt(i, 3).toString());
                                 filas.createCell(4).setCellValue(jTabViewIngresosAll.getValueAt(i, 4).toString());
-                                filas.createCell(5).setCellValue(jTabViewIngresosAll.getValueAt(i, 5).toString());
-                                filas.createCell(6).setCellValue(jTabViewIngresosAll.getValueAt(i, 6).toString());
-                                filas.createCell(7).setCellValue(jTabViewIngresosAll.getValueAt(i, 7).toString());
-                            }else{
-                                filas.createCell(0).setCellValue(jTabViewIngresosAll.getValueAt(i, 0).toString());
-                                filas.createCell(1).setCellValue(jTabViewIngresosAll.getValueAt(i, 1).toString());
-                                filas.createCell(2).setCellValue(jTabViewIngresosAll.getValueAt(i, 2).toString());
-                                filas.createCell(3).setCellValue(jTabViewIngresosAll.getValueAt(i, 3).toString());
-                                filas.createCell(4).setCellValue(jTabViewIngresosAll.getValueAt(i, 4).toString());
-                                filas.createCell(5).setCellValue(jTabViewIngresosAll.getValueAt(i, 5).toString());
-                            }
+
                         }
+                        hoja.autoSizeColumn(1);//autoajustar celdas al ancho de los datos
+                        hoja.autoSizeColumn(2);//autoajustar celdas al ancho de los datos
                         hoja.autoSizeColumn(3);//autoajustar celdas al ancho de los datos
-                        hoja.autoSizeColumn(4);//autoajustar celdas al ancho de los datos
-                        hoja.autoSizeColumn(5);//autoajustar celdas al ancho de los datos
                         jProgressBar2.setValue(0);
                         jProgressBar2.setString("Abrieno Excel");
                         try{
@@ -10095,7 +10083,7 @@ public class interno1 extends javax.swing.JFrame {
                             File file = new File("ingresos"+datCtrl.setDateActualGuion()+".xlsx");
                             Desktop.getDesktop().open(file);
                         }catch (Exception ex){
-                            Logger.getLogger(ambulantes.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }//try
                 };
@@ -10105,7 +10093,7 @@ public class interno1 extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(null, "Debe exisitir algun registro en la tabla");
         }
-        */
+
     }//GEN-LAST:event_jButton45ActionPerformed
 
     private void jButton46ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton46ActionPerformed
@@ -10277,7 +10265,7 @@ public class interno1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton49ActionPerformed
 
     private void jButton50ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton50ActionPerformed
-    /*    try{
+   try{
             Thread t;//Thread
             t = new Thread(){
                 public void run(){
@@ -10289,12 +10277,11 @@ public class interno1 extends javax.swing.JFrame {
                     XSSFRow fila = hoja.createRow(0);
                     fila.createCell(0).setCellValue("Folio");
                     fila.createCell(1).setCellValue("Fecha");
-                    fila.createCell(2).setCellValue("Hora");
-                    fila.createCell(3).setCellValue("Rubro");
-                    fila.createCell(4).setCellValue("Concepto");
-                    fila.createCell(5).setCellValue("Nombre");
-                    fila.createCell(6).setCellValue("Monto");
-                    fila.createCell(7).setCellValue("Turno");
+                    fila.createCell(2).setCellValue("Rubro");
+                    fila.createCell(3).setCellValue("Concepto");
+                    fila.createCell(4).setCellValue("Nombre");
+                    fila.createCell(5).setCellValue("Monto");
+                    fila.createCell(6).setCellValue("Turno");
 
                     XSSFCellStyle style =workbook.createCellStyle();
                     jProgressBar1.setMaximum(jTable6.getRowCount());
@@ -10355,12 +10342,7 @@ public class interno1 extends javax.swing.JFrame {
                     }else{
                         filas.createCell(6).setCellValue("");
                     }
-                    var7 = jTable6.getValueAt(i, 7);
-                    if (var7 != null && !var7.toString().isEmpty()) {
-                        filas.createCell(7).setCellValue(var7.toString());
-                    }else{
-                        filas.createCell(7).setCellValue("");
-                    }
+
                 }//for1
                 hoja.autoSizeColumn(0);//autoajustar celdas al ancho de los datos
                 hoja.autoSizeColumn(1);//autoajustar celdas al ancho de los datos
@@ -10369,7 +10351,6 @@ public class interno1 extends javax.swing.JFrame {
                 hoja.autoSizeColumn(4);//autoajustar celdas al ancho de los datos
                 hoja.autoSizeColumn(5);//autoajustar celdas al ancho de los datos
                 hoja.autoSizeColumn(6);//autoajustar celdas al ancho de los datos
-                hoja.autoSizeColumn(7);//autoajustar celdas al ancho de los datos
                 jProgressBar1.setValue(0);
                 jProgressBar1.setString("Abrieno Excel");
                 try{
@@ -10379,13 +10360,13 @@ public class interno1 extends javax.swing.JFrame {
                     File file = new File("egresos"+datCtrl.setDateActualGuion()+".xlsx");
                     Desktop.getDesktop().open(file);
                 }catch (Exception ex){
-                    Logger.getLogger(ambulantes.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }//try
         };
         t.start();
         }catch(Exception e) {JOptionPane.showMessageDialog(null, e);}
-        */
+
     }//GEN-LAST:event_jButton50ActionPerformed
 
     public Image getIconImage() {
