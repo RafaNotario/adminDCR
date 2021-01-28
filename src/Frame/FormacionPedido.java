@@ -9,6 +9,7 @@ import conexiones.db.ConexionDBOriginal;
 import controllers.altadeclientes.controladorCFP;
 import internos.tickets.print.Funciones;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,10 +33,19 @@ Funciones fn = new Funciones();
 ConexionDBOriginal con2 = new ConexionDBOriginal();
    //Creación de un formato con separadores de decimales y millares, con 2 decimales
 DecimalFormat formato = new DecimalFormat("#,###.00");
+
 List<String> filUtilidades = new ArrayList<String>();//para productos prestamo
 
 String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cantidad","Costo","Total"},
-        cabFlet = {"Folio", "En carga", "Carga Tot","Chofer", "Camioneta","$ Costo","Status","$ Prom.","$ Total"};
+        cabFlet = {"Folio", "En carga", "Carga Tot","Chofer", "Camioneta","$ Costo","Mercancia","$ Prom.","$ Total"};
+
+    BigDecimal[] promedios = {BigDecimal.ZERO,
+                                                    BigDecimal.ZERO,
+                                                    BigDecimal.ZERO,
+                                                    BigDecimal.ZERO,
+                                                    BigDecimal.ZERO,
+                                                    BigDecimal.ZERO,
+                                                    BigDecimal.ZERO};
 
     public FormacionPedido(int id, String nam) {
         initComponents();
@@ -55,6 +65,9 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTabDetailFletDet = new javax.swing.JTable();
@@ -92,10 +105,44 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jLabTotMasUtil = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jTable4 = new javax.swing.JTable();
         txtClieny = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtidPed = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+
+        jTable2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable2.setRowHeight(23);
+        jScrollPane5.setViewportView(jTable2);
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGap(59, 59, 59)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 547, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(135, Short.MAX_VALUE))
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGap(116, 116, 116)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(241, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Detalle Pedido");
@@ -156,6 +203,11 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
 
         txtGranTot.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         txtGranTot.setToolTipText("Costo mercancia + fletes");
+        txtGranTot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtGranTotActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -176,20 +228,20 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Pedido", "Asign.", "Faltan", "Import.", "Promed.", "Utilidad unit.$", "Utilidad tot.$"
+                "Pedido", "Asign.", "Faltan", "Import.", "Promed.", "Costo final$", "Utilidad tot.$", "Import+Flete", "Promed+Flet"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true, true
+                false, false, false, false, false, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -274,116 +326,138 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         jLabel24.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel24.setText("Utilidad $:");
 
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"PRIM", null},
+                {"SEG", null},
+                {"PRIM_R", null},
+                {"SEG_R", null},
+                {"BOLA_P", null},
+                {"BOLA_S", null},
+                {"TERCERA", null}
+            },
+            new String [] {
+                "Producto", "Importe"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable4.setRowHeight(23);
+        jScrollPane8.setViewportView(jTable4);
+        if (jTable4.getColumnModel().getColumnCount() > 0) {
+            jTable4.getColumnModel().getColumn(0).setResizable(false);
+            jTable4.getColumnModel().getColumn(0).setPreferredWidth(55);
+        }
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtTotCajas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtTotMoneyMerca, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(230, 230, 230)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(txtTotCajas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(txtTotMoneyMerca, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jScrollPane2)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(5, 5, 5)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addGap(10, 10, 10))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtGranTot, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 23, Short.MAX_VALUE))
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(220, 220, 220)
+                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, 0)
+                                                .addComponent(txtCostFletes, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 203, Short.MAX_VALUE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane1)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabTotMasUtil, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(220, 220, 220)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(txtCostFletes, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(48, 48, 48)
-                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(70, 70, 70)
-                                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(48, 48, 48)
+                                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(70, 70, 70)
+                                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton2))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(28, 28, 28)
+                                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtGranTot, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(jLabel24)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton2))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addGap(28, 28, 28)
-                                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(10, 10, 10)
-                                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(18, 18, 18))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(2, 2, 2)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(251, 251, 251)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabTotMasUtil, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)))))
+                        .addGap(5, 5, 5))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(9, 9, 9)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtGranTot, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel16))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel18)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabTotMasUtil, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTotCajas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTotMoneyMerca, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(57, 57, 57)
                                 .addComponent(jLabel9)
@@ -400,24 +474,24 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                                 .addGap(5, 5, 5)
                                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTotCajas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTotMoneyMerca, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel24)
+                                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtGranTot, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel16))))
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabTotMasUtil, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCostFletes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -430,8 +504,20 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(83, 83, 83)))
-                .addGap(10, 10, 10))
+                        .addGap(93, 93, 93))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCostFletes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10))))
         );
 
         txtClieny.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -482,14 +568,15 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String[] arr = new String[4],util = null;
         filUtilidades.clear();
-        Object var = null;
+        Object var = null, utilon = null;
             String idP = txtidPed.getText();
-            util =  getDatsPedido(idP);  //obtenemos utilidad,notaPed
+            util =  getDatsPedido(idP); //obtenemos utilidad,notaPed
              arr[0] = jLabTotMasUtil.getText();
              arr[1] = jTextArea1.getText();
              arr[2] = "1";
              arr[3] = txtTotCajas.getText();
-             if(util[0].equals("0")){//no ha registrado utilidad para este pedido
+             //System.err.println("Utilidad: "+util[0]+" tulidad2 = "+util[1]);
+             if(util[0].equals("0.00")){//no ha registrado utilidad para este pedido
                 actualizaCostoPedido(idP,arr);//actualiza tabla de pedidocliente con costo total
                     for (int i = 0; i < jTable1.getRowCount(); i++) {
                         for (int j = 0; j < jTable1.getColumnCount(); j++) {
@@ -499,7 +586,12 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                                     filUtilidades.add(idP);
                                     filUtilidades.add(Integer.toString(i+1));
                                     filUtilidades.add(jTable1.getValueAt(i, j+4).toString());
-                                    filUtilidades.add(jTable1.getValueAt(i, j+5).toString());
+                                    utilon = jTable1.getValueAt(i, j+5).toString();
+                                    if( utilon != null && !utilon.toString().isEmpty()){
+                                        filUtilidades.add(utilon.toString() );
+                                    }else{
+                                        filUtilidades.add("0");  
+                                    }
                                     controlInserts.guardaUtilidades(filUtilidades, 0);
                                     filUtilidades.clear();
                                 }//if var != null 
@@ -507,7 +599,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
                         }//for j
                     }//for i       
              }else{
-                 JOptionPane.showMessageDialog(null, "Va a actualizar todononon");
+                 JOptionPane.showMessageDialog(null, "Va a actualizar utilidades");
                 actualizaCostoPedido(idP,arr);//actualiza tabla de pedidocliente con costo total
                 for (int i = 0; i < jTable1.getRowCount(); i++) {
                     for (int j = 0; j < jTable1.getColumnCount(); j++) {
@@ -569,23 +661,30 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
             var1 = jTable1.getValueAt(elig, 1).toString();
 
             if (var1 != null && !var1.toString().isEmpty()) {
-                disponib = jTable1.getValueAt(elig, 5);
+                disponib = jTable1.getValueAt(elig, 5);//obtiene valor de utilidad
                 if(disponib != null && !disponib.toString().isEmpty()){
                     BigDecimal pr = new BigDecimal(disponib.toString());
                     BigDecimal ut = new BigDecimal(var1.toString());
                     jTable1.setValueAt(fn.multiplicaAmount(pr, ut).toString(), elig, 6);
+                    
+                    
                 }else{
                     jTable1.setValueAt("0", elig, 5);
                     jTable1.setValueAt("0", elig, 6);
                 }
                     jLabel23.setText(calcPrecNull(jTable1,6));
-                    jLabTotMasUtil.setText(fn.getSum(new BigDecimal(imporMerc), fn.getSum(new BigDecimal(importFlet), new BigDecimal(jLabel23.getText()))).toString() );
+//jLabTotMasUtil.setText(fn.getDifference(new BigDecimal(imporMerc), fn.getSum(new BigDecimal(importFlet), new BigDecimal(jLabel23.getText()))).toString() );
+                jLabTotMasUtil.setText(fn.getDifference(new BigDecimal(jLabel23.getText()), new BigDecimal(gTot)).toString() );
                     jLabel20.setText(fn.divideAmount(new BigDecimal(jLabTotMasUtil.getText()), new  BigDecimal(txtTotCajas.getText())).toString());
             }else{
                 JOptionPane.showMessageDialog(null, "No existe producto de este tipo asignado a pedido \n Verifique porfavor.");
             }
         }
     }//GEN-LAST:event_jTable1KeyReleased
+
+    private void txtGranTotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGranTotActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtGranTotActionPerformed
 
     /**
      * @param args the command line arguments
@@ -622,7 +721,7 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         });
     }
 
-    private void cargaDetail(String idD){     
+    private void cargaDetail(String idD){    
          for (int i = 0; i <jTable1.getRowCount() ; i++) {
             for (int j = 0; j < jTable1.getColumnCount(); j++) {
                 jTable1.setValueAt("", i, j);
@@ -635,18 +734,18 @@ String[] cabEdoPed = {"idRel", "Flete", "idCompra", "Proveedor","Producto","Cant
         txtTotCajas.setText(arr[0]);
         txtTotMoneyMerca.setText(arr[1]);
        jTabDetailPedDet.setModel(new TModel(mat, cabEdoPed));
-
 /** ------
 Para cargar la descripcion de los fletes enviados a este pedido
 ------- */
         String[][] matFlet = matFletes(idD);
-        jTabDetailFletDet.setModel(new TModel(matFlet,cabFlet));        
-        txtCostFletes.setText(calcPrecFlet(jTabDetailFletDet,8));//suma costos de fletes
+        jTabDetailFletDet.setModel(new TModel(matFlet,cabFlet));      
+        System.err.println("precvio flertes: "+calcPrecFlet(jTabDetailFletDet,8));
+     
+        txtCostFletes.setText(fn.getSum(new BigDecimal(calcPrecFlet(jTabDetailFletDet,8)), BigDecimal.ZERO).toString());//suma costos de fletes
         
         BigDecimal amountOne = new BigDecimal(txtCostFletes.getText());//monto a cobrar
         BigDecimal amountTwo = new BigDecimal(txtTotMoneyMerca.getText());//cantidad recivida
         txtGranTot.setText(fn.getSum(amountOne, amountTwo).toString());
-        
                 
         BigDecimal coastT = new BigDecimal(txtGranTot.getText());//monto a cobrar
         BigDecimal numCaj = new BigDecimal(txtTotCajas.getText());//cantidad recivida  
@@ -659,16 +758,23 @@ Para cargar la descripcion de los fletes enviados a este pedido
             totalon();
             jLabel23.setText(calcPrecNull(jTable1, 6));
             
-            jLabTotMasUtil.setText(fn.getSum(new BigDecimal(jLabel23.getText()), new BigDecimal(txtGranTot.getText())).toString());
-            jLabel20.setText(fn.divideAmount(new BigDecimal(jLabTotMasUtil.getText()), new BigDecimal(txtTotCajas.getText())).toString());
+            jLabTotMasUtil.setText(fn.getDifference(new BigDecimal(jLabel23.getText()), new BigDecimal(txtGranTot.getText())).toString());
+jLabel20.setText(fn.divideAmount(new BigDecimal(jLabTotMasUtil.getText()), new BigDecimal(txtTotCajas.getText())).toString());
             redimensionaColumns();
+            
+ //OBTENER COSTO SEGUN PRODUCTOS
+       llenaCoastFlet();
+       
+//suma precio de flete
+totalonPrecFlete();
+totalonPomed();
     } 
     
     public String[] calcAsignAPed(String idPed){
         Connection cn = con2.conexion();
         String[] prod = new String[2];
         String sql = "SELECT SUM(cantidadCajasRel),SUM(cantidadCajasRel*precioAjust)\n" +
-                            "FROM relcomprapedido WHERE id_pedidoCli  = '"+idPed+"';";
+                            "FROM relcomprapedido WHERE id_pedidoCli  = '"+idPed+"' AND relcomprapedido.typeVP_PC = 0;";
         Statement st = null;
         ResultSet rs= null;
         try {
@@ -702,7 +808,7 @@ Para cargar la descripcion de los fletes enviados a este pedido
               sql = "SELECT\n" +
                 " relCompraPedido.id_fleteP,SUM(relCompraPedido.cantidadCajasRel) AS mercan,fleteenviado.cargaParcial,fleteenviado.choferFlete,\n" +
                 " fleteenviado.trocaFlete,fleteenviado.costoFlete,\n" +
-                " IF(fleteenviado.status = 0,\"PENDIENTE\",\"PAGADO\") AS condic,\n" +
+                " productocal.nombreP,\n" +                      
                 " CAST( ( fleteenviado.costoFlete / fleteenviado.cargaParcial ) AS DECIMAL(8,2) ), \n"+      
                 " CAST( ( (fleteenviado.costoFlete / fleteenviado.cargaParcial) * SUM(relCompraPedido.cantidadCajasRel) ) AS DECIMAL(8,2) ) \n"+
                 "FROM\n" +
@@ -711,8 +817,12 @@ Para cargar la descripcion de los fletes enviados a este pedido
                 "	fleteenviado\n" +
                 "ON\n" +
                 " relcomprapedido.id_fleteP = fleteenviado.id_fleteE AND relCompraPedido.id_pedidoCli='"+fech+"'\n" +
+             "INNER JOIN\n" +
+                "	productoCal\n" +
+                "ON\n" +
+                " productoCal.codigo = relcomprapedido.tipoMercanRel\n" +          
                 "GROUP BY\n" +
-                "relcomprapedido.id_fleteP;";      
+                "relcomprapedido.tipoMercanRel,relcomprapedido.id_fleteP;";      
              int i =0,cantFilas=0, cont=1,cantColumnas=0;
              String[][] mat=null;
              int[] arrIdPedido = null;//int para usar hashMap
@@ -795,7 +905,6 @@ return mat;
                 pps.setString(2, arre[1]);
                 pps.setInt(3, Integer.parseInt(arre[2]));
                 pps.setString(4, arre[3]);
-                
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Pedido actualizado correctamente.");
             } catch (SQLException ex) {
@@ -843,12 +952,11 @@ return mat;
            return suma;
     }//validaProveedorMayorista
         
-        /// CARGA LA SUMA DE CAJAS, IMPORTE TOTAL DE COMPRAS Y SUMA DE TIPO DE MERCANCIA EN EL DIA
+// CARGA LA SUMA DE CAJAS, IMPORTE TOTAL DE COMPRAS Y SUMA DE TIPO DE MERCANCIA EN EL DIA
     protected void cargaTotCompDayProveedor(String idPedidon) {
         Connection cn = con2.conexion();
         int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0;
         String sql = "", sql2 = "",sql3 ="",sql4="",sql5="";
-        
 //Muestra la cantidad de cajas que se registraron en el pedido
         sql = "SELECT productocal.codigo,SUM(detailpedidio.cantidadCajas) AS sumaType\n" +
                 "FROM detailpedidio\n" +
@@ -858,7 +966,6 @@ return mat;
                 "INNER JOIN productocal\n" +
                 "ON productocal.codigo = detailpedidio.codigoProdP\n" +
                 "GROUP BY productocal.codigo;";
-
 //Obtenemos la sumatoria de lo que fue asignado y destinado a los pedidos        
         sql3 = " SELECT productocal.codigo,SUM(relcomprapedido.cantidadCajasRel) AS sumaType,\n" +
                    " SUM(relcomprapedido.cantidadCajasRel * relcomprapedido.precioAjust) ,\n" +
@@ -867,13 +974,11 @@ return mat;
                    " INNER JOIN productocal\n" +
                    " ON productocal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_pedidoCli = '"+idPedidon+"'\n" +
                    " GROUP BY productocal.codigo;";
-        
         sql2 = "SELECT productocal.codigo,utilidadped.utilidad,utilidadped.importon\n" +
                     "FROM utilidadped\n" +
                     "INNER JOIN productocal\n" +
                     "ON productocal.codigo = utilidadped.tipoMercan AND utilidadped.idPedidon = '"+idPedidon+"'\n" +
                     ";";
-        
         Statement st = null;
         ResultSet rs = null;
         try {
@@ -901,7 +1006,6 @@ return mat;
                     }
                 }//for
             }//while #2
-           
             st = null;
             rs = null;
             st = cn.createStatement();
@@ -915,7 +1019,6 @@ return mat;
                     }
                 }//for
             }//while #3
-           
         } catch (SQLException ex) {
             Logger.getLogger(FormacionPedido.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -953,7 +1056,55 @@ return mat;
             }
     }
     
-    protected void redimensionaColumns(){
+//Calcular suma total y promedio
+        public void totalonPrecFlete(){
+        Object val1,val2,val3,result;       
+        String vak1,vak2,vak3,resuk;
+            for (int j = 0; j < jTable1.getRowCount(); j++) {
+                val1 = jTable1.getValueAt(j,3);
+                val2 = jTable4.getValueAt(j,1);
+                if (val1 == null || val1.toString().isEmpty()){
+                    vak1 = "0";
+                }else{
+                    vak1 = val1.toString();
+                }
+                if (val2 == null || val2.toString().isEmpty()){
+                    vak2 = "0";
+                }else{
+                    vak2 = val2.toString();
+                }
+                resuk= fn.getSum(new BigDecimal(vak1), new BigDecimal(vak2)).toString();
+               jTable1.setValueAt(resuk,j,7);
+            }
+    }
+    
+        //Calcular suma total y promedio
+        public void totalonPomed(){
+        Object val1,val2,result;       
+        String vak1,vak2, resuk;
+            for (int j = 0; j < jTable1.getRowCount(); j++) {
+                val1 = jTable1.getValueAt(j,7);
+                val2 = jTable1.getValueAt(j,1);
+                if (val1 == null || val1.toString().isEmpty()){
+                    vak1 = "0";
+                }else{
+                    vak1 = val1.toString();
+                }
+                if (val2 == null || val2.toString().isEmpty()){
+                    vak2 = "0";
+                }else{
+                    vak2 = val2.toString();
+                }
+                if(vak2.equals("0"))
+                    jTable1.setValueAt(vak2,j,8);
+                else{
+                    resuk= fn.divideAmount(new BigDecimal(vak1), new BigDecimal(vak2)).toString();
+                   jTable1.setValueAt(resuk,j,8);
+                }
+            }
+    }
+        
+        protected void redimensionaColumns(){
         //Matriz principal, descripcion de formacion del pedido
         jTabDetailPedDet.getColumnModel().getColumn(0).setMaxWidth(0);
         jTabDetailPedDet.getColumnModel().getColumn(0).setMinWidth(0);
@@ -978,6 +1129,10 @@ return mat;
         jTabDetailPedDet.getColumnModel().getColumn(6).setMaxWidth(150);
         jTabDetailPedDet.getColumnModel().getColumn(6).setMinWidth(80);
         jTabDetailPedDet.getColumnModel().getColumn(6).setPreferredWidth(80);
+        
+        jTabDetailPedDet.getColumnModel().getColumn(7).setMaxWidth(180);
+        jTabDetailPedDet.getColumnModel().getColumn(7).setMinWidth(100);
+        jTabDetailPedDet.getColumnModel().getColumn(7).setPreferredWidth(100);
 
         //matriz de detalles de fletes asignados
         jTabDetailFletDet.getColumnModel().getColumn(0).setMaxWidth(150);
@@ -999,12 +1154,50 @@ return mat;
         jTabDetailFletDet.getColumnModel().getColumn(7).setMaxWidth(150);
         jTabDetailFletDet.getColumnModel().getColumn(7).setMinWidth(80);
         jTabDetailFletDet.getColumnModel().getColumn(7).setPreferredWidth(80);
-        
     }
+    
+    // calcular el costo de fletes segune el tipo de mercancia
+        private BigDecimal calcFlet$(String tipoM){
+             Object val = null;
+             BigDecimal  ret = BigDecimal.ZERO;
+             BigDecimal acumulador = BigDecimal.ZERO;
+                    for (int i = 0; i <jTabDetailFletDet.getRowCount() ; i++) {
+                        for (int j = 0; j < jTabDetailFletDet.getColumnCount(); j++) {
+                            if(j == 6){
+                                val = jTabDetailFletDet.getValueAt(i,j);
+                                if(val.toString().equals(tipoM)){
+                                    ret = new BigDecimal(jTabDetailFletDet.getValueAt(i,j+2).toString());
+                                    acumulador = fn.getSum(ret, acumulador);
+                                }
+                            }
+                        }
+                    }
+                return acumulador;
+        }
+        
+//llena arreglo de costo por tipo de mercancia de fletes
+        private void llenaCoastFlet(){
+    //limpiar tabla de fletes costo
+        for (int i = 0; i < jTable4.getRowCount(); i++) {
+            jTable4.setValueAt("", i, 1);
+        }
+     promedios[0] =  calcFlet$("PRIM");
+     promedios[1] =  calcFlet$("SEG");
+     promedios[2] =  calcFlet$("PRIM_R");
+     promedios[3] =  calcFlet$("SEG_R");
+     promedios[4] =  calcFlet$("BOLA_P");
+     promedios[5] =  calcFlet$("BOLA_S");
+     promedios[6] =  calcFlet$("TERCERA");
+    //Llena tabla de fletes costo
+        for (int i = 0; i < jTable4.getRowCount(); i++) {
+            jTable4.setValueAt(promedios[i], i, 1);
+        }
+}        
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabTotMasUtil;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1033,10 +1226,14 @@ return mat;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTabDetailFletDet;
     private javax.swing.JTable jTabDetailPedDet;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable4;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField txtClieny;
     private javax.swing.JTextField txtCostFletes;

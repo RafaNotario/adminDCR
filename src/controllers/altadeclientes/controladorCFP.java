@@ -767,6 +767,62 @@ public void guardaDetallePedidoCli(String idP,String codP, int cantP){
                 }     
                arre = new String[cantFilas][cantColumnas];
                 while(rs.next())
+                {
+                       arre[i][0]=rs.getString(1);
+                       arre[i][1]=rs.getString(2);
+                      i++;      
+                }//while
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally  
+            return arre;
+    }//regresaDatosPedido
+
+//CREAR PEDIDOS CON VISTA DE DETALLES EN TABLA
+     public String[][] consultVPAsign(String idPro,String fech1,String fech2,String status){
+        Connection cn = con2.conexion();
+        int cantColumnas=0,cantFilas=0;
+        String[][] arre=null;
+        String sql ="";
+        
+        if(idPro.isEmpty()){
+            sql = "SELECT id_venta,id_clientePiso FROM notaventapiso WHERE fechVenta = '"+fech1+"'";           
+        }else{
+                if(status.isEmpty()){
+                     sql = "SELECT pedidocliente.id_pedido,pedidocliente.id_clienteP FROM pedidocliente "+
+                        "INNER JOIN clientepedidos"+
+                        " ON  pedidocliente.id_clienteP = clientepedidos.id_cliente AND (pedidocliente.fechaPedidio >= '"+fech1+"' AND pedidocliente.fechaPedidio <= '"+fech2+"'  )"
+                       + " AND pedidocliente.id_clienteP = '"+idPro+"' "           
+                       + "ORDER BY pedidocliente.id_pedido;";
+            }else{
+                    sql = "SELECT pedidocliente.id_pedido,pedidocliente.id_clienteP FROM pedidocliente "+
+                        "INNER JOIN clientepedidos"+
+                        " ON  pedidocliente.id_clienteP = clientepedidos.id_cliente AND (pedidocliente.fechaPedidio >= '"+fech1+"' AND pedidocliente.fechaPedidio <= '"+fech2+"'  )"
+                       + " AND pedidocliente.id_clienteP = '"+idPro+"' AND pedidocliente.status = '"+status+"' "        
+                       + "ORDER BY pedidocliente.id_pedido;";
+            }            
+        }  
+              Statement st = null;
+            ResultSet rs = null;            
+            int i =0;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                
+            cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }     
+               arre = new String[cantFilas][cantColumnas];
+                while(rs.next())
                 {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
                         //for (int x=1;x<= rs.getMetaData().getColumnCount()-1;x++) {
                           //      if(x==3){
@@ -791,7 +847,7 @@ public void guardaDetallePedidoCli(String idP,String codP, int cantP){
              }
          }//finally  
             return arre;
-    }//regresaDatosPedido
+    }//regresaDatosVenta de Piso
      
         public String[][] matrizPedidos(String fech){
         Connection cn = con2.conexion();
@@ -1946,7 +2002,6 @@ return mat;
                    Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
                    JOptionPane.showMessageDialog(null, "Error durante la transaccion.");
                }finally{
-   //               System.out.println( "finally detail->cierra conexion a la base de datos" );    
                    try {
                        if(pps != null) pps.close();                
                        if(cn !=null) cn.close();
@@ -1956,7 +2011,7 @@ return mat;
                }//finally catch
     } //guardaPrestamoPrveedor
             
-             public String[][] matrizVentaPisoDia(String fech){
+     public String[][] matrizVentaPisoDia(String fech){
         Connection cn = con2.conexion();
           String sql ="",aux;
               sql = "SELECT\n" +
@@ -1977,7 +2032,6 @@ return mat;
                 "	notaventapiso.id_venta=detailventapiso.num_notaV\n" +
                 "GROUP BY notaventapiso.id_venta\n" +
                 "ORDER BY notaventapiso.fechVenta;";      
-              
              int i =0,cantFilas=0, cont=1,cantColumnas=0;
              String[][] mat=null, mat2=null;
               int[] arrIdPedido = null;//int para usar hashMap
@@ -2024,10 +2078,12 @@ return mat;
 return mat;            
 }//prestaProov
    
-   public String[][] matrizVentasDia(int opcBusq,String idCli,String fech1,String fech2){
-        Connection cn = con2.conexion();
+   public String[][] matrizVentasDia(int opcBusq,String idCli,String fech1,String fech2,String status){
+       System.out.println("llego: "+opcBusq+" status: "+status);
+       
+       Connection cn = con2.conexion();
           String sql ="",aux;
-          if(opcBusq==0){//OPCION BUSQUEDA DE NOMBRE
+          if(opcBusq==0 && status.equals("2")){//OPCION BUSQUEDA DE NOMBRE
               sql = "SELECT\n" +
                 "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
                 "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
@@ -2046,9 +2102,28 @@ return mat;
                 "	notaventapiso.id_venta=detailventapiso.num_notaV\n" +
                 "GROUP BY notaventapiso.id_venta\n" +
                 "ORDER BY notaventapiso.fechVenta;";      
+          }else if(opcBusq==0 && status.equals("0")){
+              sql = "SELECT\n" +
+                "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
+                "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
+                "	SUM(detailventapiso.cantidadV*detailventapiso.precioPV),\n" +
+                "	notaventapiso.notaVent\n" +
+                "FROM\n" +
+                "	clientepedidos\n" +
+                "INNER JOIN\n" +
+                "	notaventapiso\n" +
+                "ON\n" +
+                "	clientePedidos.id_cliente = notaventapiso.id_clientePiso AND notaventapiso.id_clientePiso = '"+idCli+"' AND notaventapiso.statusVent = '"+status+"' \n" +
+                "	 \n" +
+                "INNER JOIN \n" +
+                "	detailVentaPiso \n" +
+                "ON\n" +
+                "	notaventapiso.id_venta=detailventapiso.num_notaV\n" +
+                "GROUP BY notaventapiso.id_venta\n" +
+                "ORDER BY notaventapiso.fechVenta;";
           }
           
-          if(opcBusq==1){//OPCION BUSQUEDA FECHA
+          if(opcBusq==1 && status.equals("2")){//OPCION BUSQUEDA FECHA
               sql = "SELECT\n" +
                 "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
                 "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
@@ -2067,8 +2142,27 @@ return mat;
                 "	notaventapiso.id_venta=detailventapiso.num_notaV\n" +
                 "GROUP BY notaventapiso.id_venta\n" +
                 "ORDER BY notaventapiso.fechVenta;";      
+          }else if(opcBusq==1 && status.equals("0")){
+              sql = "SELECT\n" +
+                "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
+                "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
+                "	SUM(detailventapiso.cantidadV*detailventapiso.precioPV),\n" +
+                "	notaventapiso.notaVent\n" +
+                "FROM\n" +
+                "	clientepedidos\n" +
+                "INNER JOIN\n" +
+                "	notaventapiso\n" +
+                "ON\n" +
+                "	clientePedidos.id_cliente = notaventapiso.id_clientePiso AND notaventapiso.fechVenta = '"+fech1+"' AND notaventapiso.statusVent = '"+status+"'\n" +
+                "	 \n" +
+                "INNER JOIN \n" +
+                "	detailVentaPiso \n" +
+                "ON\n" +
+                "	notaventapiso.id_venta=detailventapiso.num_notaV\n" +
+                "GROUP BY notaventapiso.id_venta\n" +
+                "ORDER BY notaventapiso.fechVenta;";
           }
-          if(opcBusq==2){//OPCION LAPSO DE FECHAS
+          if(opcBusq==2 && status.equals("2")){//OPCION LAPSO DE FECHAS
               sql="SELECT\n" +
                 "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
                 "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
@@ -2080,7 +2174,26 @@ return mat;
                 "	notaventapiso\n" +
                 "ON\n" +
                 "	clientePedidos.id_cliente = notaventapiso.id_clientePiso AND\n" +
-                "	 (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta >= '"+fech2+"' ) \n" +
+                "	 (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"' ) \n" +
+                "INNER JOIN \n" +
+                "	detailVentaPiso \n" +
+                "ON\n" +
+                "	notaventapiso.id_venta=detailventapiso.num_notaV\n" +
+                "GROUP BY notaventapiso.id_venta\n" +
+                "ORDER BY notaventapiso.fechVenta DESC;";
+          }else if(opcBusq==2 && status.equals("0")){
+              sql="SELECT\n" +
+                "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
+                "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
+                "	SUM(detailventapiso.cantidadV*detailventapiso.precioPV),\n" +
+                "	notaventapiso.notaVent\n" +
+                "FROM\n" +
+                "	clientepedidos\n" +
+                "INNER JOIN\n" +
+                "	notaventapiso\n" +
+                "ON\n" +
+                "	clientePedidos.id_cliente = notaventapiso.id_clientePiso AND notaventapiso.statusVent = '"+status+"' AND\n" +
+                "	 (notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"' ) \n" +
                 "INNER JOIN \n" +
                 "	detailVentaPiso \n" +
                 "ON\n" +
@@ -2088,7 +2201,7 @@ return mat;
                 "GROUP BY notaventapiso.id_venta\n" +
                 "ORDER BY notaventapiso.fechVenta DESC;";
           }
-          if(opcBusq==3){
+          if(opcBusq==3 && status.equals("2")){
               sql="SELECT\n" +
                 "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
                 "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
@@ -2107,8 +2220,27 @@ return mat;
                 "	notaventapiso.id_venta=detailventapiso.num_notaV\n" +
                 "GROUP BY notaventapiso.id_venta\n" +
                 "ORDER BY notaventapiso.fechVenta;";
+          }else if(opcBusq==3 && status.equals("0")){
+              sql="SELECT\n" +
+                "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
+                "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
+                "	SUM(detailventapiso.cantidadV*detailventapiso.precioPV),\n" +
+                "	notaventapiso.notaVent\n" +
+                "FROM\n" +
+                "	clientepedidos\n" +
+                "INNER JOIN\n" +
+                "	notaventapiso\n" +
+                "ON\n" +
+                "	clientePedidos.id_cliente = notaventapiso.id_clientePiso AND notaventapiso.id_clientePiso = '"+idCli+"' AND notaventapiso.statusVent = '"+status+"' AND\n" +
+                "	notaventapiso.fechVenta = '"+fech1+"'\n" +
+                "INNER JOIN \n" +
+                "	detailVentaPiso \n" +
+                "ON\n" +
+                "	notaventapiso.id_venta=detailventapiso.num_notaV\n" +
+                "GROUP BY notaventapiso.id_venta\n" +
+                "ORDER BY notaventapiso.fechVenta;";
           }
-          if(opcBusq ==4){
+          if(opcBusq == 4 && status.equals("2")){
               sql="SELECT\n" +
                 "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
                 "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
@@ -2120,6 +2252,25 @@ return mat;
                 "	notaventapiso\n" +
                 "ON\n" +
                 "	clientePedidos.id_cliente = notaventapiso.id_clientePiso AND notaventapiso.id_clientePiso = '"+idCli+"' AND\n" +
+                "	(notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"' )\n" +
+                "INNER JOIN \n" +
+                "	detailVentaPiso \n" +
+                "ON\n" +
+                "	notaventapiso.id_venta=detailventapiso.num_notaV\n" +
+                "GROUP BY notaventapiso.id_venta\n" +
+                "ORDER BY notaventapiso.fechVenta;";
+          }else if(opcBusq ==4 && status.equals("0")){
+              sql="SELECT\n" +
+                "	notaventapiso.id_venta,notaventapiso.fechVenta,IF(notaventapiso.statusVent = 0,'PENDIENTE','PAGADO'),\n" +
+                "	clientepedidos.id_cliente,clientepedidos.nombre,\n" +
+                "	SUM(detailventapiso.cantidadV*detailventapiso.precioPV),\n" +
+                "	notaventapiso.notaVent\n" +
+                "FROM\n" +
+                "	clientepedidos\n" +
+                "INNER JOIN\n" +
+                "	notaventapiso\n" +
+                "ON\n" +
+                "	clientePedidos.id_cliente = notaventapiso.id_clientePiso AND notaventapiso.id_clientePiso = '"+idCli+"' AND notaventapiso.statusVent = '"+status+"' AND\n" +
                 "	(notaventapiso.fechVenta >= '"+fech1+"' AND notaventapiso.fechVenta <= '"+fech2+"' )\n" +
                 "INNER JOIN \n" +
                 "	detailVentaPiso \n" +
@@ -2207,6 +2358,67 @@ return mat;
                 }
         return prod;
     }
+     
+     public String[][] regresaMatVP(String id){
+        Connection cn = con2.conexion();
+          String sql ="",aux;
+              sql = "SELECT detailventapiso.num_detV,productocal.nombreP,detailventapiso.cantidadV,detailventapiso.precioPV,\n" +
+                "	(detailventapiso.cantidadV*detailventapiso.precioPV) AS prod\n" +
+                "	\n" +
+                "FROM \n" +
+                "	detailventapiso \n" +
+                "INNER JOIN\n" +
+                "	productocal\n" +
+                "ON detailventapiso.cod_prodV = productocal.codigo AND detailventapiso.num_notaV = '"+id+"';";      
+             int i =0,cantFilas=0, cont=1;
+             String[][] mat=null, mat2=null;
+              int[] arrIdPedido = null;//int para usar hashMap
+            Statement st = null;
+            ResultSet rs = null;    
+            int cantColumnas=0;
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }
+               mat = new String[cantFilas][cantColumnas];
+               //aqui iria crear matriz
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                 
+                      for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
+                           // System.out.print("| "+rs.getString(x)+" |");
+                             mat[i][x-1]=rs.getString(x);
+                      //System.out.print(x+" -> "+rs.getString(x));                   
+                      }//for
+                       i++;
+                }//whilE
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+//             System.out.println("cierra conexion a la base de datos");    
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally 
+           // System.out.println("filas: "+cantFilas);
+            if (cantFilas == 0){
+                mat=null;
+                mat = new String[1][cantColumnas];
+                
+                for (int j = 0; j < mat[0].length; j++) {
+                     mat[0][j]="NO DATA";
+                }
+           }
+return mat;            
+}//regresaPays  
+
      
  //**CODIGO PARA FLETES*/
          public void creaFletes(List<String> param){
@@ -2451,7 +2663,7 @@ return mat;
      Connection cn = con2.conexion();
             PreparedStatement pps=null;
             String SQL="";        
-                SQL="INSERT INTO relcomprapedido (id_compraProveed,id_pedidoCli,cantidadCajasRel,tipoMercanRel,id_fleteP,precioAjust,id_detailComp) VALUES (?,?,?,?,?,?,?)";                           
+                SQL="INSERT INTO relcomprapedido (id_compraProveed,id_pedidoCli,cantidadCajasRel,tipoMercanRel,id_fleteP,precioAjust,id_detailComp,typeVP_PC) VALUES (?,?,?,?,?,?,?,?)";                           
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, dots.get(0));
@@ -2461,6 +2673,7 @@ return mat;
                 pps.setString(5, dots.get(4));
                 pps.setString(6, dots.get(5));
                 pps.setString(7, dots.get(6));
+                pps.setInt(8, Integer.parseInt(dots.get(7)));
                 pps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Asignacion Guardada correctamente");
             } catch (SQLException ex) {
@@ -2484,8 +2697,11 @@ return mat;
             int num=0,i=1;
             String sql = "";
             switch(camp){
+                case "id_VentaPiso"://opcion para ver si hay asignado venta piso + flete N/A
+                    sql = "SELECT '1' FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"' AND typeVP_PC = 1;";
+                break;
                 case "id_compraProveed":
-                    sql = "SELECT '1' FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"';";
+                    sql = "SELECT '1' FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"' AND typeVP_PC = 0;";
                 break;
                 case "id_pedidoCli":
                     sql = "SELECT '1' FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"';";
@@ -2531,6 +2747,9 @@ return mat;
             int num=0,i=1;
             String sql = "";
             switch(camp){
+                case "id_VentaPiso":
+                    sql = "SELECT SUM(cantidadCajasRel) FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"' ;";
+                break;
                 case "id_compraProveed":
                     sql = "SELECT SUM(cantidadCajasRel) FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"';";
                 break;
@@ -2686,7 +2905,7 @@ return mat;
                 " INNER JOIN\n" +
                 "	productoCal\n" +
                 "ON\n" +
-                "	productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_pedidoCli = '"+id+"'\n" +
+                "	productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_pedidoCli = '"+id+"' AND relcomprapedido.typeVP_PC = 0 \n" +
                 "INNER JOIN \n" +
                 "	compraprooved\n" +
                 "ON \n" +
@@ -2697,14 +2916,14 @@ return mat;
                 "	compraprooved.id_ProveedorC = proveedor.id_Proveedor"
                   + " ORDER BY relcomprapedido.tipoMercanRel;";      
           }
-          if(opc == 1){
+          if(opc == 1){//muestra solo lo que se asigno a pedido cliente
               sql = "SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_fleteP,relcomprapedido.id_pedidoCli,\n" +
                 "clientepedidos.nombre,\n" +
                 "productocal.nombreP,relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,\n" +
                 "(relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT\n" +
                 "FROM relcomprapedido\n" +
                 "INNER JOIN productoCal\n" +
-                "ON productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_compraProveed = '"+id+"'\n" +
+                "ON productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_compraProveed = '"+id+"' AND relcomprapedido.typeVP_PC = 0\n" +
                 "INNER JOIN pedidocliente -- compraprooved\n" +
                 "ON relcomprapedido.id_pedidoCli = pedidocliente.id_pedido\n" +
                 "INNER JOIN clientepedidos\n" +
@@ -2720,7 +2939,27 @@ return mat;
             "INNER JOIN compraprooved ON relcomprapedido.id_compraProveed = compraprooved.id_compraProve\n" +
             "INNER JOIN proveedor ON compraprooved.id_ProveedorC = proveedor.id_Proveedor;";
           }
-          
+          if(opc == 3){//opcion vista detalle Venta de piso
+          sql = "SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_fleteP,relcomprapedido.id_compraProveed,\n" +
+                "	IF(proveedor.nombreP = 'SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) AS condic,\n" +
+                "	productocal.nombreP,relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,\n" +
+                "	(relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT\n" +
+                "FROM\n" +
+                "	relcomprapedido\n" +
+                " INNER JOIN\n" +
+                "	productoCal\n" +
+                "ON\n" +
+                "	productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_pedidoCli = '"+id+"' AND relcomprapedido.typeVP_PC = 1\n" +
+                "INNER JOIN \n" +
+                "	compraprooved\n" +
+                "ON \n" +
+                "	relcomprapedido.id_compraProveed = compraprooved.id_compraProve\n" +
+                " INNER JOIN \n" +
+                "	proveedor\n" +
+                "ON \n" +
+                "	compraprooved.id_ProveedorC = proveedor.id_Proveedor"
+                  + " ORDER BY relcomprapedido.tipoMercanRel;";      
+          }         
           int i =0,cantFilas=0, cont=1,cantColumnas=0;
              String[][] mat=null;
               int[] arrIdPedido = null;//int para usar hashMap
@@ -2738,7 +2977,6 @@ return mat;
                //aqui iria crear matriz
                 while(rs.next())
                 {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
-                 
                       for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
                            // System.out.print("| "+rs.getString(x)+" |");
                              mat[i][x-1]=rs.getString(x);
@@ -2760,7 +2998,6 @@ return mat;
            if (cantFilas == 0){
                 mat=null;
                 mat = new String[1][cantColumnas];
-                
                 for (int j = 0; j < mat[0].length; j++) {
                      mat[0][j]="NO DATA";
                 }
@@ -3577,7 +3814,6 @@ return mat;
                 "ON\n" +
                 "	productocal.codigo = detailcompraprooved.codigoProdC;";      
           }
-          
              int i =0,cantFilas=0, cont=1;
              String[][] mat=null, mat2=null;
               int[] arrIdPedido = null;//int para usar hashMap
@@ -4612,6 +4848,8 @@ public void guardaUtilidades(List<String> param, int opc){
            }
 return mat;            
 }//@endmatrizgetTicketsDia
+        
+
         
           public static void main(String[] argv){
               String[] dats = null;

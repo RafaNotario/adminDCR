@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 
 /**
  *
@@ -184,6 +185,17 @@ public String getHour(){
     return hor;
 }
 
+    public String totalon(JTable tablon,int colsum){
+        String sumon ="",dat;
+        double t = 0, p = 0;
+        for (int i = 0; i < tablon.getRowCount(); i++) {
+            p = Double.parseDouble(tablon.getValueAt(i,colsum).toString());
+            t += p;
+        }
+        sumon = Double.toString(t);
+        return sumon;
+    }
+    
     public static void main(String[] args) {
                  Funciones dC = new Funciones();
 //        System.out.println("Semana del año es: "+dC.semanYear("2020/04/13",0)+"\t dia de la semana: "+dC.semanYear("2020/04/13",1));

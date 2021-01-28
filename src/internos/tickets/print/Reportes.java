@@ -79,7 +79,6 @@ void imprim() throws JRException{
 
                 //linea para mandar a imprimir
                 if(print){
-                    
                     JasperPrintManager.printReport(jp, false);
                 }else{
                     JasperViewer jv = new JasperViewer(jp,false);
@@ -87,7 +86,6 @@ void imprim() throws JRException{
                    jv.setVisible(true);
                    jv.setTitle("Central Huixcolotla");
                 }
-            
             }  catch (JRException ex) {
             Logger.getLogger(Reportes.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
@@ -104,13 +102,11 @@ void imprim() throws JRException{
   public void imprim80MMAsignacioncompraProv(String param,String numC,boolean print){
         Connection cn = con2.conexion();
         String  var = "C:/adminDCR/src/internos/tickets/print/vistaDiaProveedores.jasper";
-                //"C:/central/src/tickets/Jasper/ticket80MM_Ambu.jasper";
         JasperReport reporte = null;
             try {
                  Map parametro = new HashMap();
                 parametro.put("parameter1",param);
                 parametro.put("numComp",numC);
-                
                 reporte = (JasperReport) JRLoader.loadObjectFromFile(var);
                 JasperPrint jp = JasperFillManager.fillReport(reporte, parametro, cn);
                 //linea para mandar a imprimir
@@ -151,7 +147,6 @@ void imprim() throws JRException{
                 parametro.put("numCargador",datas[4]);
                 reporte = (JasperReport) JRLoader.loadObjectFromFile(var);
                 JasperPrint jp = JasperFillManager.fillReport(reporte, parametro, cn);
-
                 //linea para mandar a imprimir
                 if(print){
                     JasperPrintManager.printReport(jp, false);
@@ -161,7 +156,6 @@ void imprim() throws JRException{
                    jv.setVisible(true);
                    jv.setTitle("Central Huixcolotla \t Pago Cargadores.");
                 }
-            
             }  catch (JRException ex) {
             Logger.getLogger(Reportes.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
@@ -317,7 +311,6 @@ void imprim() throws JRException{
                     jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     jf.setTitle("CORTE DE CAJA");
                 }
-           
             }  catch (JRException ex) {
             Logger.getLogger(Reportes.class.getName()).log(Level.SEVERE, null, ex);
         }finally{

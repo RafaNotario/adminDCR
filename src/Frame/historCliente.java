@@ -297,7 +297,7 @@ public class historCliente extends javax.swing.JFrame {
         jLabel21.setText("jLabel21");
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel22.setText("Pedidos:");
+        jLabel22.setText("Total:");
 
         jLabel23.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel23.setText("Entregados:");
@@ -435,11 +435,11 @@ public class historCliente extends javax.swing.JFrame {
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Elija:");
 
         buttonGroup1.add(jRadOneFecha);
-        jRadOneFecha.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jRadOneFecha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jRadOneFecha.setText("Fecha");
         jRadOneFecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -448,7 +448,7 @@ public class historCliente extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(jRadLapsoFechs);
-        jRadLapsoFechs.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jRadLapsoFechs.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jRadLapsoFechs.setText("Lapso de fechas.");
         jRadLapsoFechs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -459,10 +459,10 @@ public class historCliente extends javax.swing.JFrame {
         jDateChooser1.setDateFormatString("dd/MM/yyyy");
         jDateChooser1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Fecha 1:");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Fecha 2:");
 
         jDateChooser2.setDateFormatString("dd/MM/yyyy");
@@ -536,8 +536,8 @@ public class historCliente extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButton1)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(10, 10, 10)
