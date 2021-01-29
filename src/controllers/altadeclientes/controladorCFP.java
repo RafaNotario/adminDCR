@@ -2695,13 +2695,14 @@ return mat;
             Connection cn = con2.conexion();
             boolean existe =false;
             int num=0,i=1;
+            
             String sql = "";
             switch(camp){
                 case "id_VentaPiso"://opcion para ver si hay asignado venta piso + flete N/A
-                    sql = "SELECT '1' FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"' AND typeVP_PC = 1;";
+                    sql = "SELECT '1' FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"' AND typeVP_PC = 1;";
                 break;
                 case "id_compraProveed":
-                    sql = "SELECT '1' FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"' AND typeVP_PC = 0;";
+                    sql = "SELECT '1' FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"' ;";
                 break;
                 case "id_pedidoCli":
                     sql = "SELECT '1' FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"';";
@@ -2716,6 +2717,8 @@ return mat;
                     sql = "SELECT '1' FROM compramayoreo WHERE id_compraProveMin = '"+idBusq+"';";
                 break;
             };
+            
+          
             Statement st = null;
             ResultSet rs= null;
             try {
@@ -2748,10 +2751,10 @@ return mat;
             String sql = "";
             switch(camp){
                 case "id_VentaPiso":
-                    sql = "SELECT SUM(cantidadCajasRel) FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"' ;";
+                    sql = "SELECT SUM(cantidadCajasRel) FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"' AND  typeVP_PC = 1;";
                 break;
                 case "id_compraProveed":
-                    sql = "SELECT SUM(cantidadCajasRel) FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"';";
+                    sql = "SELECT SUM(cantidadCajasRel) FROM relcomprapedido WHERE id_compraProveed = '"+idBusq+"' ;";
                 break;
                 case "id_pedidoCli":
                     sql = "SELECT '1' FROM relcomprapedido WHERE id_pedidoCli = '"+idBusq+"';";
