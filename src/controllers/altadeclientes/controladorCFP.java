@@ -231,8 +231,7 @@ public class controladorCFP {
                 SQL="UPDATE compraprooved  SET "+opcColumn+" =? WHERE id_compraProve = '"+id+"' ";   
 //***condiciones para  cambiar status de pagado a no pagado en pedido, compra o flete            
              if(table.equals("pedidocliente"))
-                SQL="UPDATE "+table+"  SET "+opcColumn+" =? WHERE id_pedido = '"+id+"' ";   
-             
+                SQL="UPDATE "+table+"  SET "+opcColumn+" =? WHERE id_pedido = '"+id+"' "; 
             try {
                 pps = cn.prepareStatement(SQL);
                 pps.setString(1, val);
