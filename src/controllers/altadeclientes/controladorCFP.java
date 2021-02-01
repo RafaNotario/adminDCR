@@ -4851,7 +4851,77 @@ public void guardaUtilidades(List<String> param, int opc){
            }
 return mat;            
 }//@endmatrizgetTicketsDia
-        
+ 
+        //*VISTA PEDIDA SEGUN FORMATO DE SEÑORA*/
+                   //regresa matrizde vista tickets del dia
+        public String[][] matrizgetVistaSra(String idPed, String fech1, String fech2){
+        Connection cn = con2.conexion();
+          String sql ="",aux;
+          if(fech1.isEmpty() && fech2.isEmpty()){
+              sql = "SELECT pedidocliente.id_pedido,pedidocliente.fechaPedidio, productocal.nombreP,SUM(relcomprapedido.cantidadCajasRel) AS sumaType,\n" +
+                "	utilidadped.importon\n" +
+                "	FROM relcomprapedido\n" +
+                "	INNER JOIN productocal\n" +
+                "	ON productocal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_pedidoCli = '"+idPed+"'  AND relcomprapedido.typeVP_PC = 0\n" +
+                "    INNER JOIN pedidocliente ON pedidocliente.id_pedido = relcomprapedido.id_pedidoCli\n" +
+                "    INNER JOIN utilidadped ON utilidadped.idPedidon = pedidocliente.id_pedido AND utilidadped.tipoMercan = productocal.codigo\n" +
+                "	GROUP BY productocal.codigo;";  
+          }else{
+              sql = "SELECT pedidocliente.id_pedido,pedidocliente.fechaPedidio, productocal.nombreP,SUM(relcomprapedido.cantidadCajasRel) AS sumaType,\n" +
+                "	utilidadped.importon\n" +
+                "	FROM relcomprapedido\n" +
+                "	INNER JOIN productocal\n" +
+                "	ON productocal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.typeVP_PC = 0\n" +
+                "    INNER JOIN pedidocliente ON pedidocliente.id_pedido = relcomprapedido.id_pedidoCli AND pedidocliente.fechaPedidio >= '"+fech1+"' AND pedidocliente.fechaPedidio <= '"+fech2+"' AND pedidocliente.id_clienteP = '"+idPed+"'\n" +
+                "    INNER JOIN utilidadped ON utilidadped.idPedidon = pedidocliente.id_pedido AND utilidadped.tipoMercan = productocal.codigo\n" +
+                "	GROUP BY pedidocliente.id_pedido,productocal.codigo;";
+          }
+
+             int i =0,cantFilas=0, cont=1,cantColumnas=0;
+             String[][] mat=null, mat2=null;
+              int[] arrIdPedido = null;//int para usar hashMap
+            Statement st = null;
+            ResultSet rs = null;            
+            try {
+                st = cn.createStatement();
+                rs = st.executeQuery(sql);
+                cantColumnas = rs.getMetaData().getColumnCount();
+               if(rs.last()){//Nos posicionamos al final
+                    cantFilas = rs.getRow();//sacamos la cantidad de filas/registros
+                    rs.beforeFirst();//nos posicionamos antes del inicio (como viene por defecto)
+                }
+               mat = new String[cantFilas][cantColumnas];
+               //aqui iria crear matriz
+                while(rs.next())
+                {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                 
+                      for (int x=1;x<= rs.getMetaData().getColumnCount();x++) {
+                           // System.out.print("| "+rs.getString(x)+" |");
+                             mat[i][x-1]=rs.getString(x);
+                      //System.out.print(x+" -> "+rs.getString(x));                   
+                      }//for
+                       i++;
+                }//whilE
+            } catch (SQLException ex) {
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{               
+//             System.out.println("cierra conexion a la base de datos");    
+             try {        
+                 if(st != null) st.close();                
+                 if(cn !=null) cn.close();
+             } catch (SQLException ex) {
+                 JOptionPane.showMessageDialog(null,ex.getMessage()); 
+             }
+         }//finally        
+           if (cantFilas == 0){
+                mat=null;
+                mat = new String[1][cantColumnas];
+                for (int j = 0; j < mat[0].length; j++) {
+                     mat[0][j]="NO DATA";
+                }
+           }
+return mat;            
+}//@endmatrizgetVistaSra
 
         
           public static void main(String[] argv){

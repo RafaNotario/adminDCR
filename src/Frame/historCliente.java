@@ -31,7 +31,8 @@ public class historCliente extends javax.swing.JFrame {
     controladorCFP controlInserts = new controladorCFP();
     ConexionDBOriginal con2 = new ConexionDBOriginal();
 
-    String[] cabDet1 = {"idPago","#Compra", "Fecha", "Monto", "Nota"};
+    String[] cabDet1 = {"idPago","#Compra", "Fecha", "Monto", "Nota"},
+            cabSra = {"idPedido","Fecha", "Producto", "Cantidad", "Importe"};
     
      DefaultTableModel dtmPrest,//obtener modelo en tabla CreaPedido clientes
             dtmPrec,
@@ -43,7 +44,6 @@ public class historCliente extends javax.swing.JFrame {
         initComponents();
         this.idProvd = idprv;
         iniFech();
-       
     }
 
     @SuppressWarnings("unchecked")
@@ -51,6 +51,18 @@ public class historCliente extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jItemVer1 = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jItemVerAll = new javax.swing.JMenuItem();
+        jDialViews = new javax.swing.JDialog();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableViewDet = new javax.swing.JTable();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        txtCajNum = new javax.swing.JTextField();
+        txtImportAll = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPanCompras = new javax.swing.JScrollPane();
@@ -95,6 +107,111 @@ public class historCliente extends javax.swing.JFrame {
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
 
+        jItemVer1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jItemVer1.setText("Ver Pedido");
+        jItemVer1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jItemVer1ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jItemVer1);
+        jPopupMenu1.add(jSeparator2);
+
+        jItemVerAll.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jItemVerAll.setText("Ver todos");
+        jItemVerAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jItemVerAllActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jItemVerAll);
+
+        jDialViews.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jDialViews.setTitle("Detalle Pedido");
+        jDialViews.setBackground(new java.awt.Color(0, 204, 255));
+        jDialViews.setSize(new java.awt.Dimension(555, 400));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        jTableViewDet.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jTableViewDet.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jTableViewDet.setRowHeight(23);
+        jScrollPane2.setViewportView(jTableViewDet);
+
+        jLabel24.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel24.setText("Total cajas=");
+        jLabel24.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel25.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel25.setText("Importe=");
+        jLabel25.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txtCajNum.setEditable(false);
+        txtCajNum.setBackground(new java.awt.Color(204, 255, 204));
+        txtCajNum.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+        txtCajNum.setText("0");
+
+        txtImportAll.setEditable(false);
+        txtImportAll.setBackground(new java.awt.Color(204, 255, 204));
+        txtImportAll.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+        txtImportAll.setText("0.0");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel24)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCajNum, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel25)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtImportAll, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)))
+                .addGap(22, 22, 22))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(38, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel24)
+                        .addComponent(jLabel25)
+                        .addComponent(txtImportAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCajNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15))
+        );
+
+        javax.swing.GroupLayout jDialViewsLayout = new javax.swing.GroupLayout(jDialViews.getContentPane());
+        jDialViews.getContentPane().setLayout(jDialViewsLayout);
+        jDialViewsLayout.setHorizontalGroup(
+            jDialViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jDialViewsLayout.setVerticalGroup(
+            jDialViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -103,13 +220,10 @@ public class historCliente extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 204));
 
-        jTablePedidos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTablePedidos.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jTablePedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "ID", "Status", "Fecha", "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "3_RA", "#CAJA", "IMPORTE"
@@ -123,6 +237,7 @@ public class historCliente extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTablePedidos.setComponentPopupMenu(jPopupMenu1);
         jTablePedidos.setRowHeight(23);
         jScrollPanCompras.setViewportView(jTablePedidos);
         if (jTablePedidos.getColumnModel().getColumnCount() > 0) {
@@ -161,6 +276,7 @@ public class historCliente extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 3, 15)); // NOI18N
         jLabel8.setText("Pedidos Realizados");
 
+        jTabsumtotales.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jTabsumtotales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
@@ -186,12 +302,10 @@ public class historCliente extends javax.swing.JFrame {
             jTabsumtotales.getColumnModel().getColumn(8).setMaxWidth(120);
         }
 
+        jTable3.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
@@ -200,13 +314,10 @@ public class historCliente extends javax.swing.JFrame {
         jTable3.setRowHeight(23);
         jScrollPane3.setViewportView(jTable3);
 
-        jTabPrestamos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTabPrestamos.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jTabPrestamos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "ID", "FECHA", "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "3_RA", "CAJA", "S BRICE B", "S ROCIO L", "EFECTIVO", "IMPORTE"
@@ -238,13 +349,10 @@ public class historCliente extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 3, 15)); // NOI18N
         jLabel3.setText("Pagos realizados");
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
@@ -645,6 +753,52 @@ public class historCliente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jRadLapsoFechsActionPerformed
 
+    private void jItemVer1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jItemVer1ActionPerformed
+        int cont = jTablePedidos.getRowCount(),fil = 0;
+        if(cont > 0){
+            jDialViews.setLocationRelativeTo(null);
+            jDialViews.setVisible(true);
+            jDialViews.setEnabled(true);
+            fil = jTablePedidos.getSelectedRow();
+            String paramV = jTablePedidos.getValueAt(fil, 0).toString(); 
+            String[][] mat = controlInserts.matrizgetVistaSra(paramV,"","");
+            jTableViewDet.setModel(new TModel(mat,cabSra));
+            
+            txtCajNum.setText(fn.totalon(jTableViewDet, 3));
+            txtImportAll.setText(fn.totalon(jTableViewDet, 4));
+        }else{
+            JOptionPane.showMessageDialog(null, "<html><h2> Sin datos para mostrar. </h2></html>");
+        }
+    }//GEN-LAST:event_jItemVer1ActionPerformed
+
+    private void jItemVerAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jItemVerAllActionPerformed
+        int cont = jTablePedidos.getRowCount(),fil = 0;
+        if(cont > 0){
+            String[][] mat = null;
+            fil = jTablePedidos.getSelectedRow();
+            String paramV = jTablePedidos.getValueAt(fil, 0).toString(),
+                    fechO = fn.getFecha(jDateChooser1),
+                    fechT = fn.getFecha(jDateChooser2); 
+            jDialViews.setLocationRelativeTo(null);
+            jDialViews.setVisible(true);
+            jDialViews.setEnabled(true);
+            if( jRadOneFecha.isSelected() ){
+                
+                paramV = jLabnumProv.getText();
+                mat = controlInserts.matrizgetVistaSra(paramV,fechO,fechO);
+            }else if(jRadLapsoFechs.isSelected()){
+              
+                paramV = jLabnumProv.getText();
+                mat = controlInserts.matrizgetVistaSra(paramV,fechO,fechT);
+            }
+            jTableViewDet.setModel(new TModel(mat,cabSra));
+            txtCajNum.setText(fn.totalon(jTableViewDet, 3));
+            txtImportAll.setText(fn.totalon(jTableViewDet, 4));
+        }else{
+            JOptionPane.showMessageDialog(null, "<html><h2> Sin datos para mostrar. </h2></html>");
+        }
+    }//GEN-LAST:event_jItemVerAllActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1017,6 +1171,9 @@ sql5 ="SELECT SUM(detailpedidio.cantidadCajas) AS numCaja\n" +
     private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
+    private javax.swing.JDialog jDialViews;
+    private javax.swing.JMenuItem jItemVer1;
+    private javax.swing.JMenuItem jItemVerAll;
     private javax.swing.JLabel jLabLetreroCompras;
     public javax.swing.JLabel jLabNombProv;
     private javax.swing.JLabel jLabel1;
@@ -1035,6 +1192,8 @@ sql5 ="SELECT SUM(detailpedidio.cantidadCajas) AS numCaja\n" +
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1044,18 +1203,25 @@ sql5 ="SELECT SUM(detailpedidio.cantidadCajas) AS numCaja\n" +
     private javax.swing.JLabel jLabel9;
     public javax.swing.JLabel jLabnumProv;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JRadioButton jRadLapsoFechs;
     private javax.swing.JRadioButton jRadOneFecha;
     private javax.swing.JScrollPane jScrollPanCompras;
     private javax.swing.JScrollPane jScrollPanTotCompras;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTable jTabPrestamos;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTablePedidos;
+    private javax.swing.JTable jTableViewDet;
     private javax.swing.JTable jTabsumtotales;
+    private javax.swing.JTextField txtCajNum;
+    private javax.swing.JTextField txtImportAll;
     // End of variables declaration//GEN-END:variables
 }

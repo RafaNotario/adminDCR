@@ -2399,7 +2399,7 @@ public class interno1 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanAdminist, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanVistaAlta, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
+                .addComponent(jPanVistaAlta, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2933,8 +2933,8 @@ public class interno1 extends javax.swing.JFrame {
         );
         jLayeredPanePedidosLayout.setVerticalGroup(
             jLayeredPanePedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanCreaPedido, javax.swing.GroupLayout.DEFAULT_SIZE, 740, Short.MAX_VALUE)
-            .addComponent(jPanConsulPed, javax.swing.GroupLayout.DEFAULT_SIZE, 740, Short.MAX_VALUE)
+            .addComponent(jPanCreaPedido, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
+            .addComponent(jPanConsulPed, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPPedidosHistLayout = new javax.swing.GroupLayout(jPPedidosHist);
@@ -2961,7 +2961,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jRadioCreaPedido, javax.swing.GroupLayout.Alignment.LEADING)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLayeredPanePedidos, javax.swing.GroupLayout.DEFAULT_SIZE, 740, Short.MAX_VALUE)
+                .addComponent(jLayeredPanePedidos, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
                 .addGap(25, 25, 25))
         );
 
@@ -4098,9 +4098,9 @@ public class interno1 extends javax.swing.JFrame {
         jLayeredPane1.setLayout(jLayeredPane1Layout);
         jLayeredPane1Layout.setHorizontalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanBusquedaPrest, javax.swing.GroupLayout.DEFAULT_SIZE, 1608, Short.MAX_VALUE)
-            .addComponent(jPanCompraProoved, javax.swing.GroupLayout.DEFAULT_SIZE, 1608, Short.MAX_VALUE)
-            .addComponent(jPanPrestamoProovedor, javax.swing.GroupLayout.DEFAULT_SIZE, 1608, Short.MAX_VALUE)
+            .addComponent(jPanBusquedaPrest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanCompraProoved, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanPrestamoProovedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jLayeredPane1Layout.setVerticalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4115,7 +4115,7 @@ public class interno1 extends javax.swing.JFrame {
         proveedorJP.setLayout(proveedorJPLayout);
         proveedorJPLayout.setHorizontalGroup(
             proveedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1608, Short.MAX_VALUE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(proveedorJPLayout.createSequentialGroup()
                 .addGap(92, 92, 92)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4700,8 +4700,8 @@ public class interno1 extends javax.swing.JFrame {
         );
         jLayerFletesLayout.setVerticalGroup(
             jLayerFletesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanHistorFletes, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
-            .addComponent(jPanCreaFletes, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
+            .addComponent(jPanHistorFletes, javax.swing.GroupLayout.DEFAULT_SIZE, 769, Short.MAX_VALUE)
+            .addComponent(jPanCreaFletes, javax.swing.GroupLayout.DEFAULT_SIZE, 769, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPFletesLayout = new javax.swing.GroupLayout(jPFletes);
@@ -4724,7 +4724,7 @@ public class interno1 extends javax.swing.JFrame {
                     .addComponent(jRdCreaFletes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jRHistorFletes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLayerFletes, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE))
+                .addComponent(jLayerFletes, javax.swing.GroupLayout.DEFAULT_SIZE, 769, Short.MAX_VALUE))
         );
 
         paneAltas.addTab("    FLETES    ", jPFletes);
@@ -4779,14 +4779,10 @@ public class interno1 extends javax.swing.JFrame {
         jLabel55.setText("CAJAS");
 
         txtNotaVentP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtNotaVentP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNotaVentPActionPerformed(evt);
-            }
-        });
+        txtNotaVentP.setNextFocusableComponent(jButton10);
         txtNotaVentP.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtNotaVentPKeyPressed(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNotaVentPKeyReleased(evt);
             }
         });
 
@@ -4827,9 +4823,10 @@ public class interno1 extends javax.swing.JFrame {
         jLabel77.setText("IMPORTE:");
 
         txtImportVentaP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtImportVentaP.setNextFocusableComponent(txtNotaVentP);
         txtImportVentaP.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtImportVentaPKeyPressed(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtImportVentaPKeyReleased(evt);
             }
         });
 
@@ -4839,6 +4836,7 @@ public class interno1 extends javax.swing.JFrame {
         jLabel79.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel79.setText("CLIENTE:");
 
+        jTVistaVentaPisoDia.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jTVistaVentaPisoDia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -4856,8 +4854,7 @@ public class interno1 extends javax.swing.JFrame {
             }
         });
         jTVistaVentaPisoDia.setComponentPopupMenu(jPMAsignaVentaPiso);
-        jTVistaVentaPisoDia.setRowHeight(32);
-        jTVistaVentaPisoDia.setRowMargin(2);
+        jTVistaVentaPisoDia.setRowHeight(23);
         jTVistaVentaPisoDia.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTVistaVentaPisoDiaMousePressed(evt);
@@ -4897,6 +4894,7 @@ public class interno1 extends javax.swing.JFrame {
             jTVistaVentaPisoDia.getColumnModel().getColumn(9).setMaxWidth(150);
         }
 
+        jTabDescVentaP.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jTabDescVentaP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -4914,8 +4912,7 @@ public class interno1 extends javax.swing.JFrame {
             }
         });
         jTabDescVentaP.setGridColor(new java.awt.Color(204, 204, 204));
-        jTabDescVentaP.setRowHeight(32);
-        jTabDescVentaP.setRowMargin(2);
+        jTabDescVentaP.setRowHeight(23);
         jTabDescVentaP.setShowHorizontalLines(false);
         jTabDescVentaP.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -5010,7 +5007,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jLabel200, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane41)))
+                        .addComponent(jScrollPane41, javax.swing.GroupLayout.DEFAULT_SIZE, 1039, Short.MAX_VALUE)))
                 .addGap(12, 12, 12))
         );
         jPanel7Layout.setVerticalGroup(
@@ -5053,7 +5050,7 @@ public class interno1 extends javax.swing.JFrame {
                 "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "TERCERA", "TOTAL CAJAS"
             }
         ));
-        jTabSumTotalPedido1.setRowHeight(44);
+        jTabSumTotalPedido1.setRowHeight(23);
         jScrollPane42.setViewportView(jTabSumTotalPedido1);
         if (jTabSumTotalPedido1.getColumnModel().getColumnCount() > 0) {
             jTabSumTotalPedido1.getColumnModel().getColumn(0).setMinWidth(110);
@@ -5086,7 +5083,6 @@ public class interno1 extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPaNVentaPisoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPaNVentaPisoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane42)
                     .addComponent(jScrollPane17)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPaNVentaPisoLayout.createSequentialGroup()
                         .addGroup(jPaNVentaPisoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -5157,6 +5153,10 @@ public class interno1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(250, 250, 250))
+            .addGroup(jPaNVentaPisoLayout.createSequentialGroup()
+                .addGap(226, 226, 226)
+                .addComponent(jScrollPane42, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPaNVentaPisoLayout.setVerticalGroup(
             jPaNVentaPisoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5212,13 +5212,13 @@ public class interno1 extends javax.swing.JFrame {
                         .addGap(20, 20, 20)
                         .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPaNVentaPisoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel53)
                         .addComponent(jLabel201, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane17, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(jScrollPane17, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane42, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
+                .addComponent(jScrollPane42, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63))
         );
 
         jPanBusqVentasPiso.setBackground(new java.awt.Color(255, 255, 255));
@@ -5391,13 +5391,13 @@ public class interno1 extends javax.swing.JFrame {
             jLayVentasPisoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPaNVentaPiso, javax.swing.GroupLayout.DEFAULT_SIZE, 2007, Short.MAX_VALUE)
             .addGroup(jLayVentasPisoLayout.createSequentialGroup()
-                .addComponent(jPanBusqVentasPiso, javax.swing.GroupLayout.PREFERRED_SIZE, 1551, Short.MAX_VALUE)
+                .addComponent(jPanBusqVentasPiso, javax.swing.GroupLayout.DEFAULT_SIZE, 1551, Short.MAX_VALUE)
                 .addGap(456, 456, 456))
         );
         jLayVentasPisoLayout.setVerticalGroup(
             jLayVentasPisoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPaNVentaPiso, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
-            .addComponent(jPanBusqVentasPiso, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
+            .addComponent(jPaNVentaPiso, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
+            .addComponent(jPanBusqVentasPiso, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanVentasPisoLayout = new javax.swing.GroupLayout(jPanVentasPiso);
@@ -6450,7 +6450,7 @@ public class interno1 extends javax.swing.JFrame {
                 .addGroup(ReportDayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ReportDayLayout.createSequentialGroup()
                         .addGap(2, 2, 2)
-                        .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1135, Short.MAX_VALUE)
+                        .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1135, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(ReportDayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(ReportDayLayout.createSequentialGroup()
@@ -7403,10 +7403,6 @@ public class interno1 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCantVentaPisoActionPerformed
 
-    private void txtNotaVentPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNotaVentPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNotaVentPActionPerformed
-
     private void jPanVentasPisoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanVentasPisoKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {//,VK_F1
             JOptionPane.showMessageDialog(null, "OPRIMIO ESC TECLA");
@@ -7438,7 +7434,6 @@ public class interno1 extends javax.swing.JFrame {
                 controlInserts.guardaDetalleVentPiso(datos);
                 datos.clear();
             }
-
             String dateD = fn.getFecha(jDFVentaPiso);
 
             //String[][] mat = controlInserts.matrizVentaPisoDia(dateD);
@@ -7449,8 +7444,6 @@ public class interno1 extends javax.swing.JFrame {
 
             String val = arr[0],
                     name = jCombCliVentaP.getSelectedItem().toString();
-    //        System.out.println(val);
-            //   vP = new VentaPiso(controlInserts.totalCompraProv(val), val);   
 
             vP = new VentaPiso(txtTotalVentaPiso.getText(), val, "pagoventapiso");
             vP.setVisible(true);
@@ -7462,7 +7455,10 @@ public class interno1 extends javax.swing.JFrame {
             vP.txtProveedorName.setText(name);
             vP.jLabTurno.setText(jLabTurno.getText());
             txtTotalVentaPiso.setText("0.0");
+            vP.jDatePayFech.setDate(jDFVentaPiso.getDate());
+            vP.jButContado.doClick();
             vP.jRadContado.doClick();
+            vP.jButton2.requestFocus(true);
             dtm = (DefaultTableModel) jTabDescVentaP.getModel(); //TableProducto es el nombre de mi tabla ;)
             for (int i = 0; filas > i; i++) {
                 dtm.removeRow(0);
@@ -8309,14 +8305,12 @@ public class interno1 extends javax.swing.JFrame {
         jPanBusqVentasPiso.setVisible(false);
         jDFVentaPiso.setDate(cargafecha());//carga la fecha del sistema
         String datePed = fn.getFecha(jDFVentaPiso);
-        
+
         dtm = (DefaultTableModel) jTabDescVentaP.getModel(); //TableProducto es el nombre de mi tabla ;)
             for (int i = 0; jTabDescVentaP.getRowCount() > i; i++) {
+                System.err.println(i);
                 dtm.removeRow(0);
          }
-        //String[][] mat = controlInserts.matrizVentaPisoDia(datePed);
-        //jTVistaVentaPisoDia.setModel(new TModel(mat, cabvENTAp));
-        
         
         cargaVPDetail(jTVistaVentaPisoDia,datePed,0);
         llenacomboAltaClis();
@@ -8331,7 +8325,6 @@ public class interno1 extends javax.swing.JFrame {
     private void txtPrecProdVentaPFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrecProdVentaPFocusLost
         String cant = txtCantVentaPiso.getText(),
                 cos = txtPrecProdVentaP.getText();
-        // txtImportVentaP.setText("");
 
         if (cant.isEmpty() || cos.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Campo cantidad o monto vacios\n Verifique Por favor");
@@ -9047,10 +9040,14 @@ public class interno1 extends javax.swing.JFrame {
             if(val.equals("NO DATA")){
                 JOptionPane.showMessageDialog(null, "<html> <h2>Sin datos para mostrar. </h2> </html>");
             }else{
-                for (int i = 0; i < cols; i++) {
-                    datos.add(jTVistaVentaPisoDia.getValueAt(fila, i).toString());
-                }
-                val = jTVistaVentaPisoDia.getValueAt(fila, 0).toString();
+               datos.add(fn.getFecha(jDFVentaPiso));
+               datos.add(jTVistaVentaPisoDia.getValueAt(fila, 0).toString());//id
+               datos.add(jTVistaVentaPisoDia.getValueAt(fila, 1).toString());//Cliente
+               datos.add(jTVistaVentaPisoDia.getValueAt(fila, 9).toString());//total cajas 
+               datos.add(jTVistaVentaPisoDia.getValueAt(fila, 11).toString());//Status
+               datos.add(jTVistaVentaPisoDia.getValueAt(fila, 12).toString());//Nota
+               
+               val = jTVistaVentaPisoDia.getValueAt(fila, 0).toString();
                 //System.out.println(val);
                 ventDP = new detalleVP(Integer.parseInt(val));
                 ventDP.setVisible(true);
@@ -9186,18 +9183,6 @@ public class interno1 extends javax.swing.JFrame {
             jButton7.doClick();
         }
     }//GEN-LAST:event_textANotaPrestProvKeyPressed
-
-    private void txtImportVentaPKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtImportVentaPKeyPressed
-        if (evt.getKeyCode() == evt.VK_ENTER) {
-            jButton8.doClick();
-        }
-    }//GEN-LAST:event_txtImportVentaPKeyPressed
-
-    private void txtNotaVentPKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNotaVentPKeyPressed
-        if (evt.getKeyCode() == evt.VK_ENTER) {
-            jButton8.doClick();
-        }
-    }//GEN-LAST:event_txtNotaVentPKeyPressed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         try {
@@ -10820,6 +10805,18 @@ public class interno1 extends javax.swing.JFrame {
            
        }
     }//GEN-LAST:event_jTabVistaPedidosDia1MouseClicked
+
+    private void txtImportVentaPKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtImportVentaPKeyReleased
+         if (evt.getKeyCode() == evt.VK_ENTER) {
+            jButton8.doClick();
+        }
+    }//GEN-LAST:event_txtImportVentaPKeyReleased
+
+    private void txtNotaVentPKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNotaVentPKeyReleased
+         if (evt.getKeyCode() == evt.VK_ENTER) {
+            jButton8.doClick();
+        }
+    }//GEN-LAST:event_txtNotaVentPKeyReleased
 
     public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("image/icons8_customer_32px_1.png"));

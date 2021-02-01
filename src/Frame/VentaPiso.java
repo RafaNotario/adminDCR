@@ -48,7 +48,6 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
         
         txtCantCobrar.setText(monto);
         jDatePayFech.setDate(fn.cargafecha());
-        
         txtAbonosPays.setText(controlInserts.sumAbonos(tipe, folio));
     }
 
@@ -334,11 +333,16 @@ String[] cabDet1 = {"idPago", "Fecha", "Monto", "Nota","Metodo"};
                 jButton2ActionPerformed(evt);
             }
         });
+        jButton2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jButton2KeyReleased(evt);
+            }
+        });
         jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 120, 60));
 
         jDatePayFech.setDateFormatString("dd/MM/yyyy");
         jDatePayFech.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        jPanel2.add(jDatePayFech, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 150, 50));
+        jPanel2.add(jDatePayFech, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 150, 33));
 
         jLabel25.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel25.setText("Fecha:");
@@ -611,6 +615,12 @@ if(jPanContadoPay.isVisible()){
         }
     }//GEN-LAST:event_txtCambioPAgoKeyReleased
 
+    private void jButton2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton2KeyReleased
+        if (evt.getKeyCode() == evt.VK_ESCAPE) {
+            jButton1.doClick();
+        }
+    }//GEN-LAST:event_jButton2KeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -786,9 +796,9 @@ if(jPanContadoPay.isVisible()){
     public javax.swing.JButton jButContado;
     public javax.swing.JButton jButTransfer;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    public javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private com.toedter.calendar.JDateChooser jDatePayFech;
+    public com.toedter.calendar.JDateChooser jDatePayFech;
     private javax.swing.JLabel jLaBRecomen;
     public javax.swing.JLabel jLabLetreroTransac;
     public javax.swing.JLabel jLabNameProv;

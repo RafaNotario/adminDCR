@@ -2400,7 +2400,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jPanAdminist" min="-2" pref="252" max="-2" attributes="0"/>
                       <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                      <Component id="jPanVistaAlta" pref="462" max="32767" attributes="0"/>
+                      <Component id="jPanVistaAlta" pref="465" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -2909,7 +2909,7 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLayeredPanePedidos" pref="740" max="32767" attributes="0"/>
+                      <Component id="jLayeredPanePedidos" pref="743" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -2982,8 +2982,8 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanCreaPedido" pref="740" max="32767" attributes="0"/>
-                      <Component id="jPanConsulPed" pref="740" max="32767" attributes="0"/>
+                      <Component id="jPanCreaPedido" pref="743" max="32767" attributes="0"/>
+                      <Component id="jPanConsulPed" pref="743" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -3918,7 +3918,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLayeredPane1" pref="1608" max="32767" attributes="0"/>
+                  <Component id="jLayeredPane1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" pref="126" max="-2" attributes="0"/>
@@ -4026,9 +4026,9 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanBusquedaPrest" pref="1608" max="32767" attributes="0"/>
-                      <Component id="jPanCompraProoved" pref="1608" max="32767" attributes="0"/>
-                      <Component id="jPanPrestamoProovedor" pref="1608" max="32767" attributes="0"/>
+                      <Component id="jPanBusquedaPrest" max="32767" attributes="0"/>
+                      <Component id="jPanCompraProoved" max="32767" attributes="0"/>
+                      <Component id="jPanPrestamoProovedor" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -6090,7 +6090,7 @@
                           <Component id="jRHistorFletes" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLayerFletes" pref="768" max="32767" attributes="0"/>
+                      <Component id="jLayerFletes" pref="769" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -6144,8 +6144,8 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanHistorFletes" pref="768" max="32767" attributes="0"/>
-                      <Component id="jPanCreaFletes" pref="768" max="32767" attributes="0"/>
+                      <Component id="jPanHistorFletes" pref="769" max="32767" attributes="0"/>
+                      <Component id="jPanCreaFletes" pref="769" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -7128,8 +7128,8 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPaNVentaPiso" pref="778" max="32767" attributes="0"/>
-                      <Component id="jPanBusqVentasPiso" pref="778" max="32767" attributes="0"/>
+                      <Component id="jPaNVentaPiso" pref="779" max="32767" attributes="0"/>
+                      <Component id="jPanBusqVentasPiso" pref="779" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -7150,7 +7150,6 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jScrollPane42" alignment="1" max="32767" attributes="0"/>
                                   <Component id="jScrollPane17" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="1" attributes="0">
@@ -7241,6 +7240,11 @@
                               </Group>
                               <EmptySpace min="-2" pref="250" max="-2" attributes="0"/>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="226" max="-2" attributes="0"/>
+                              <Component id="jScrollPane42" min="-2" pref="913" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -7313,15 +7317,15 @@
                                       <Component id="jSeparator12" min="-2" pref="10" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel53" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                      <Component id="jLabel53" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel201" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="jScrollPane17" pref="187" max="32767" attributes="0"/>
+                              <Component id="jScrollPane17" pref="197" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane42" min="-2" pref="79" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="jScrollPane42" min="-2" pref="51" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -7380,10 +7384,12 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="14" style="0"/>
                         </Property>
+                        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                          <ComponentRef name="jButton10"/>
+                        </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNotaVentPActionPerformed"/>
-                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNotaVentPKeyPressed"/>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNotaVentPKeyReleased"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton8">
@@ -7466,9 +7472,12 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="14" style="0"/>
                         </Property>
+                        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                          <ComponentRef name="txtNotaVentP"/>
+                        </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtImportVentaPKeyPressed"/>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtImportVentaPKeyReleased"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel78">
@@ -7498,6 +7507,9 @@
                       <SubComponents>
                         <Component class="javax.swing.JTable" name="jTVistaVentaPisoDia">
                           <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="13" style="0"/>
+                            </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                               <Table columnCount="13" rowCount="0">
                                 <Column editable="false" title="ID" type="java.lang.Object"/>
@@ -7587,8 +7599,7 @@
                             <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
                               <ComponentRef name="jPMAsignaVentaPiso"/>
                             </Property>
-                            <Property name="rowHeight" type="int" value="32"/>
-                            <Property name="rowMargin" type="int" value="2"/>
+                            <Property name="rowHeight" type="int" value="23"/>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
@@ -7608,6 +7619,9 @@
                       <SubComponents>
                         <Component class="javax.swing.JTable" name="jTabDescVentaP">
                           <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="13" style="0"/>
+                            </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                               <Table columnCount="6" rowCount="0">
                                 <Column editable="false" title="COD" type="java.lang.Object"/>
@@ -7655,8 +7669,7 @@
                             <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="cc" green="cc" red="cc" type="rgb"/>
                             </Property>
-                            <Property name="rowHeight" type="int" value="32"/>
-                            <Property name="rowMargin" type="int" value="2"/>
+                            <Property name="rowHeight" type="int" value="23"/>
                             <Property name="showHorizontalLines" type="boolean" value="false"/>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
@@ -7735,7 +7748,7 @@
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                                          <Component id="jScrollPane41" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane41" pref="1039" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
@@ -8018,7 +8031,7 @@
                                 </Column>
                               </TableColumnModel>
                             </Property>
-                            <Property name="rowHeight" type="int" value="44"/>
+                            <Property name="rowHeight" type="int" value="23"/>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
