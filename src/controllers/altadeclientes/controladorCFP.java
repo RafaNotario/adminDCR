@@ -4922,15 +4922,91 @@ return mat;
 return mat;            
 }//@endmatrizgetVistaSra
 
+        //codigo para manejar la mercancia reportada
+        public void GuardaReporton(List<String> param, int opc){
+            Connection cn = con2.conexion();
+            PreparedStatement pps=null;
+            String SQL="";     
+          if(opc == 0){  
+          SQL="INSERT INTO merc_reportarda (idMerc,nuReport,fech,idTurno) VALUES (?,?,?,?)";                           
+          try {
+                pps = cn.prepareStatement(SQL);
+                pps.setString(1, param.get(0));
+                pps.setString(2, param.get(1));
+                pps.setString(3, param.get(2));
+                pps.setString(4, param.get(3));
+                pps.executeUpdate();
+            } catch (SQLException ex) {
+                
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);               
+            }finally{
+                try {
+                    if(pps != null) pps.close();                
+                    if(cn !=null) cn.close();
+                    } catch (SQLException ex) {
+                      JOptionPane.showMessageDialog(null, ex.getMessage() );
+                    }                
+            }//finally catch  
+          }//if = 0
+          
+          if(opc == 1){
+          SQL="UPDATE merc_reportarda SET nuReport=? WHERE idMerc = '"+param.get(0)+"' AND fech = '"+param.get(2)+"'; ";                           
+       try {
+                pps = cn.prepareStatement(SQL);
+                pps.setString(1, param.get(1));
+                pps.executeUpdate();
+            } catch (SQLException ex) {
+                
+                Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);               
+            }finally{
+                try {
+                    if(pps != null) pps.close();                
+                    if(cn !=null) cn.close();
+                    } catch (SQLException ex) {
+                      JOptionPane.showMessageDialog(null, ex.getMessage() );
+                    }                
+            }//finally catch   
+          } 
+ 
+          }//@endGuardaReporton
+        
+             /*COMPRA A PROVEEDORES*/
+    public boolean validaReporton(String idM, String fech){
+        Connection cn = con2.conexion();
+        boolean existe =false;
+        int num=0,i=1;
+        String sql = "SELECT '1' FROM merc_reportarda WHERE idMerc = '"+idM+"' AND fech = '"+fech+"';";
+        Statement st = null;
+        ResultSet rs= null;
+        try {
+            st = cn.createStatement();
+            rs = st.executeQuery(sql);
+            rs.beforeFirst();
+            if(rs.next())
+            {
+                if(rs.getRow() > 0){
+                    existe =true;
+                }
+            }
+            System.err.println(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(controladorCFP.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+                    try {
+                        if(cn != null) cn.close();
+                    } catch (SQLException ex) {
+                        System.err.println( ex.getMessage() );    
+                    }
+                }
+       return existe;
+    }//@endvalidaReporton
         
           public static void main(String[] argv){
               String[] dats = null;
                 controladorCFP control = new controladorCFP();
                 
-                dats = control.getSemanTableAct("2020-10-12");
-                for (int i = 0; i < dats.length; i++) {
-                  System.out.println("datas -> "+dats[i]);
-              }
+
+             //  System.out.println("datas -> "+control.validaReporton("3","2020-11-28")); 
     }//main
           
 }//class

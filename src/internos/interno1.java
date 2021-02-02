@@ -366,6 +366,11 @@ public class interno1 extends javax.swing.JFrame {
         jPMAsignaVentaPiso = new javax.swing.JPopupMenu();
         jMAsignarMercanc = new javax.swing.JMenuItem();
         buttonGroupPagoenCompra = new javax.swing.ButtonGroup();
+        jPopupMenuValuesAll = new javax.swing.JPopupMenu();
+        jMenu1 = new javax.swing.JMenu();
+        Guardar = new javax.swing.JMenuItem();
+        jSeparator21 = new javax.swing.JPopupMenu.Separator();
+        eliminar = new javax.swing.JMenuItem();
         jPanCabezera = new javax.swing.JPanel();
         jLabel52 = new javax.swing.JLabel();
         jTextField17 = new javax.swing.JTextField();
@@ -735,6 +740,7 @@ public class interno1 extends javax.swing.JFrame {
         jRadioButton5 = new javax.swing.JRadioButton();
         jLabel116 = new javax.swing.JLabel();
         jLabel125 = new javax.swing.JLabel();
+        jLabel202 = new javax.swing.JLabel();
         jPanPagos = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         ReportDay = new javax.swing.JPanel();
@@ -1250,7 +1256,7 @@ public class interno1 extends javax.swing.JFrame {
         );
 
         jMenuItem2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jMenuItem2.setText("<html>\n<h2 style=\"color:rgb(11, 239, 251)\">Ver detalle</h2>\n</html>\n");
+        jMenuItem2.setText("<html>\n<h2 style=\"color:rgb(11, 239, 251)\">Ver detalle</h2>\n</html>");
         jMenuItem2.setActionCommand("");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1986,6 +1992,25 @@ public class interno1 extends javax.swing.JFrame {
             }
         });
         jPMAsignaVentaPiso.add(jMAsignarMercanc);
+
+        jPopupMenuValuesAll.setComponentPopupMenu(jPopupMenuValuesAll);
+
+        jMenu1.setText("<html>\n<h2 style=\"color:rgb(11, 239, 251)\"> Reportó > </h2>\n</html>");
+
+        Guardar.setBackground(new java.awt.Color(0, 102, 153));
+        Guardar.setText("<html>\n<h2 style=\"color:rgb(0, 102, 153)\">Guardar > </h2>\n</html>");
+        Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(Guardar);
+        jMenu1.add(jSeparator21);
+
+        eliminar.setText("<html>\n<h2 style=\"color:red\"> Eliminar > </h2>\n</html>");
+        jMenu1.add(eliminar);
+
+        jPopupMenuValuesAll.add(jMenu1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ADMINISTRACION DCR");
@@ -5766,7 +5791,14 @@ public class interno1 extends javax.swing.JFrame {
                 "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "3_RA", "TOTAL"
             }
         ));
+        jTable1.setToolTipText("<html>\n<aside>\n                <h2>Descripcion de datos:</h2>\n                <ul>\n                    <li><h3> 1. Merma: Sobrantes del dia anterior.</h3></li>\n                    <li><h3> 2. V_Piso: Total de mercancia a surtir en venta de piso.  </h3></li>\n                    <li><h3> 3. Pedidos: Total de mercancia registrada a surtir.</h3></li>\n                    <li><h3> 4. Compra: Total de mercancia comprada a proveedores.</h3></li>\n                    <li><h3> 5. Faltan: Diferencia (Merma + Compra) - ( V_Piso + Pedidos ).</h3></li>\n                    <li><h3> 6. Reportado: Mercancia reportada en el dia por trabajador.</h3></li>\n                </ul>\n            </aside>\n</html>");
+        jTable1.setComponentPopupMenu(jPopupMenuValuesAll);
         jTable1.setRowHeight(25);
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTable1KeyReleased(evt);
+            }
+        });
         jScrollPane7.setViewportView(jTable1);
 
         jLabel104.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -5832,6 +5864,9 @@ public class interno1 extends javax.swing.JFrame {
         jLabel125.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel125.setText("Merma =");
 
+        jLabel202.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel202.setText("Reporto =");
+
         javax.swing.GroupLayout jPanAsignacLayout = new javax.swing.GroupLayout(jPanAsignac);
         jPanAsignac.setLayout(jPanAsignacLayout);
         jPanAsignacLayout.setHorizontalGroup(
@@ -5847,7 +5882,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jLabel32)
                         .addGap(104, 104, 104)
                         .addComponent(jLaComp, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                         .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3))
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
@@ -5869,11 +5904,10 @@ public class interno1 extends javax.swing.JFrame {
                                         .addComponent(jRadioButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(134, 134, 134)
                                         .addComponent(jLabPed, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 26, Short.MAX_VALUE))
+                                .addGap(0, 33, Short.MAX_VALUE))
                             .addGroup(jPanAsignacLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabFlet, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5890,12 +5924,13 @@ public class interno1 extends javax.swing.JFrame {
                                         .addComponent(jLabel125))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                             .addGroup(jPanAsignacLayout.createSequentialGroup()
+                                .addGap(0, 0, 0)
                                 .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel106, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel104)
-                                        .addComponent(jLabel105)))
-                                .addGap(0, 0, 0)))))
+                                        .addComponent(jLabel105))
+                                    .addComponent(jLabel202, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane7)
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
@@ -5905,7 +5940,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(jButton37, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 246, Short.MAX_VALUE))
+                        .addGap(0, 245, Short.MAX_VALUE))
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5934,7 +5969,9 @@ public class interno1 extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel105, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel106))
+                                .addComponent(jLabel106)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel202))
                             .addGroup(jPanAsignacLayout.createSequentialGroup()
                                 .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jCheckBox3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -8796,6 +8833,9 @@ public class interno1 extends javax.swing.JFrame {
         cargaTotVPDay(jTable1,fechAs,1);
         cargaTotPedidoDay(jTable1,fechAs,2);
         cargaTotCompDayProveedor(jTable1,fechAs,3);
+        cargaReportados(jTable1,fechAs,5);
+        
+        
                 
         String[][] mat = controlInserts.matFletEstados(fechAs);
         jTDetailAsign.setModel(new TModel(mat, cabEdoPed));
@@ -10838,6 +10878,37 @@ public class interno1 extends javax.swing.JFrame {
             jButton8.doClick();
         }
     }//GEN-LAST:event_txtNotaVentPKeyReleased
+
+    private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
+        int elj = jTable1.getSelectedRow();
+        if( elj == 5){
+            System.out.println("Eligio col: "+jTable1.getSelectedColumn());
+        }
+    }//GEN-LAST:event_jTable1KeyReleased
+
+    private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
+        int elj = jTable1.getSelectedRow();
+        Object val = null;
+        if( elj == 5){
+            List<String> contentL = new ArrayList<String>();
+            String fech = fn.getFecha(jDCAsignacionDia),idt = jLabTurno.getText();
+            for (int i = 0; i < 6; i++) {
+                val = jTable1.getValueAt(elj, i);
+                if (val != null && !val.toString().isEmpty() ){
+                    contentL.add(Integer.toString(i+1));
+                    contentL.add(val.toString());
+                    contentL.add(fech);
+                    contentL.add(idt);
+                    if(controlInserts.validaReporton(contentL.get(0),contentL.get(2) )){
+                        controlInserts.GuardaReporton(contentL,1);//si devuelve true, existe y actualiza
+                    }else{//si devuelve false no esta y crea
+                        controlInserts.GuardaReporton(contentL,0);
+                    }
+                    contentL.clear();
+                }
+            }
+        }
+    }//GEN-LAST:event_GuardarActionPerformed
 
     public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("image/icons8_customer_32px_1.png"));
@@ -13298,8 +13369,50 @@ public class interno1 extends javax.swing.JFrame {
         }//finally  
     }
     
+            /// CARGA LA SUMA DE CAJAS, IMPORTE TOTAL DE COMPRAS Y SUMA DE TIPO DE MERCANCIA EN EL DIA
+    protected void cargaReportados(JTable tab, String fech, int opc) {
+        Connection cn = con2.conexion();
+        int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0,
+                fil =opc;      
+        Object temp = null;
+        String sql = "", sql2 = "";
+        sql = "SELECT productocal.codigo,merc_reportarda.nuReport\n" +
+                " FROM merc_reportarda\n" +
+                " INNER JOIN productocal\n" +
+                " ON merc_reportarda.idMerc = productocal.codigo AND merc_reportarda.fech = '"+fech+"'\n" +
+                " ORDER BY productocal.codigo;";
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            st = cn.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
+                    if (x == 1) {
+                        tab.setValueAt(rs.getInt(x + 1), fil, rs.getInt(x) - 1);//se le suma 1 por las columnas id,nombre de la jTable
+                    }
+                }//for
+            }//while
+
+        } catch (SQLException ex) {
+            Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        }//finally  
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AgregarMayoreo;
+    private javax.swing.JMenuItem Guardar;
     private javax.swing.JPanel ReportDay;
     private javax.swing.ButtonGroup btnGAltaClientes;
     private javax.swing.ButtonGroup btnGFletesCrea;
@@ -13312,6 +13425,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroupPagoenCompra;
     private javax.swing.JMenuItem delDetailcompra;
+    private javax.swing.JMenuItem eliminar;
     private javax.swing.JButton jButAltasActualiza;
     private javax.swing.JButton jButAltasActualiza1;
     private javax.swing.JButton jButAltasElimina;
@@ -13595,6 +13709,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel200;
     private javax.swing.JLabel jLabel201;
+    private javax.swing.JLabel jLabel202;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -13696,6 +13811,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMItPayFlete;
     private javax.swing.JMenuItem jMPAYFILTRO;
     private javax.swing.JMenuItem jMenPago;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
@@ -13750,6 +13866,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopPedidosDia;
     private javax.swing.JPopupMenu jPopVentaPisoBusq;
     private javax.swing.JPopupMenu jPopupMenActualizaCompra;
+    private javax.swing.JPopupMenu jPopupMenuValuesAll;
     private javax.swing.JPopupMenu jPopupPrestaProov;
     private javax.swing.JPopupMenu jPpMnDetFletes;
     private javax.swing.JPopupMenu jPpMnPagoFletes;
@@ -13830,6 +13947,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JSeparator jSeparator20;
+    private javax.swing.JPopupMenu.Separator jSeparator21;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;

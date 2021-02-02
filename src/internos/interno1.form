@@ -789,7 +789,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="16" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;&lt;h2 style=&quot;color:rgb(11, 239, 251)&quot;&gt;Ver detalle&lt;/h2&gt;&#xa;&lt;/html&gt;&#xa;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;&lt;h2 style=&quot;color:rgb(11, 239, 251)&quot;&gt;Ver detalle&lt;/h2&gt;&#xa;&lt;/html&gt;"/>
             <Property name="actionCommand" type="java.lang.String" value=""/>
           </Properties>
           <Events>
@@ -2080,6 +2080,44 @@
     </Container>
     <Component class="javax.swing.ButtonGroup" name="buttonGroupPagoenCompra">
     </Component>
+    <Container class="javax.swing.JPopupMenu" name="jPopupMenuValuesAll">
+      <Properties>
+        <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="jPopupMenuValuesAll"/>
+        </Property>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <Menu class="javax.swing.JMenu" name="jMenu1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;&lt;h2 style=&quot;color:rgb(11, 239, 251)&quot;&gt; Report&#xf3; &gt; &lt;/h2&gt;&#xa;&lt;/html&gt;"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="Guardar">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="99" green="66" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;&lt;h2 style=&quot;color:rgb(0, 102, 153)&quot;&gt;Guardar &gt; &lt;/h2&gt;&#xa;&lt;/html&gt;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GuardarActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator21">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="eliminar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;&lt;h2 style=&quot;color:red&quot;&gt; Eliminar &gt; &lt;/h2&gt;&#xa;&lt;/html&gt;"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+      </SubComponents>
+    </Container>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -8373,7 +8411,7 @@
                               <Component id="jLabel32" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
                               <Component id="jLaComp" min="-2" pref="176" max="-2" attributes="0"/>
-                              <EmptySpace pref="37" max="32767" attributes="0"/>
+                              <EmptySpace pref="38" max="32767" attributes="0"/>
                               <Component id="jButton18" min="-2" pref="60" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
@@ -8399,14 +8437,13 @@
                                               <Component id="jLabPed" min="-2" pref="187" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="0" pref="26" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="33" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="jLabFlet" min="-2" pref="213" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -8429,14 +8466,15 @@
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Component id="jLabel106" min="-2" pref="61" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="jLabel104" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel105" min="-2" max="-2" attributes="0"/>
                                           </Group>
+                                          <Component id="jLabel202" alignment="1" min="-2" pref="61" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -8450,7 +8488,7 @@
                               <Component id="jCheckBox3" min="-2" pref="187" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Component id="jButton37" min="-2" pref="66" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="246" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="245" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
@@ -8487,6 +8525,8 @@
                                       <Component id="jLabel105" min="-2" pref="17" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jLabel106" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="jLabel202" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -9282,6 +9322,7 @@
                         <Column editable="true" title="TOTAL" type="java.lang.Object"/>
                       </Table>
                     </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&#xa;&lt;aside&gt;&#xa;                &lt;h2&gt;Descripcion de datos:&lt;/h2&gt;&#xa;                &lt;ul&gt;&#xa;                    &lt;li&gt;&lt;h3&gt; 1. Merma: Sobrantes del dia anterior.&lt;/h3&gt;&lt;/li&gt;&#xa;                    &lt;li&gt;&lt;h3&gt; 2. V_Piso: Total de mercancia a surtir en venta de piso.  &lt;/h3&gt;&lt;/li&gt;&#xa;                    &lt;li&gt;&lt;h3&gt; 3. Pedidos: Total de mercancia registrada a surtir.&lt;/h3&gt;&lt;/li&gt;&#xa;                    &lt;li&gt;&lt;h3&gt; 4. Compra: Total de mercancia comprada a proveedores.&lt;/h3&gt;&lt;/li&gt;&#xa;                    &lt;li&gt;&lt;h3&gt; 5. Faltan: Diferencia (Merma + Compra) - ( V_Piso + Pedidos ).&lt;/h3&gt;&lt;/li&gt;&#xa;                    &lt;li&gt;&lt;h3&gt; 6. Reportado: Mercancia reportada en el dia por trabajador.&lt;/h3&gt;&lt;/li&gt;&#xa;                &lt;/ul&gt;&#xa;            &lt;/aside&gt;&#xa;&lt;/html&gt;"/>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
@@ -9326,11 +9367,17 @@
                         </Column>
                       </TableColumnModel>
                     </Property>
+                    <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                      <ComponentRef name="jPopupMenuValuesAll"/>
+                    </Property>
                     <Property name="rowHeight" type="int" value="25"/>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTable1KeyReleased"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -9440,6 +9487,14 @@
                   <Font name="Tahoma" size="14" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Merma ="/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel202">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="12" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Reporto ="/>
               </Properties>
             </Component>
           </SubComponents>
