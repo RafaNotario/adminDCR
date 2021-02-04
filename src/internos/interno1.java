@@ -80,6 +80,7 @@ public class interno1 extends javax.swing.JFrame {
     //** variables globales     ->netflix oss microservices
     String atribAltaCli = "";//variable para asignar el nombre de la tabla llenar de la base de datos
     String buscarTurn ="0"; //BUSCAtURNO EN  REPORTES
+    String fechAument = "";
     
     List<String> conten = new ArrayList<String>();//lista para guardar el id de cada cleinte en crea pedido y en ventas piso
     List<String> idProducts = new ArrayList<String>();//lista para id de produvtod
@@ -192,10 +193,14 @@ public class interno1 extends javax.swing.JFrame {
 //panel asignacion
         jDCAsignacionDia.setDate(cargafecha());
         jButton34.setEnabled(false);
+        jButtArriba.setEnabled(false);
+            jButtonAbajo.setEnabled(false);          
 //panel reportes
         llenacombogetcuentaGasto();
         jComboBox1.setVisible(false);
         AutoCompleteDecorator.decorate(jComboBox1);
+        
+        
 //panel pagos vista
         jDFechPays.setDate(cargafecha());
 //panel reportes
@@ -741,6 +746,8 @@ public class interno1 extends javax.swing.JFrame {
         jLabel116 = new javax.swing.JLabel();
         jLabel125 = new javax.swing.JLabel();
         jLabel202 = new javax.swing.JLabel();
+        jButtArriba = new javax.swing.JButton();
+        jButtonAbajo = new javax.swing.JButton();
         jPanPagos = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         ReportDay = new javax.swing.JPanel();
@@ -5802,10 +5809,10 @@ public class interno1 extends javax.swing.JFrame {
         jScrollPane7.setViewportView(jTable1);
 
         jLabel104.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel104.setText("Pedidos =");
+        jLabel104.setText("Pedidos=");
 
         jLabel105.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel105.setText("Compra =");
+        jLabel105.setText("Compra=");
 
         jLabel106.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel106.setText("Faltan =");
@@ -5859,13 +5866,29 @@ public class interno1 extends javax.swing.JFrame {
         });
 
         jLabel116.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel116.setText("V_Piso =");
+        jLabel116.setText("V_Piso=");
 
         jLabel125.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel125.setText("Merma =");
+        jLabel125.setText("Inventario");
 
-        jLabel202.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel202.setText("Reporto =");
+        jLabel202.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel202.setText("Reporto");
+
+        jButtArriba.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButtArriba.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/arriba.png"))); // NOI18N
+        jButtArriba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtArribaActionPerformed(evt);
+            }
+        });
+
+        jButtonAbajo.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButtonAbajo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/abajo.png"))); // NOI18N
+        jButtonAbajo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAbajoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanAsignacLayout = new javax.swing.GroupLayout(jPanAsignac);
         jPanAsignac.setLayout(jPanAsignacLayout);
@@ -5880,74 +5903,73 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(txtBusqAignCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel32)
-                        .addGap(104, 104, 104)
-                        .addComponent(jLaComp, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                        .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLaComp))
+                    .addComponent(jScrollPane26)
+                    .addComponent(jScrollPane25)
+                    .addComponent(jScrollPane23)
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane26, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane25, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane23, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanAsignacLayout.createSequentialGroup()
-                                .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanAsignacLayout.createSequentialGroup()
-                                        .addComponent(jLabel110)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtBusqFleteAsign, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel177))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanAsignacLayout.createSequentialGroup()
-                                        .addComponent(jLabel126, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(77, 77, 77)
-                                        .addComponent(jRadioButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(134, 134, 134)
-                                        .addComponent(jLabPed, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 33, Short.MAX_VALUE))
-                            .addGroup(jPanAsignacLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabFlet, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel110)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtBusqFleteAsign, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel177))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanAsignacLayout.createSequentialGroup()
+                                .addComponent(jLabel126, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(77, 77, 77)
+                                .addComponent(jRadioButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(134, 134, 134)
+                                .addComponent(jLabPed, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 43, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanAsignacLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabFlet, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanAsignacLayout.createSequentialGroup()
-                                        .addGap(2, 2, 2)
-                                        .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(7, 7, 7))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanAsignacLayout.createSequentialGroup()
-                                        .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(5, 5, 5)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanAsignacLayout.createSequentialGroup()
-                                    .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel116)
-                                        .addComponent(jLabel125))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                             .addGroup(jPanAsignacLayout.createSequentialGroup()
-                                .addGap(0, 0, 0)
-                                .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel106, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel104)
-                                        .addComponent(jLabel105))
-                                    .addComponent(jLabel202, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addGap(2, 2, 2)
+                                .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(7, 7, 7))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanAsignacLayout.createSequentialGroup()
+                                .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)))
+                        .addComponent(jLabel116, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel125, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel104)
+                            .addComponent(jLabel105))
+                        .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel106, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel202, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanAsignacLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane7)
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(jDCAsignacionDia, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtArriba)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox3)
+                        .addGap(6, 6, 6)
+                        .addComponent(jButtonAbajo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton37, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 245, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanAsignacLayout.createSequentialGroup()
                                 .addComponent(jLabel111, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane27)))
+                            .addComponent(jScrollPane27, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(55, 55, 55))
         );
@@ -5973,10 +5995,14 @@ public class interno1 extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel202))
                             .addGroup(jPanAsignacLayout.createSequentialGroup()
-                                .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jCheckBox3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jDCAsignacionDia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton37, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jDCAsignacionDia, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jButton37, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jButtonAbajo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButtArriba, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -5986,7 +6012,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane27, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane27, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)))
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -8835,7 +8861,7 @@ public class interno1 extends javax.swing.JFrame {
         cargaTotCompDayProveedor(jTable1,fechAs,3);
         cargaReportados(jTable1,fechAs,5);
         
-        
+        fechAument = fechAs;//obtiene fecha de jcalendar
                 
         String[][] mat = controlInserts.matFletEstados(fechAs);
         jTDetailAsign.setModel(new TModel(mat, cabEdoPed));
@@ -8871,6 +8897,11 @@ public class interno1 extends javax.swing.JFrame {
             jLaComp.setText(Integer.toString(jTabVistaComprasDia3.getRowCount()));
             jLabFlet.setText(Integer.toString(jTabFletesDia1.getRowCount()));
             jRadioButton5.setSelected(false);
+            
+//habilita flechas
+jButtArriba.setEnabled(false);
+jButtonAbajo.setEnabled(false);
+jCheckBox3.setSelected(false);
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
@@ -9672,7 +9703,7 @@ public class interno1 extends javax.swing.JFrame {
                 jLabel143.setText(difer);
                 jLabel145.setText(falt);
                 jLabel141.setText(tot);
-                        String[][] mati = controlInserts.matPedidosEst(param,2);
+                        String[][] mati = controlInserts.matPedidosEst(param,2);//envia folioFlete+opc
                         jTable3.setModel(new TModel(mati, cabDetFlet));
                         jLabel124.setText(Integer.toString(mati.length));
                 jTable3.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -10097,17 +10128,33 @@ public class interno1 extends javax.swing.JFrame {
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
          if(jCheckBox3.isSelected()){
             String fechAs = fn.getFecha(jDCAsignacionDia),
-                     fech2 = fn.getSumFechDay(fn.volteaFecha(fechAs, 1),-1);//RESTA 1 DIA A LA FECHA ACTUAL PARA CARGAR INVENTARIO
+                    fech2 = fn.getSumFechDay(fn.volteaFecha(fechAs, 1),-1);
+            
+             fechAument = fech2;//RESTA 1 DIA A LA FECHA ACTUAL PARA CARGAR INVENTARIO
              int fil2 = jTabVistaComprasDia3.getRowCount();
-             dtm = null;
+            
+            Object valu =null;
+            dtm = null;
             dtm = (DefaultTableModel) jTabVistaComprasDia3.getModel(); 
             for (int i = 0; fil2 > i; i++) {
                 dtm.removeRow(0);
             }
-            cargaComprasDiaAsign(fech2, "sobrinas");//carga las compras del dia 
+            cargaComprasDiaAsign(fech2, "sobrinas");//carga las compras del dia anterior
+                        jButtArriba.setEnabled(true);
+            jButtonAbajo.setEnabled(true);
+//recalcular la asignacion de mercancia
+    fil2 = jTabVistaComprasDia3.getRowCount();
+    if( fil2 > 0 ){
+        for (int i = 0; i < fil2; i++) {
+            valu = jTabVistaComprasDia3.getValueAt(i, 0);
+            consultDiferCompraAsign(jTabVistaComprasDia3,valu.toString(),i);
+        }
+    }
          }else{
              jButton18.doClick();
          }  
+         
+         System.err.println("oprimon");
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void txtBusqFleteAsignKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusqFleteAsignKeyReleased
@@ -10910,6 +10957,50 @@ public class interno1 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_GuardarActionPerformed
 
+    private void jButtonAbajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAbajoActionPerformed
+            String fech2 = fn.getSumFechDay(fn.volteaFecha(fechAument, 1),-1);
+             int fil2 = jTabVistaComprasDia3.getRowCount();
+            fechAument = fech2;
+            Object valu =null;
+            dtm = null;
+            dtm = (DefaultTableModel) jTabVistaComprasDia3.getModel(); 
+            for (int i = 0; fil2 > i; i++) {
+                dtm.removeRow(0);
+            }
+            cargaComprasDiaAsign(fechAument, "sobrinas");//carga las compras del dia anterior
+
+//recalcular la asignacion de mercancia
+    fil2 = jTabVistaComprasDia3.getRowCount();
+    if( fil2 > 0 ){
+        for (int i = 0; i < fil2; i++) {
+            valu = jTabVistaComprasDia3.getValueAt(i, 0);
+            consultDiferCompraAsign(jTabVistaComprasDia3,valu.toString(),i);
+        }
+    }
+    }//GEN-LAST:event_jButtonAbajoActionPerformed
+
+    private void jButtArribaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtArribaActionPerformed
+          String fech2 = fn.getSumFechDay(fn.volteaFecha(fechAument, 1),1);
+             int fil2 = jTabVistaComprasDia3.getRowCount();
+            fechAument = fech2;
+            Object valu =null;
+            dtm = null;
+            dtm = (DefaultTableModel) jTabVistaComprasDia3.getModel(); 
+            for (int i = 0; fil2 > i; i++) {
+                dtm.removeRow(0);
+            }
+            cargaComprasDiaAsign(fechAument, "sobrinas");//carga las compras del dia anterior
+
+//recalcular la asignacion de mercancia
+    fil2 = jTabVistaComprasDia3.getRowCount();
+    if( fil2 > 0 ){
+        for (int i = 0; i < fil2; i++) {
+            valu = jTabVistaComprasDia3.getValueAt(i, 0);
+            consultDiferCompraAsign(jTabVistaComprasDia3,valu.toString(),i);
+        }
+    }
+    }//GEN-LAST:event_jButtArribaActionPerformed
+
     public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("image/icons8_customer_32px_1.png"));
         return retValue;
@@ -11573,7 +11664,7 @@ public class interno1 extends javax.swing.JFrame {
             }
             tabCompras.setRowCount(arre.length);//CREAMOS EL NUMERO DE FILAS SEGUN LA MATRIZ DEVUELTA
             jTabVistaComprasDia3.setModel(tabCompras);//agrego el modelo creado con el numero de filas devuelto
-            for (int j = 0; j < arre.length; j++) {
+            for (int j = 0; j < arre.length; j++) { 
                 for (int k = 0; k < arre[0].length; k++) {
                     if (k == 0) {
                         consultDetailCompraAsign(Integer.parseInt(arre[j][k]), j);//envia matriz con id_compra,id_proveedor,fila
@@ -11586,9 +11677,9 @@ public class interno1 extends javax.swing.JFrame {
             coloreA.clear();
         } else {
            if(filter.equals("sobrinas"))
-                jLaComp.setText("Sin inventario del dia"+fech);
+                jLaComp.setText("Sin inventario del dia: "+fech);
             else
-            jLaComp.setText("No hay compras del día");
+            jLaComp.setText("No hay compras del día.");
         }
     }//Fin cargaComprasDia
 
@@ -13410,6 +13501,52 @@ public class interno1 extends javax.swing.JFrame {
         }//finally  
     }
     
+//recalcula diferencia entre compra total y compra asiganada
+    public void consultDiferCompraAsign(JTable jt, String opc, int fila) {
+        Connection cn = con2.conexion();
+        int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0;
+        String  sql2 = "";
+        int dat = 0;
+        sql2 = "SELECT productocal.codigo,SUM(relcomprapedido.cantidadCajasRel) AS asignados\n" +
+                    " FROM relcomprapedido\n" +
+                    " INNER JOIN compraprooved\n" +
+                    " ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed AND compraprooved.id_compraProve = '"+opc+"'\n" +
+                    " INNER JOIN productocal ON productocal.codigo = relcomprapedido.tipoMercanRel\n" +
+                    " GROUP BY productocal.codigo\n" +
+                    " ORDER BY productocal.codigo;";
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            st = cn.createStatement();
+            rs = st.executeQuery(sql2);
+            // System.out.print("Filas: "+cantFilas+"\tColumnas: "+cantColumnas+"\n");
+            while (rs.next()) {//es necesario el for para llenar dinamicamente la lista, ya que varia el numero de columnas de las tablas
+                for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
+                    if (x == 1) {//valor,fila,columna
+                        dat = Integer.parseInt( jt.getValueAt( fila,rs.getInt(x) + 1 ).toString() );
+//                        System.out.print("Reescribire: " + dat+"fila -> "+fila+"Columna ->"+(rs.getInt(x)+1)+", Pondre "+rs.getInt(x+1));
+                    jt.setValueAt( ( dat - rs.getInt(x + 1) ), fila, rs.getInt(x) + 1);//se le suma 1 por las columnas id,nombre de la jTable
+                    }//System.out.print("["+x+"]"+" -> "+rs.getString(x));                   
+                }//for
+                System.out.println();
+            }//while
+        } catch (SQLException ex) {
+            Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        }//finally  
+    }//regresaDatos
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AgregarMayoreo;
     private javax.swing.JMenuItem Guardar;
@@ -13434,6 +13571,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JButton jButFleteGuardar1;
     private javax.swing.JButton jButGuardaPedidodia;
     private javax.swing.JButton jButaltasGuardar;
+    private javax.swing.JButton jButtArriba;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -13486,6 +13624,7 @@ public class interno1 extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButtonAbajo;
     private javax.swing.JComboBox<String> jCBAltasFletes;
     private javax.swing.JComboBox<String> jCBTypeProv;
     private javax.swing.JComboBox<String> jCBoxEsIngreso;

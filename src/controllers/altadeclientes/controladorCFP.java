@@ -1574,7 +1574,7 @@ public void elimaRow(String table,String campo,String id){
                         " ON  compraprooved.id_ProveedorC = proveedor.id_Proveedor AND compraprooved.fechaCompra = '"+fech1+"' AND "
                        + "(proveedor.nombreP LIKE '"+filt+"%'  OR compraprooved.descripcionSubasta LIKE '%"+filt+"%') "
                        + "ORDER BY compraprooved.id_compraProve;";           
-            } else if(filt.equals("sobrinas")){
+            } else if(filt.equals("sobrinas")){//statAsign se actualiza cuando tiene mercancia sin asignar
                  sql = "SELECT id_compraProve,id_ProveedorC FROM compraprooved WHERE fechaCompra = '"+fech1+"' AND statAsign <> 0";   
             }
         
@@ -2932,13 +2932,15 @@ return mat;
                 "ON pedidocliente.id_clienteP = clientepedidos.id_cliente;";
           }
           if(opc == 2){
-              sql = "SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_pedidoCli,relcomprapedido.id_compraProveed,\n" +
+              sql = "SELECT relcomprapedido.id_relacionCP,clientepedidos.nombre,relcomprapedido.id_compraProveed,\n" +
             "IF(proveedor.nombreP = 'SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) AS alia,productocal.nombreP,relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,\n" +
             "(relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT\n" +
             "FROM relcomprapedido\n" +
             "INNER JOIN productoCal\n" +
-            "ON productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_fleteP = '"+id+"'\n" +
+            "ON productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_fleteP = '"+id+"' AND relcomprapedido.typeVP_PC = 0\n" +
             "INNER JOIN compraprooved ON relcomprapedido.id_compraProveed = compraprooved.id_compraProve\n" +
+            "INNER JOIN pedidocliente ON relcomprapedido.id_pedidoCli = pedidocliente.id_pedido\n" +
+                      "INNER JOIN clientepedidos ON pedidocliente.id_clienteP = clientepedidos.id_cliente\n" + 
             "INNER JOIN proveedor ON compraprooved.id_ProveedorC = proveedor.id_Proveedor;";
           }
           if(opc == 3){//opcion vista detalle Venta de piso

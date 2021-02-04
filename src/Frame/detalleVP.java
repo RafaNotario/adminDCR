@@ -429,7 +429,7 @@ static int param=0;
            txtTotPrest1.setText("0.0");
         }else{
             txtTotPrest1.setText(func.totalon(jTabDetalleAsign,7));
-            txtTotPrest.setText(func.totalon(jTabDetallePrest, 3));
+            txtTotPrest.setText(func.totalon(jTabDetallePrest, 4));
          }
         
         

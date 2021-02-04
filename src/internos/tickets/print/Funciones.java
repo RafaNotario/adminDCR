@@ -136,6 +136,8 @@ public String getSumFechDay(String fech, int nDays){
         cal.setTime(StringDate(fech));
         cal.add(Calendar.DAY_OF_YEAR, nDays);
         prox=cal.getTime();
+        
+        System.out.println("Fechan : "+formato.format(prox));
         return formato.format(prox);
     }
 

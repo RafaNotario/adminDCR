@@ -20,7 +20,7 @@ ON compraprooved.id_compraProve= detailcompraprooved.id_compraP AND compraproove
 INNER JOIN relcomprapedido
 ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed
 INNER JOIN pedidocliente
-ON pedidocliente.id_pedido = relcomprapedido.id_pedidoCli
+ON pedidocliente.id_pedido = relcomprapedido.id_pedidoCli AND relcomprapedido.typeVP_PC = 0
 INNER JOIN clientepedidos
 ON clientepedidos.id_cliente = pedidocliente.id_clienteP
 INNER JOIN productocal
@@ -39,15 +39,14 @@ INNER JOIN detailcompraprooved
 ON compraprooved.id_compraProve= detailcompraprooved.id_compraP AND compraprooved.statAsign <> 0 AND
 	compraprooved.fechaCompra = DATE_SUB(STR_TO_DATE($P{parameter1},'%Y-%m-%d'),interval 1 day)
 INNER JOIN relcomprapedido
-ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed
+ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed and relcomprapedido.typeVP_PC = 1
 INNER JOIN pedidocliente
 ON pedidocliente.id_pedido = relcomprapedido.id_pedidoCli AND pedidocliente.fechaPedidio = $P{parameter1}
 INNER JOIN clientepedidos
 ON clientepedidos.id_cliente = pedidocliente.id_clienteP
 INNER JOIN productocal
 ON relcomprapedido.tipoMercanRel = productocal.codigo
-group by relcomprapedido.id_relacionCP);
-]]>
+group by relcomprapedido.id_relacionCP);]]>
 	</queryString>
 	<field name="prov" class="java.lang.String"/>
 	<field name="merca" class="java.lang.String"/>
