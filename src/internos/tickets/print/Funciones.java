@@ -136,8 +136,6 @@ public String getSumFechDay(String fech, int nDays){
         cal.setTime(StringDate(fech));
         cal.add(Calendar.DAY_OF_YEAR, nDays);
         prox=cal.getTime();
-        
-        System.out.println("Fechan : "+formato.format(prox));
         return formato.format(prox);
     }
 
@@ -145,14 +143,11 @@ public String getSumFechDay(String fech, int nDays){
      private BigDecimal rounded(BigDecimal aNumber){
             return aNumber.setScale(DECIMALS, ROUNDING_MODE);
      }
-     
      public BigDecimal multiplicaAmount(BigDecimal aAmountOne, BigDecimal aAmountTwo){
             fAmountOne = rounded(aAmountOne);
             fAmountTwo = rounded(aAmountTwo);
-        //    System.out.println(fAmountOne+" -> "+fAmountTwo);
         return fAmountOne.multiply(fAmountTwo);
     }
-     
       public BigDecimal getDifference(BigDecimal aAmountOne, BigDecimal aAmountTwo){
             fAmountOne = rounded(aAmountOne);
             fAmountTwo = rounded(aAmountTwo);
@@ -163,13 +158,11 @@ public String getSumFechDay(String fech, int nDays){
             fAmountTwo = rounded(aAmountTwo);
           return fAmountOne.add(fAmountTwo);
       }
-      
      public BigDecimal percentage(BigDecimal base, BigDecimal pct){
          fAmountOne = rounded(base);
             fAmountTwo = rounded(pct);
        return fAmountOne.multiply(fAmountTwo).divide(ONE_HUNDRED);
     }
-     
     public BigDecimal divideAmount(BigDecimal aAmountOne, BigDecimal aAmountTwo){
             fAmountOne = rounded(aAmountOne);
             fAmountTwo = rounded(aAmountTwo);
@@ -199,9 +192,8 @@ public String getHour(){
     }
     
     public static void main(String[] args) {
-                 Funciones dC = new Funciones();
-//        System.out.println("Semana del año es: "+dC.semanYear("2020/04/13",0)+"\t dia de la semana: "+dC.semanYear("2020/04/13",1));
-     System.out.println(dC.getSumFechDay("01/04/2020",-1));
+          Funciones dC = new Funciones();
+          System.out.println(dC.getSumFechDay("01/04/2020",-1));
     }
     
 }

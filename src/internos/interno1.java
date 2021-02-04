@@ -5716,9 +5716,9 @@ public class interno1 extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtidPedidoAsign, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtidPedidoAsign, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel114)
-                    .addComponent(txtCompraAsign, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCompraAsign, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel115))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -5928,27 +5928,24 @@ public class interno1 extends javax.swing.JFrame {
                         .addComponent(jLabFlet, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanAsignacLayout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanAsignacLayout.createSequentialGroup()
-                                .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)))
-                        .addComponent(jLabel116, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel125, javax.swing.GroupLayout.Alignment.TRAILING))
-                    .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel104)
-                            .addComponent(jLabel105))
-                        .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel106, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel202, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanAsignacLayout.createSequentialGroup()
+                            .addGap(2, 2, 2)
+                            .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(11, 11, 11))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanAsignacLayout.createSequentialGroup()
+                            .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(9, 9, 9)))
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel202)
+                            .addComponent(jLabel106)
+                            .addComponent(jLabel105)
+                            .addComponent(jLabel104)
+                            .addComponent(jLabel116)
+                            .addComponent(jLabel125))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane7)
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
@@ -5982,9 +5979,9 @@ public class interno1 extends javax.swing.JFrame {
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanAsignacLayout.createSequentialGroup()
                                 .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(23, 23, 23)
                                 .addComponent(jLabel125)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel116)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel104)
@@ -5992,7 +5989,7 @@ public class interno1 extends javax.swing.JFrame {
                                 .addComponent(jLabel105, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel106)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel202))
                             .addGroup(jPanAsignacLayout.createSequentialGroup()
                                 .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -6005,8 +6002,8 @@ public class interno1 extends javax.swing.JFrame {
                                     .addComponent(jButtArriba, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel111)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -8853,9 +8850,9 @@ public class interno1 extends javax.swing.JFrame {
         cargaPedidosDiaAsign(fechAs);//carga los pedidos del dia 
         mostrarTablaFletesDiaAsign(fechAs,"");//carga los fletes del dia
                 
-        System.err.println("fecha-1 dia anerior: "+fn.getSumFechDay(fn.volteaFecha(fechAs,1),-1));
+      //  System.err.println("fecha-1 dia anerior: "+fn.getSumFechDay(fn.volteaFecha(fechAs,1),-1));
         //cargaTotCompDayProveedor(jTable1,fn.getSumFechDay(fn.volteaFecha(fechAs,1),-1),0);//carga mermas, en 2 pasos, 1: total compra dia anterior
-        cargaTotCompDayProveedorAnt(jTable1,fn.getSumFechDay(fn.volteaFecha(fechAs,1),-1),0);
+        cargaTotCompDayProveedorAnt(jTable1,fn.getSumFechDay(fn.volteaFecha(fechAs,1),-4),fechAs,0);//envia fecha -1 dia
         cargaTotVPDay(jTable1,fechAs,1);
         cargaTotPedidoDay(jTable1,fechAs,2);
         cargaTotCompDayProveedor(jTable1,fechAs,3);
@@ -8866,29 +8863,38 @@ public class interno1 extends javax.swing.JFrame {
         String[][] mat = controlInserts.matFletEstados(fechAs);
         jTDetailAsign.setModel(new TModel(mat, cabEdoPed));
         txtBusqAignCompra.setText("");
-        Object val1,val2,val3,result;
-        int vak1,vak2,vak3,resuk;
+        Object val1,val2,val3,val4,result;
+        int vak1,vak2,vak3,vak4,resuk;
         //Realiza diferencia de pedido del dia con compras del dia
             for (int j = 0; j < jTable1.getColumnCount(); j++) {
                 val1 = jTable1.getValueAt(2, j);// Pedidos
-                val2 = jTable1.getValueAt(3, j);// Compa
                 val3 = jTable1.getValueAt(1, j);// Venta piso
-                if (val1 == null || val1.toString().isEmpty())
+                
+                val2 = jTable1.getValueAt(3, j);// Compra
+                val4 = jTable1.getValueAt(0, j);//Inventario
+                if (val1 == null || val1.toString().isEmpty()){//Pedidos
                     vak1 = 0;
-                else{
+                }else{
                     vak1 = Integer.parseInt(val1.toString());
                 }
-                if (val2 == null || val2.toString().isEmpty())
-                    vak2 = 0;
-                else{
-                    vak2 = Integer.parseInt(val2.toString());
-                }
-                 if (val3 == null || val3.toString().isEmpty())
+                if (val3 == null || val3.toString().isEmpty()){//V_P
                     vak3 = 0;
-                else{
+                }else{
                     vak3 = Integer.parseInt(val3.toString());
                 }
-                resuk= vak2 - (vak1+vak3);
+                
+                if (val2 == null || val2.toString().isEmpty()){//Compra
+                    vak2 = 0;
+                }else{
+                    vak2 = Integer.parseInt(val2.toString());
+                }
+
+                  if (val4 == null || val4.toString().isEmpty()){//Inventario
+                    vak4 = 0;
+                }else{
+                    vak4 = Integer.parseInt(val4.toString());
+                }
+                resuk= (vak4 + vak2) - (vak1+vak3);
                jTable1.setValueAt(resuk, 4, j);
             }
  
@@ -13396,7 +13402,7 @@ jCheckBox3.setSelected(false);
     }//regresaDatos
     
         /// CARGA LA SUMA DE CAJAS, IMPORTE TOTAL DE COMPRAS Y SUMA DE TIPO DE MERCANCIA EN EL DIA
-    protected void cargaTotCompDayProveedorAnt(JTable tab, String fech, int opc) {
+    protected void cargaTotCompDayProveedorAnt(JTable tab, String fech, String fech2, int opc) {
         Connection cn = con2.conexion();
         int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0,
                 fil =opc;      
@@ -13405,13 +13411,13 @@ jCheckBox3.setSelected(false);
         sql = "SELECT productocal.codigo,SUM(detailcompraprooved.cantCajasC) AS totales\n" +
             " FROM detailcompraprooved\n" +
             " INNER JOIN compraprooved\n" +
-            " ON compraprooved.id_compraProve = detailcompraprooved.id_compraP AND compraprooved.fechaCompra = '"+fech+"'\n" +
+            " ON compraprooved.id_compraProve = detailcompraprooved.id_compraP AND compraprooved.statAsign <> 0 AND (compraprooved.fechaCompra >= '"+fech+"' AND compraprooved.fechaCompra <= '"+fech2+"')\n" +
             " INNER JOIN productocal ON productocal.codigo = detailcompraprooved.codigoProdC\n" +
             " GROUP BY productocal.codigo;";
         sql2 = "SELECT productocal.codigo,SUM(relcomprapedido.cantidadCajasRel) AS asignados\n" +
             " FROM relcomprapedido\n" +
             " INNER JOIN compraprooved\n" +
-            " ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed AND compraprooved.fechaCompra = '"+fech+"'\n" +
+            " ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed AND compraprooved.statAsign <> 0 AND ( compraprooved.fechaCompra >= '"+fech+"' AND compraprooved.fechaCompra <= '"+fech2+"'  )\n" +
             " INNER JOIN productocal ON productocal.codigo = relcomprapedido.tipoMercanRel\n" +
             " GROUP BY productocal.codigo;";
         Statement st = null;
