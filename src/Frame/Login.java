@@ -2,6 +2,8 @@
 package Frame;
 
 import AppPackage.AnimationClass;
+import com.sun.istack.internal.logging.Logger;
+import controllers.altadeclientes.HiloLector;
 import controllers.altadeclientes.controladorCFP;
 import controllers.altadeclientes.usuarios;
 import internos.interno1;
@@ -9,11 +11,20 @@ import internos.tickets.print.Funciones;
 import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
@@ -54,7 +65,7 @@ public class Login extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jlabelMusica = new javax.swing.JLabel();
-        jlabelInternet = new javax.swing.JLabel();
+        jlabelImportDB = new javax.swing.JLabel();
         jlabelCalculadora = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -178,29 +189,33 @@ public class Login extends javax.swing.JFrame {
 
         jlabelMusica.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/IconNewUser.png"))); // NOI18N
         jlabelMusica.setToolTipText("Crea usuario nuevo");
+        jlabelMusica.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jlabelMusica.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jlabelMusicaMouseClicked(evt);
             }
         });
-        jpIngreso.add(jlabelMusica, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, 180, -1, 50));
+        jpIngreso.add(jlabelMusica, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, 120, -1, 50));
 
-        jlabelInternet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/icons8_Globe_32px.png"))); // NOI18N
-        jlabelInternet.addMouseListener(new java.awt.event.MouseAdapter() {
+        jlabelImportDB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/database.png"))); // NOI18N
+        jlabelImportDB.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jlabelImportDB.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jlabelInternetMouseClicked(evt);
+                jlabelImportDBMouseClicked(evt);
             }
         });
-        jpIngreso.add(jlabelInternet, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, 70, -1, 50));
+        jpIngreso.add(jlabelImportDB, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, 70, -1, 50));
 
         jlabelCalculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/icons8_Calculator_32px.png"))); // NOI18N
+        jlabelCalculadora.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jlabelCalculadora.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jlabelCalculadoraMouseClicked(evt);
             }
         });
-        jpIngreso.add(jlabelCalculadora, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, 130, -1, 50));
+        jpIngreso.add(jlabelCalculadora, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, 180, -1, 50));
 
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/logo1.png"))); // NOI18N
         jpIngreso.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, -1, -1));
 
@@ -499,7 +514,7 @@ public class Login extends javax.swing.JFrame {
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         AnimationClass internet = new AnimationClass();
-        internet.jLabelXRight(-40, 10, 10, 5, jlabelInternet);
+        internet.jLabelXRight(-40, 10, 10, 5, jlabelImportDB);
         
         AnimationClass calc = new AnimationClass();
         calc.jLabelXRight(-40, 10, 10, 5, jlabelCalculadora);
@@ -508,7 +523,7 @@ public class Login extends javax.swing.JFrame {
         music.jLabelXRight(-40, 10, 10, 5, jlabelMusica);
         /*    */
         AnimationClass internett = new AnimationClass();
-        internett.jLabelXLeft(10, -40, 10, 5, jlabelInternet);
+        internett.jLabelXLeft(10, -40, 10, 5, jlabelImportDB);
         
         AnimationClass calcu = new AnimationClass();
         calcu.jLabelXLeft(10, -40, 10, 5, jlabelCalculadora);
@@ -525,9 +540,10 @@ public class Login extends javax.swing.JFrame {
             System.exit(0);
     }//GEN-LAST:event_jLabel21MouseClicked
 
-    private void jlabelInternetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlabelInternetMouseClicked
-    openInternet();
-    }//GEN-LAST:event_jlabelInternetMouseClicked
+    private void jlabelImportDBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlabelImportDBMouseClicked
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/tenor.gif"))); // NOI18N
+        openInternet();
+    }//GEN-LAST:event_jlabelImportDBMouseClicked
 
     private void jlabelCalculadoraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlabelCalculadoraMouseClicked
         try{
@@ -660,7 +676,6 @@ public class Login extends javax.swing.JFrame {
     private void txtMontoaper1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoaper1KeyReleased
         int var = evt.getKeyCode();
         if(var == KeyEvent.VK_ENTER){
-           // jButton10.doClick();
         }
     }//GEN-LAST:event_txtMontoaper1KeyReleased
 
@@ -676,13 +691,42 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtMontoaper2KeyReleased
    
     public void openInternet(){
-        try{
-            Desktop.getDesktop().browse(URI.create("www.google.com"));
-        }catch (IOException e){
-            JOptionPane.showConfirmDialog(this, e);
+            String varRut = "";
+                    //Creamos el objeto JFileChooser
+            JFileChooser fc=new JFileChooser();
+            //Abrimos la ventana, guardamos la opcion seleccionada por el usuario
+            int seleccion=fc.showOpenDialog(this);
+            //Si el usuario, pincha en aceptar
+            if(seleccion==JFileChooser.APPROVE_OPTION){
+            //Seleccionamos el fichero
+            File fichero=fc.getSelectedFile();
+            //Ecribe la ruta del fichero seleccionado en el campo de texto
+            varRut = fichero.getAbsolutePath().replace('\\','/');
+            try {
+                    Process p = Runtime.getRuntime().exec("C:/Program Files/MySQL/MySQL Server 8.0/bin/mysql --user=root --password=0ehn4TNU5R --database admindcr");
+                    new HiloLector(p.getErrorStream()).start();//HILO PARA CREAR ARCHIVO DE ERRORES
+                    OutputStream os = p.getOutputStream();
+                    FileInputStream fis = new FileInputStream(varRut);
+                    byte[] buffer = new byte[1000];
+                    int leido = fis.read(buffer);
+                    while ( leido > 0 ){
+                        os.write(buffer, 0, leido);
+                        leido = fis.read(buffer);
+                    }
+                    os.flush();
+                    os.close();
+                    fis.close();
+                    JOptionPane.showMessageDialog(null, "Archivo cargado correctamente.", "Verificar", JOptionPane.INFORMATION_MESSAGE);
+                    jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/logo1.png"))); // NOI18N
+                } catch (IOException e1) {
+                        java.util.logging.Logger.getLogger(Login.class.getName()).log(Level.SEVERE,null,e1);
+            }    
+        }else{
+             jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/logo1.png"))); // NOI18N
+            jTextField1.requestFocus(true);
         }
-    }
-        
+    }//@end openInternet
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -774,7 +818,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel jlabelCalculadora;
-    private javax.swing.JLabel jlabelInternet;
+    private javax.swing.JLabel jlabelImportDB;
     private javax.swing.JLabel jlabelMusica;
     private javax.swing.JPanel jpIngreso;
     private javax.swing.JTextField txtApellid;

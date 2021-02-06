@@ -5077,10 +5077,10 @@ public class interno1 extends javax.swing.JFrame {
         jTabSumTotalPedido1.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
         jTabSumTotalPedido1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "TERCERA", "TOTAL CAJAS"
+                "PRIM", "SEG", "PRIM_R", "SEG_R", "BOLA_P", "BOLA_S", "TERCERA", "TOTAL CAJAS", "TOTAL FALTAN"
             }
         ));
         jTabSumTotalPedido1.setRowHeight(23);
@@ -5188,7 +5188,7 @@ public class interno1 extends javax.swing.JFrame {
                 .addGap(250, 250, 250))
             .addGroup(jPaNVentaPisoLayout.createSequentialGroup()
                 .addGap(226, 226, 226)
-                .addComponent(jScrollPane42, javax.swing.GroupLayout.PREFERRED_SIZE, 913, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane42, javax.swing.GroupLayout.PREFERRED_SIZE, 1109, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPaNVentaPisoLayout.setVerticalGroup(
@@ -6530,7 +6530,7 @@ public class interno1 extends javax.swing.JFrame {
                 .addGroup(ReportDayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ReportDayLayout.createSequentialGroup()
                         .addGap(2, 2, 2)
-                        .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1135, Short.MAX_VALUE)
+                        .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1135, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(ReportDayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(ReportDayLayout.createSequentialGroup()
@@ -9287,8 +9287,6 @@ jCheckBox3.setSelected(false);
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         try {
             Runtime runtime = Runtime.getRuntime();//Escritorio
-            //File backupFile = new File(String.valueOf(RealizarBackupMySQL.getSelectedFile().toString())+".sql");
-            // File backupFile = new File("C:\\Users\\monit\\Documents\\CENTRAL DE ABASTOS\\autoGenerate.sql");
             File backupFile = new File(controlInserts.cargaConfig() + "autoGenerateAdminDCR" + fn.setDateActualGuion() + ".sql");
             InputStreamReader irs;
             BufferedReader br;
@@ -9307,7 +9305,6 @@ jCheckBox3.setSelected(false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error no se genero el archivo por el siguiente motivo:" + e.getMessage(), "Verificar", JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void delDetailcompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delDetailcompraActionPerformed
@@ -9327,7 +9324,7 @@ jCheckBox3.setSelected(false);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Debe elegir una opcion de la tabla.");
-        }        // TODO add your handling code here:
+        }        
     }//GEN-LAST:event_delDetailcompraActionPerformed
 
     private void jTabDetallecompraAllMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabDetallecompraAllMousePressed
@@ -10804,14 +10801,13 @@ jCheckBox3.setSelected(false);
             for (int i = 0; jTabDescVentaP.getRowCount() > i; i++) {
                 dtm.removeRow(0);
          }
-        //String[][] mat = controlInserts.matrizVentaPisoDia(datePed);
-        //jTVistaVentaPisoDia.setModel(new TModel(mat, cabvENTAp));
         cargaVPDetail(jTVistaVentaPisoDia,datePed,0);
         cargaComprasDiaAsignVP(datePed, "");
         txtTotalVentaPiso.setText("0.0");
         jCombCliVentaP.setSelectedItem("VENTA DE PISO");
         jLabVP.setText("---");
        jLabel201.setText(Integer.toString(jTVistaVentaPisoDia.getRowCount()));
+       
     }//GEN-LAST:event_jButton52ActionPerformed
 
     private void jCheckbpAGADOKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCheckbpAGADOKeyReleased
@@ -11854,7 +11850,7 @@ jCheckBox3.setSelected(false);
         //CARGA VENTAS DE PISO DEL DIA VISTA DE DETALLE
     private void cargaVPDetail(JTable tablon, String fech, int param) {//para cargar detalle de vehta de piso
         String[][] arre = controlInserts.consultVPAsign("",fech,"","");//regresa idPedido,idCliente
-        System.err.println("tam VP array = "+arre.length);
+       
         if (arre.length > 0) {
             tabCompras = (DefaultTableModel) tablon.getModel();//tabla de pedidos/VP dia
             int filas = tabCompras.getRowCount(), filasPrec = tabCompras.getRowCount();
@@ -11876,6 +11872,17 @@ jCheckBox3.setSelected(false);
             c1.arrIntRowsIluminados = controlInserts.fnToArray(coloreB);
             tablon.setDefaultRenderer(Object.class, c1);
             coloreB.clear();
+//suma columnas para obtener total de mercancia VP del dia     
+       jTabSumTotalPedido1.setValueAt(totalonNull(jTVistaVentaPisoDia,2), 0, 0);
+       jTabSumTotalPedido1.setValueAt(totalonNull(jTVistaVentaPisoDia,3), 0, 1);
+       jTabSumTotalPedido1.setValueAt(totalonNull(jTVistaVentaPisoDia,4), 0, 2);
+       jTabSumTotalPedido1.setValueAt(totalonNull(jTVistaVentaPisoDia,5), 0, 3);
+       jTabSumTotalPedido1.setValueAt(totalonNull(jTVistaVentaPisoDia,6), 0,4);
+       jTabSumTotalPedido1.setValueAt(totalonNull(jTVistaVentaPisoDia,7), 0, 5);
+       jTabSumTotalPedido1.setValueAt(totalonNull(jTVistaVentaPisoDia,8), 0, 6);
+       jTabSumTotalPedido1.setValueAt(totalonNull(jTVistaVentaPisoDia,9), 0, 7);
+       jTabSumTotalPedido1.setValueAt(totalonNull(jTVistaVentaPisoDia,10), 0, 8);
+       
         } else {
             jLabPed.setText("No hay Venta de Piso");
             tabCompras=null;
