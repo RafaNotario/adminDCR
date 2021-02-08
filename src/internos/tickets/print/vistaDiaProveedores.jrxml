@@ -27,6 +27,26 @@ INNER JOIN productocal
 ON relcomprapedido.tipoMercanRel = productocal.codigo
 group by relcomprapedido.id_relacionCP)
 UNION
+(SELECT IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) as prov,productocal.nombreP as merca,
+relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,clientepedidos.nombre as cliente,
+(relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT,IF(notaventapiso.statusVent = 0,'Pendiente','Pagado') as pay
+FROM proveedor
+INNER JOIN compraprooved
+ON proveedor.id_Proveedor = compraprooved.id_ProveedorC
+INNER JOIN detailcompraprooved
+ON compraprooved.id_compraProve= detailcompraprooved.id_compraP 
+INNER JOIN relcomprapedido
+ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed
+INNER JOIN notaventapiso
+ON notaventapiso.id_venta = relcomprapedido.id_pedidoCli AND notaventapiso.fechVenta = $P{parameter1} AND relcomprapedido.typeVP_PC = 1
+INNER JOIN clientepedidos
+ON clientepedidos.id_cliente = notaventapiso.id_clientePiso
+INNER JOIN productocal
+ON relcomprapedido.tipoMercanRel = productocal.codigo
+group by relcomprapedido.id_relacionCP
+ORDER BY relcomprapedido.id_pedidoCli)
+
+UNION
 (select '---------------','----------',0,0.0,'----------',0.0,'-------------')
 UNION
 (SELECT IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) as prov,productocal.nombreP as merca,
@@ -39,7 +59,7 @@ INNER JOIN detailcompraprooved
 ON compraprooved.id_compraProve= detailcompraprooved.id_compraP AND compraprooved.statAsign <> 0 AND
 	compraprooved.fechaCompra = DATE_SUB(STR_TO_DATE($P{parameter1},'%Y-%m-%d'),interval 1 day)
 INNER JOIN relcomprapedido
-ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed and relcomprapedido.typeVP_PC = 1
+ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed and relcomprapedido.typeVP_PC = 0
 INNER JOIN pedidocliente
 ON pedidocliente.id_pedido = relcomprapedido.id_pedidoCli AND pedidocliente.fechaPedidio = $P{parameter1}
 INNER JOIN clientepedidos
