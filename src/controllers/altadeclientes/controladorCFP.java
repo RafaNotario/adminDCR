@@ -2919,7 +2919,7 @@ return mat;
                   + " ORDER BY relcomprapedido.tipoMercanRel;";      
           }
           if(opc == 1){//muestra solo lo que se asigno a pedido cliente
-              sql = "SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_fleteP,relcomprapedido.id_pedidoCli,\n" +
+              sql = "(SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_fleteP,relcomprapedido.id_pedidoCli,\n" +
                 "clientepedidos.nombre,\n" +
                 "productocal.nombreP,relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,\n" +
                 "(relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT\n" +
@@ -2929,7 +2929,19 @@ return mat;
                 "INNER JOIN pedidocliente -- compraprooved\n" +
                 "ON relcomprapedido.id_pedidoCli = pedidocliente.id_pedido\n" +
                 "INNER JOIN clientepedidos\n" +
-                "ON pedidocliente.id_clienteP = clientepedidos.id_cliente;";
+                "ON pedidocliente.id_clienteP = clientepedidos.id_cliente) "
+                + "UNION"
+                      + "(SELECT relcomprapedido.id_relacionCP,relcomprapedido.id_fleteP,relcomprapedido.id_pedidoCli,\n" +
+                " clientepedidos.nombre,\n" +
+                " productocal.nombreP,relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,\n" +
+                " (relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT\n" +
+                " FROM relcomprapedido\n" +
+                " INNER JOIN productoCal\n" +
+                " ON productoCal.codigo = relcomprapedido.tipoMercanRel AND relcomprapedido.id_compraProveed = '"+id+"' AND relcomprapedido.typeVP_PC = 1\n" +
+                " INNER JOIN notaventapiso  -- compraprooved pedidocliente\n" +
+                " ON relcomprapedido.id_pedidoCli = notaventapiso.id_venta\n" +
+                " INNER JOIN clientepedidos\n" +
+                " ON clientepedidos.id_cliente = notaventapiso.id_clientePiso);";
           }
           if(opc == 2){
               sql = "SELECT relcomprapedido.id_relacionCP,clientepedidos.nombre,relcomprapedido.id_compraProveed,\n" +

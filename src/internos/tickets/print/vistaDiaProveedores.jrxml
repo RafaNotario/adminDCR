@@ -49,7 +49,7 @@ ORDER BY relcomprapedido.id_pedidoCli)
 UNION
 (select '---------------','----------',0,0.0,'----------',0.0,'-------------')
 UNION
-(SELECT IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP) as prov,productocal.nombreP as merca,
+(SELECT CONCAT( IF(proveedor.nombreP='SUBASTA',compraprooved.descripcionSubasta,proveedor.nombreP),' /',compraprooved.fechaCompra ) as prov,productocal.nombreP as merca,
 relcomprapedido.cantidadCajasRel,relcomprapedido.precioAjust,clientepedidos.nombre as cliente,
 (relcomprapedido.cantidadCajasRel*relcomprapedido.precioAjust) AS TOT,IF(compraprooved.statusCompra = 0,'Pendiente','Pagado') as pay
 FROM proveedor
