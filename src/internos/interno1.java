@@ -2039,7 +2039,7 @@ public class interno1 extends javax.swing.JFrame {
 
         jButton2.setBackground(new java.awt.Color(117, 229, 255));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/Actualizar.png"))); // NOI18N
-        jButton2.setToolTipText("Actualzar sistema.");
+        jButton2.setToolTipText("<html>\n<aside>\n                <h2>Refrescar sistema.</h2>\n            </aside>\n</html>");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -2049,7 +2049,7 @@ public class interno1 extends javax.swing.JFrame {
         jButton6.setBackground(new java.awt.Color(117, 229, 255));
         jButton6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton6.setText("BACKUP");
-        jButton6.setToolTipText("Realizar respaldo de base de datos.");
+        jButton6.setToolTipText("<html>\n<aside>\n                <h2>Generar respaldo de base de datos.</h2>\n            </aside>\n</html>");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -2067,7 +2067,7 @@ public class interno1 extends javax.swing.JFrame {
 
         jButton25.setBackground(new java.awt.Color(117, 229, 255));
         jButton25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/payExit.png"))); // NOI18N
-        jButton25.setToolTipText("Registrar gasto");
+        jButton25.setToolTipText("<html>\n<aside>\n                <h2>Registrar gasto.</h2>\n            </aside>\n</html>");
         jButton25.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton25ActionPerformed(evt);
@@ -2082,7 +2082,7 @@ public class interno1 extends javax.swing.JFrame {
         jButton36.setBackground(new java.awt.Color(117, 229, 255));
         jButton36.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jButton36.setText("$");
-        jButton36.setToolTipText("Ingresar efectivo");
+        jButton36.setToolTipText("<html>\n<aside>\n                <h2>Ingreso de efectivo.</h2>\n            </aside>\n</html>");
         jButton36.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton36ActionPerformed(evt);
@@ -6032,7 +6032,7 @@ public class interno1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton34, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane27, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane27, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)))
                     .addGroup(jPanAsignacLayout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addGroup(jPanAsignacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -6064,7 +6064,7 @@ public class interno1 extends javax.swing.JFrame {
                                         .addGap(2, 2, 2)))
                                 .addGap(2, 2, 2)
                                 .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))))
-                .addGap(82, 82, 82))
+                .addGap(50, 50, 50))
         );
 
         paneAltas.addTab("ASIGNACION", jPanAsignac);
@@ -8854,7 +8854,9 @@ public class interno1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabFletesDia1MousePressed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        String fechAs = fn.getFecha(jDCAsignacionDia);
+        String fechAs = fn.getFecha(jDCAsignacionDia),
+                fechAux = fn.getSumFechDay(fn.volteaFecha(fechAs,1),-1);//fecha de calendar menos 1 dia
+        
         int fil1 = jTabVistaPedidosDia1.getRowCount(), fil2 = jTabVistaComprasDia3.getRowCount(), fil3 = jTabFletesDia1.getRowCount();
         Object valu = null; 
         dtm = (DefaultTableModel) jTabVistaPedidosDia1.getModel(); //TableProducto es el nombre de mi tabla ;)
@@ -8880,9 +8882,10 @@ public class interno1 extends javax.swing.JFrame {
         cargaPedidosDiaAsign(fechAs);//carga los pedidos del dia 
         mostrarTablaFletesDiaAsign(fechAs,"");//carga los fletes del dia
                 
-      //  System.err.println("fecha-1 dia anerior: "+fn.getSumFechDay(fn.volteaFecha(fechAs,1),-1));
+        //  System.err.println("fecha-1 dia anerior: "+fn.getSumFechDay(fn.volteaFecha(fechAs,1),-1));
         //cargaTotCompDayProveedor(jTable1,fn.getSumFechDay(fn.volteaFecha(fechAs,1),-1),0);//carga mermas, en 2 pasos, 1: total compra dia anterior
-        cargaTotCompDayProveedorAnt(jTable1,fn.getSumFechDay(fn.volteaFecha(fechAs,1),-4),fechAs,0);//envia fecha -1 dia
+        cargaTotCompDayProveedorAnt(jTable1,fechAux,fechAux,0);//envia fecha -1 dia
+       
         cargaTotVPDay(jTable1,fechAs,1);
         cargaTotPedidoDay(jTable1,fechAs,2);
         cargaTotCompDayProveedor(jTable1,fechAs,3);
@@ -10132,19 +10135,22 @@ jCheckBox3.setSelected(false);
                jDiaViewSobrinas.setTitle("Sobrantes del día");
                jDiaViewSobrinas.setEnabled(true);
                jLabRcontFilsob.setText(Integer.toString(conunt));
-          for (int j = 0; j < conunt; j++) {
+ 
+/*  Se omite porque ya no se hace la cuenta
+               for (int j = 0; j < conunt; j++) {
                val = jTabSobrinasDays.getValueAt(j, 0).toString();
                cargaDetailcompSobrina(Integer.parseInt(val),j);//calcula la diferencia entre total de compra y total asigando
           }//for
-                jTable2.setValueAt(totalonNull(jTabSobrinasDays,2), 0, 0);
-                jTable2.setValueAt(totalonNull(jTabSobrinasDays,3), 0, 1);
-                jTable2.setValueAt(totalonNull(jTabSobrinasDays,4), 0, 2);
-                jTable2.setValueAt(totalonNull(jTabSobrinasDays,5), 0, 3);
-                jTable2.setValueAt(totalonNull(jTabSobrinasDays,6), 0, 4);
-                jTable2.setValueAt(totalonNull(jTabSobrinasDays,7), 0, 5);
-                jTable2.setValueAt(totalonNull(jTabSobrinasDays,8), 0, 6);
-                jTable2.setValueAt(totalonNull(jTabSobrinasDays,9), 0, 7);
-         }else{
+*/                
+                jTable2.setValueAt(totalonNullDiag(jTabSobrinasDays,2), 0, 0);
+                jTable2.setValueAt(totalonNullDiag(jTabSobrinasDays,3), 0, 1);
+                jTable2.setValueAt(totalonNullDiag(jTabSobrinasDays,4), 0, 2);
+                jTable2.setValueAt(totalonNullDiag(jTabSobrinasDays,5), 0, 3);
+                jTable2.setValueAt(totalonNullDiag(jTabSobrinasDays,6), 0, 4);
+                jTable2.setValueAt(totalonNullDiag(jTabSobrinasDays,7), 0, 5);
+                jTable2.setValueAt(totalonNullDiag(jTabSobrinasDays,8), 0, 6);
+                jTable2.setValueAt(totalonNullDiag(jTabSobrinasDays,9), 0, 7);
+         }else{//if ( conunt > 0)
              JOptionPane.showMessageDialog(null, "Sin sobrantes del dia");
          }
        }
@@ -11124,7 +11130,6 @@ fil2 = jTabMErcancVP.getRowCount();
             valu = jTabMErcancVP.getValueAt(i, 0);
             consultDiferCompraAsign(jTabMErcancVP,valu.toString(),i);
         }
-       
     }else{
         // jLabel200.setText("N/A");
     }
@@ -11139,6 +11144,7 @@ fil2 = jTabMErcancVP.getRowCount();
     public void cargaDetailcompSobrina(int opc, int fila) {
         Connection cn = con2.conexion();
         String aux = "";
+        String[] auxArr = null;
         int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0;
         String sql = "", sql2 = "";
         sql = "SELECT productocal.codigo,SUM(relcomprapedido.cantidadCajasRel) AS sumaType\n" +
@@ -11179,7 +11185,6 @@ fil2 = jTabMErcancVP.getRowCount();
     }//LlenaDetailPedido
 
     public final void mostrarTabla() {
-//        String datos[][] =  new String[2][4];
         String[][] datos = {{"1", "Jimena", "Perez", "23-10-2019", "ACTIVO"}, {"2", "JOSE", "SANCHEZ", "23-11-2018", "BAJA"}, {"4", "ESPERANZA", "ALVARADO", "25-01-2017", "ACTIVO"}};
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
@@ -11189,7 +11194,6 @@ fil2 = jTabMErcancVP.getRowCount();
         modelo.addColumn("STATUS");
         for (int x = 0; x < datos.length; x++) {
             for (int y = 0; y < datos[x].length; y++) {
-                //System.out.println ("[" + x + "," + y + "] = " + datos[x][y]);
                 modelo.addRow(datos[x]);
             }
         }
@@ -11256,9 +11260,7 @@ fil2 = jTabMErcancVP.getRowCount();
         if (var.equals("")) {
             consul = "SELECT * FROM " + atribAltaCli + " ORDER BY " + campo + " ASC";
         } else {
-
             consul = "SELECT * FROM " + atribAltaCli + " WHERE " + campo + " LIKE '%" + var + "%' ORDER BY " + campo + " ASC";
-//        System.out.println(consul);
         }
         String datos[] = new String[6];
         List<String> contentL = new ArrayList<String>();
@@ -11638,10 +11640,8 @@ fil2 = jTabMErcancVP.getRowCount();
                     }//System.out.print("["+x+"]"+" -> "+rs.getString(x));                   
                 }//for
             }//while
-
             st = null;
             rs = null;
-
             st = cn.createStatement();
             rs = st.executeQuery(sql2);
             while (rs.next()) {
@@ -12927,6 +12927,31 @@ fil2 = jTabMErcancVP.getRowCount();
         return sumon;
     }
     
+            private String totalonNullDiag(JTable tablon,int colsum){
+            String sumon ="",dat;
+            String[] auxArr = null;
+            double t = 0, p = 0;
+            int res =0;
+            Object var = null;
+            for (int i = 0; i < tablon.getRowCount(); i++) {
+                var = tablon.getValueAt(i,colsum);
+                if (var != null && !var.toString().isEmpty()) {
+                    if(var.toString().contains("/")){
+                       auxArr = var.toString().split("/");
+                       p = Double.parseDouble(auxArr[1].trim()) - Double.parseDouble(auxArr[0].trim());
+                    }else{
+                        p = Double.parseDouble(var.toString());
+                    }
+                    }else{
+                    p = 0;
+                }
+                t += p;
+            }
+            res = (int) t;
+            sumon = Double.toString(t);
+            return sumon;
+    }
+    
         private String totalonNull(JTable tablon,int colsum){
             String sumon ="",dat;
             double t = 0, p = 0;
@@ -13537,14 +13562,17 @@ fil2 = jTabMErcancVP.getRowCount();
         /// CARGA LA SUMA DE CAJAS, IMPORTE TOTAL DE COMPRAS Y SUMA DE TIPO DE MERCANCIA EN EL DIA
     protected void cargaTotCompDayProveedorAnt(JTable tab, String fech, String fech2, int opc) {
         Connection cn = con2.conexion();
+        
+        System.err.println("fehca-1 : "+fech);
         int cantColumnas = 0, cantFilas = 0, temporal = 0, bandera = 0,
                 fil =opc;      
         Object temp = null;
-        String sql = "", sql2 = "";
+        String sql = "", sql2 = "",sql3 = "";
         sql = "SELECT productocal.codigo,SUM(detailcompraprooved.cantCajasC) AS totales\n" +
             " FROM detailcompraprooved\n" +
             " INNER JOIN compraprooved\n" +
-            " ON compraprooved.id_compraProve = detailcompraprooved.id_compraP AND compraprooved.statAsign <> 0 AND (compraprooved.fechaCompra >= '"+fech+"' AND compraprooved.fechaCompra <= '"+fech2+"')\n" +
+            " ON compraprooved.id_compraProve = detailcompraprooved.id_compraP AND compraprooved.statAsign <> 0 AND"
+         + " (compraprooved.fechaCompra >= '"+fech+"' AND compraprooved.fechaCompra <= '"+fech2+"')\n" +
             " INNER JOIN productocal ON productocal.codigo = detailcompraprooved.codigoProdC\n" +
             " GROUP BY productocal.codigo;";
         sql2 = "SELECT productocal.codigo,SUM(relcomprapedido.cantidadCajasRel) AS asignados\n" +
@@ -13552,6 +13580,14 @@ fil2 = jTabMErcancVP.getRowCount();
             " INNER JOIN compraprooved\n" +
             " ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed AND compraprooved.statAsign <> 0 AND ( compraprooved.fechaCompra >= '"+fech+"' AND compraprooved.fechaCompra <= '"+fech2+"'  )\n" +
             " INNER JOIN productocal ON productocal.codigo = relcomprapedido.tipoMercanRel\n" +
+            " INNER JOIN pedidocliente ON relcomprapedido.id_pedidoCli = pedidocliente.id_pedido AND relcomprapedido.typeVP_PC = 0 AND (pedidocliente.fechaPedidio >= '"+fech+"' AND pedidocliente.fechaPedidio <= '"+fech2+"' )\n" +
+            " GROUP BY productocal.codigo;";
+        sql3 = "SELECT productocal.codigo,SUM(relcomprapedido.cantidadCajasRel) AS asignados\n" +
+            " FROM relcomprapedido\n" +
+            " INNER JOIN compraprooved\n" +
+            " ON compraprooved.id_compraProve = relcomprapedido.id_compraProveed AND compraprooved.statAsign <> 0 AND ( compraprooved.fechaCompra >= '"+fech+"' AND compraprooved.fechaCompra <= '"+fech2+"'  )\n" +
+            " INNER JOIN productocal ON productocal.codigo = relcomprapedido.tipoMercanRel\n" +
+            " INNER JOIN notaventapiso ON relcomprapedido.id_pedidoCli = notaventapiso.id_venta AND relcomprapedido.typeVP_PC = 1 AND (notaventapiso.fechVenta >= '"+fech+"' AND notaventapiso.fechVenta <= '"+fech2+"'   )\n" +
             " GROUP BY productocal.codigo;";
         Statement st = null;
         ResultSet rs = null;
@@ -13565,6 +13601,7 @@ fil2 = jTabMErcancVP.getRowCount();
                     }
                 }//for
             }//while
+
             st = null;
             rs = null;
             st = cn.createStatement();
@@ -13580,7 +13617,24 @@ fil2 = jTabMErcancVP.getRowCount();
                         tab.setValueAt(Integer.parseInt(temp.toString()) - rs.getInt(x + 1), fil, rs.getInt(x) - 1);//se le suma 1 por las columnas id,nombre de la jTable
                     }
                 }//for
-            }
+            }//while
+            
+            st = null;
+            rs = null;
+            st = cn.createStatement();
+            rs = st.executeQuery(sql3);
+            while (rs.next()) {
+                for (int x = 1; x <= rs.getMetaData().getColumnCount(); x++) {
+                    if (x == 1) {
+                        temp = tab.getValueAt(fil,rs.getInt(x) - 1); 
+                        if(temp == null || temp.toString().isEmpty()){
+                            temp = 0;
+                        }
+                        System.err.println("temp3: "+temp);
+                        tab.setValueAt(Integer.parseInt(temp.toString()) - rs.getInt(x + 1), fil, rs.getInt(x) - 1);//se le suma 1 por las columnas id,nombre de la jTable
+                    }
+                }//for
+            }//while
 
         } catch (SQLException ex) {
             Logger.getLogger(interno1.class.getName()).log(Level.SEVERE, null, ex);

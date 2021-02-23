@@ -2,7 +2,7 @@
 package Frame;
 
 import AppPackage.AnimationClass;
-import com.sun.istack.internal.logging.Logger;
+//import com.sun.istack.internal.logging.Logger;
 import controllers.altadeclientes.HiloLector;
 import controllers.altadeclientes.controladorCFP;
 import controllers.altadeclientes.usuarios;
@@ -686,7 +686,6 @@ public class Login extends javax.swing.JFrame {
     private void txtMontoaper2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoaper2KeyReleased
         int var = evt.getKeyCode();
         if(var == KeyEvent.VK_ENTER){
-          //   jButton10.doClick();
         }
     }//GEN-LAST:event_txtMontoaper2KeyReleased
    
